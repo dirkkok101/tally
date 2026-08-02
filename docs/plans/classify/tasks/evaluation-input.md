@@ -22,16 +22,16 @@ Evaluation receives one bounded, compatible, completely paged Ledger snapshot or
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts | `data_model` | `touches` | `true` |
-| FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) | `data_model` | `touches` | `true` |
+| [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work](../../../prd/classify/prd.md#nfr-classify-bounded-evaluation-bound-local-classification-work) | `nfr` | `satisfies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md) | `compile` | Input acquisition uses the verified purpose=evaluation client method. |
+| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](ledger-classification-client.md) | `compile` | Input acquisition uses the verified purpose=evaluation client method. |
 
 ## Recipe
 
@@ -73,8 +73,8 @@ Evaluation receives one bounded, compatible, completely paged Ledger snapshot or
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| ClassificationEvaluationInputLoader.LoadAsync | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
+| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| ClassificationEvaluationInputLoader.LoadAsync | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
 
 ### Verification
 
@@ -96,11 +96,11 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md): Input acquisition uses the verified purpose=evaluation client method.
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `implements` -> FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection
-- `satisfies` -> NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work
-- `touches` -> DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts
+- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](ledger-classification-client.md): Input acquisition uses the verified purpose=evaluation client method.
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `implements` -> [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection)
+- `satisfies` -> [NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work](../../../prd/classify/prd.md#nfr-classify-bounded-evaluation-bound-local-classification-work)
+- `touches` -> [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts)
 
 ## Navigation
 

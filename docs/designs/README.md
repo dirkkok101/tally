@@ -6,8 +6,10 @@ Generated from the lex graph.
 
 | Module | Document |
 |---|---|
+| budget | [Budget Planning — Architecture](budget/architecture.md) |
 | budget | [Data Models — Budget Planning](budget/data-model.md) |
 | budget | [Typed vertical slices with one earned public-contract seam](budget/decisions/application-architecture.md) |
+| budget | [Nearest-ancestor Category Budget Entry resolution over frozen Spend Category ancestry](budget/decisions/category-envelope-resolution.md) |
 | budget | [Six explicit BUDGET operations from one registry](budget/decisions/cli-operation-contract.md) |
 | budget | [Pure exhaustive bucketing over one complete LEDGER snapshot](budget/decisions/exact-position-calculation.md) |
 | budget | [Transactional replay from immutable outcome references](budget/decisions/idempotent-mutations.md) |
@@ -23,10 +25,28 @@ Generated from the lex graph.
 | budget | [Snapshot-bound Budget Position calculation](budget/diagrams/position-sequence.md) |
 | budget | [BUDGET durable state model](budget/diagrams/state-er.md) |
 | budget | [Contract and Authority — API Surface](budget/features/contract-authority/api-surface.md) |
+| budget | [Feature — Contract and Authority](budget/features/contract-authority/feature.md) |
+| budget | [Contract and Authority — Test Plan](budget/features/contract-authority/test-plan.md) |
+| budget | [Contract and Authority — UI Mockups](budget/features/contract-authority/ui-mockup.md) |
 | budget | [Plans and Lifecycle — API Surface](budget/features/plans-lifecycle/api-surface.md) |
+| budget | [Feature — Plans and Lifecycle](budget/features/plans-lifecycle/feature.md) |
+| budget | [Plans and Lifecycle — Test Plan](budget/features/plans-lifecycle/test-plan.md) |
+| budget | [Plans and Lifecycle — UI Mockups](budget/features/plans-lifecycle/ui-mockup.md) |
 | budget | [Position and Projection — API Surface](budget/features/position-projection/api-surface.md) |
+| budget | [Feature — Position and Projection](budget/features/position-projection/feature.md) |
+| budget | [Position and Projection — Test Plan](budget/features/position-projection/test-plan.md) |
+| budget | [Position and Projection — UI Mockups](budget/features/position-projection/ui-mockup.md) |
 | budget | [Storage and Recovery — API Surface](budget/features/storage-recovery/api-surface.md) |
+| budget | [Feature — Storage and Recovery](budget/features/storage-recovery/feature.md) |
+| budget | [Storage and Recovery — Test Plan](budget/features/storage-recovery/test-plan.md) |
+| budget | [Storage and Recovery — UI Mockups](budget/features/storage-recovery/ui-mockup.md) |
+| budget | [Ungrouped — API Surface](budget/features/_ungrouped/api-surface.md) |
+| budget | [Feature — Ungrouped](budget/features/_ungrouped/feature.md) |
+| budget | [Ungrouped — Test Plan](budget/features/_ungrouped/test-plan.md) |
+| budget | [Budget Planning — Glossary](budget/glossary.md) |
+| budget | [Budget Planning — Design Workspace](budget/README.md) |
 | channels | [Design — Interaction Channels](channels/design.md) |
+| classify | [Transaction Classification — Architecture](classify/architecture.md) |
 | classify | [Data Models — Transaction Classification](classify/data-model.md) |
 | classify | [Single-process vertical slices with one earned external seam](classify/decisions/application-architecture.md) |
 | classify | [Expiry-bound preview and per-item idempotent Ledger saga](classify/decisions/apply-saga.md) |
@@ -34,9 +54,17 @@ Generated from the lex graph.
 | classify | [Twelve explicit CLASSIFY operations from one registry](classify/decisions/cli-operation-contract.md) |
 | classify | [Pure ordered evaluation with fingerprint-bound evidence](classify/decisions/deterministic-evaluation.md) |
 | classify | [Use purpose-scoped classification projections on the public Ledger actuals contract](classify/decisions/ledger-public-projection.md) |
+| classify | [Add five explicit operator discovery and private-tool operations](classify/decisions/operator-ergonomics-contract.md) |
+| classify | [Build the owner-authored deterministic rulebook path](classify/decisions/owner-rulebook-replacement.md) |
+| classify | [Use fingerprint-bound keyset cursors for outcome and rule discovery](classify/decisions/paginated-discovery.md) |
+| classify | [Publish private validation corpora by protected atomic replacement](classify/decisions/private-corpus-publication.md) |
 | classify | [Memory-only private corpus validation with aggregate durability](classify/decisions/private-validation.md) |
+| classify | [Record minimal rule authority provenance](classify/decisions/rule-authority-provenance.md) |
 | classify | [Closed typed rule grammar with code-owned normalization versions](classify/decisions/rule-vocabulary.md) |
+| classify | [Treat CLASSIFY 0.3.3 as the production-usable baseline](classify/decisions/shipped-baseline.md) |
 | classify | [Separate raw-SQLite classification state with immutable history](classify/decisions/state-store.md) |
+| classify | [Generate unresolved-pattern reports without durable descriptions](classify/decisions/unresolved-report-boundary.md) |
+| classify | [Stop CLASSIFY v1 after the private viability spike](classify/decisions/viability-disposition.md) |
 | classify | [Transaction Classification technical design](classify/design.md) |
 | classify | [Preview preflight and replay-safe apply saga](classify/diagrams/apply-saga.md) |
 | classify | [CLASSIFY component architecture](classify/diagrams/components.md) |
@@ -44,10 +72,27 @@ Generated from the lex graph.
 | classify | [Classification rule and rule-set lifecycle](classify/diagrams/rule-lifecycle.md) |
 | classify | [CLASSIFY durable state model](classify/diagrams/state-er.md) |
 | classify | [Apply and Feedback — API Surface](classify/features/apply-feedback/api-surface.md) |
+| classify | [Feature — Apply and Feedback](classify/features/apply-feedback/feature.md) |
+| classify | [Apply and Feedback — Test Plan](classify/features/apply-feedback/test-plan.md) |
+| classify | [Apply and Feedback — UI Mockups](classify/features/apply-feedback/ui-mockup.md) |
 | classify | [Contract and Vocabulary — API Surface](classify/features/contract-vocabulary/api-surface.md) |
+| classify | [Feature — Contract and Vocabulary](classify/features/contract-vocabulary/feature.md) |
+| classify | [Contract and Vocabulary — Test Plan](classify/features/contract-vocabulary/test-plan.md) |
+| classify | [Contract and Vocabulary — UI Mockups](classify/features/contract-vocabulary/ui-mockup.md) |
 | classify | [Evaluation and Explanation — API Surface](classify/features/evaluation-explanation/api-surface.md) |
+| classify | [Feature — Evaluation and Explanation](classify/features/evaluation-explanation/feature.md) |
+| classify | [Evaluation and Explanation — Test Plan](classify/features/evaluation-explanation/test-plan.md) |
+| classify | [Evaluation and Explanation — UI Mockups](classify/features/evaluation-explanation/ui-mockup.md) |
 | classify | [Rules and Validation — API Surface](classify/features/rules-validation/api-surface.md) |
+| classify | [Feature — Rules and Validation](classify/features/rules-validation/feature.md) |
+| classify | [Rules and Validation — Test Plan](classify/features/rules-validation/test-plan.md) |
+| classify | [Rules and Validation — UI Mockups](classify/features/rules-validation/ui-mockup.md) |
 | classify | [State and Recovery — API Surface](classify/features/state-recovery/api-surface.md) |
+| classify | [Feature — State and Recovery](classify/features/state-recovery/feature.md) |
+| classify | [State and Recovery — Test Plan](classify/features/state-recovery/test-plan.md) |
+| classify | [State and Recovery — UI Mockups](classify/features/state-recovery/ui-mockup.md) |
+| classify | [Transaction Classification — Glossary](classify/glossary.md) |
+| classify | [Transaction Classification — Design Workspace](classify/README.md) |
 | core | [Design — Platform Core](core/design.md) |
 | core | [Action Creation (M2M) — Process Flow](core/diagrams/action-creation-m2m-process.md) |
 | core | [Action Creation via M2M](core/diagrams/action-creation-m2m.md) |
@@ -76,6 +121,7 @@ Generated from the lex graph.
 | core | [State Transition with Guard Evaluation](core/diagrams/state-transition-with-guards.md) |
 | core | [System Data Flow](core/diagrams/system-data-flow.md) |
 | core | [WorkflowDefinition Lifecycle State Machine](core/diagrams/workflow-definition-lifecycle.md) |
+| ingest | [Statement Ingestion — Architecture](ingest/architecture.md) |
 | ingest | [Data Models — Statement Ingestion](ingest/data-model.md) |
 | ingest | [Single-process vertical slices with isolated ingestion state](ingest/decisions/application-architecture.md) |
 | ingest | [Memory-only extraction and owner-only payload handling](ingest/decisions/artifact-security.md) |
@@ -93,9 +139,26 @@ Generated from the lex graph.
 | ingest | [Preview approval commit and receipt sequence](ingest/diagrams/preview-commit-sequence.md) |
 | ingest | [INGEST durable state model](ingest/diagrams/state-er.md) |
 | ingest | [Contract and Formats — API Surface](ingest/features/contract-formats/api-surface.md) |
+| ingest | [Feature — Contract and Formats](ingest/features/contract-formats/feature.md) |
+| ingest | [Contract and Formats — Test Plan](ingest/features/contract-formats/test-plan.md) |
+| ingest | [Contract and Formats — UI Mockups](ingest/features/contract-formats/ui-mockup.md) |
 | ingest | [Preview and Reconciliation — API Surface](ingest/features/preview-reconciliation/api-surface.md) |
+| ingest | [Feature — Preview and Reconciliation](ingest/features/preview-reconciliation/feature.md) |
+| ingest | [Preview and Reconciliation — Test Plan](ingest/features/preview-reconciliation/test-plan.md) |
+| ingest | [Preview and Reconciliation — UI Mockups](ingest/features/preview-reconciliation/ui-mockup.md) |
 | ingest | [Recovery and Cleanup — API Surface](ingest/features/recovery-cleanup/api-surface.md) |
+| ingest | [Feature — Recovery and Cleanup](ingest/features/recovery-cleanup/feature.md) |
+| ingest | [Recovery and Cleanup — Test Plan](ingest/features/recovery-cleanup/test-plan.md) |
+| ingest | [Recovery and Cleanup — UI Mockups](ingest/features/recovery-cleanup/ui-mockup.md) |
 | ingest | [Review and Commit — API Surface](ingest/features/review-commit/api-surface.md) |
+| ingest | [Feature — Review and Commit](ingest/features/review-commit/feature.md) |
+| ingest | [Review and Commit — Test Plan](ingest/features/review-commit/test-plan.md) |
+| ingest | [Review and Commit — UI Mockups](ingest/features/review-commit/ui-mockup.md) |
+| ingest | [Ungrouped — API Surface](ingest/features/_ungrouped/api-surface.md) |
+| ingest | [Feature — Ungrouped](ingest/features/_ungrouped/feature.md) |
+| ingest | [Ungrouped — Test Plan](ingest/features/_ungrouped/test-plan.md) |
+| ingest | [Statement Ingestion — Glossary](ingest/glossary.md) |
+| ingest | [Statement Ingestion — Design Workspace](ingest/README.md) |
 | insights | [Data Models — Budget Insights](insights/data-model.md) |
 | insights | [Typed analytical compiler with concrete local boundaries](insights/decisions/application-architecture.md) |
 | insights | [Eleven explicit Public INSIGHTS Operations from one registry](insights/decisions/cli-operation-contract.md) |
@@ -118,6 +181,7 @@ Generated from the lex graph.
 | insights | [Policy Release Validation — API Surface](insights/features/policy-release-validation/api-surface.md) |
 | insights | [Report and Explanation — API Surface](insights/features/report-explanation/api-surface.md) |
 | insights | [Retention and Recovery — API Surface](insights/features/retention-recovery/api-surface.md) |
+| ledger | [Financial Ledger — Architecture](ledger/architecture.md) |
 | ledger | [Data Models — Financial Ledger](ledger/data-model.md) |
 | ledger | [Single-process provider-neutral vertical slices with selective ports](ledger/decisions/application-architecture.md) |
 | ledger | [Verified store generations with atomic pointer activation](ledger/decisions/candidate-activation.md) |
@@ -142,8 +206,28 @@ Generated from the lex graph.
 | ledger | [Provider-neutral reconciliation lifecycle](ledger/diagrams/reconciliation-state.md) |
 | ledger | [Complete verified restore and evolution activation](ledger/diagrams/recovery-workflow.md) |
 | ledger | [Accounts and Financial Dimensions — API Surface](ledger/features/accounts-categories/api-surface.md) |
+| ledger | [Feature — Accounts and Financial Dimensions](ledger/features/accounts-categories/feature.md) |
+| ledger | [Accounts and Financial Dimensions — Test Plan](ledger/features/accounts-categories/test-plan.md) |
+| ledger | [Accounts and Financial Dimensions — UI Mockups](ledger/features/accounts-categories/ui-mockup.md) |
 | ledger | [Contract and Integration Guidance — API Surface](ledger/features/contract-skills/api-surface.md) |
+| ledger | [Feature — Contract and Integration Guidance](ledger/features/contract-skills/feature.md) |
+| ledger | [Contract and Integration Guidance — Test Plan](ledger/features/contract-skills/test-plan.md) |
+| ledger | [Contract and Integration Guidance — UI Mockups](ledger/features/contract-skills/ui-mockup.md) |
 | ledger | [Evidence Reconciliation and Coverage — API Surface](ledger/features/reconciliation/api-surface.md) |
+| ledger | [Feature — Evidence Reconciliation and Coverage](ledger/features/reconciliation/feature.md) |
+| ledger | [Evidence Reconciliation and Coverage — Test Plan](ledger/features/reconciliation/test-plan.md) |
+| ledger | [Evidence Reconciliation and Coverage — UI Mockups](ledger/features/reconciliation/ui-mockup.md) |
 | ledger | [Recovery and Storage — API Surface](ledger/features/recovery-storage/api-surface.md) |
+| ledger | [Feature — Recovery and Storage](ledger/features/recovery-storage/feature.md) |
+| ledger | [Recovery and Storage — Test Plan](ledger/features/recovery-storage/test-plan.md) |
+| ledger | [Recovery and Storage — UI Mockups](ledger/features/recovery-storage/ui-mockup.md) |
 | ledger | [Relationships and Dimensional Actuals — API Surface](ledger/features/relationships-actuals/api-surface.md) |
+| ledger | [Feature — Relationships and Dimensional Actuals](ledger/features/relationships-actuals/feature.md) |
+| ledger | [Relationships and Dimensional Actuals — Test Plan](ledger/features/relationships-actuals/test-plan.md) |
+| ledger | [Relationships and Dimensional Actuals — UI Mockups](ledger/features/relationships-actuals/ui-mockup.md) |
 | ledger | [Transactions, Evidence, and Attribution — API Surface](ledger/features/transactions-allocations/api-surface.md) |
+| ledger | [Feature — Transactions, Evidence, and Attribution](ledger/features/transactions-allocations/feature.md) |
+| ledger | [Transactions, Evidence, and Attribution — Test Plan](ledger/features/transactions-allocations/test-plan.md) |
+| ledger | [Transactions, Evidence, and Attribution — UI Mockups](ledger/features/transactions-allocations/ui-mockup.md) |
+| ledger | [Financial Ledger — Glossary](ledger/glossary.md) |
+| ledger | [Financial Ledger — Design Workspace](ledger/README.md) |

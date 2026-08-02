@@ -22,23 +22,23 @@ UC-CLASSIFY-003 proves all-or-none preflight, explicit authority, at-most-once L
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga](../../../designs/classify/decisions/apply-saga.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run](../../../prd/classify/prd.md#fr-classify-apply-authorization-authorize-a-classification-apply-run) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT: Verify explicit apply authorization | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX: Verify every classification apply crash window | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-003: Apply accepted classification decisions | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-003: Apply accepted classification decisions](../../../prd/classify/prd.md#uc-classify-003-apply-accepted-classification-decisions) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md) | `compile` | The UC verifies the complete preview and apply saga. |
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md) | `compile` | Acceptance invokes the published process boundary. |
-| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md) | `compile` | UC-003 verifies preview and run as one published authorized-apply workflow. |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](rulebook-apply-run-saga.md) | `compile` | The UC verifies the complete preview and apply saga. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md) | `compile` | Acceptance invokes the published process boundary. |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](rulebook-apply-preview.md) | `compile` | UC-003 verifies preview and run as one published authorized-apply workflow. |
 
 ## Recipe
 
@@ -66,21 +66,25 @@ UC-CLASSIFY-003 proves all-or-none preflight, explicit authority, at-most-once L
 ### Notes
 
 - Ledger allocation history is the authoritative duplicate-mutation oracle.
+- Hermes blocker resolution (2026-08-01): ValidationReportBuilder currently binds validation_run_id into report_fingerprint while VerifiedOwnerRulebookGateReceipt requires distinct-run report fingerprints to match. A run identity is provenance, not report content. This verification bead owns the bounded correction: exclude validation_run_id from the aggregate report fingerprint, preserve the row foreign key separately, keep the replay equality check, and prove distinct validation IDs with identical semantic evidence produce identical report fingerprints before activation.
+- Hermes blocker resolution (2026-08-01): the public projection currently hashes category ID, lifecycle, and display name with a different framing than EvaluationFingerprint, while validation persists that producer fingerprint and activation recomputes identity plus lifecycle. This makes unchanged categories appear stale and violates rename-stability. This verification bead owns the bounded shared-seam correction in ActualsQueryHandler: emit the same canonical identity-plus-lifecycle fingerprint used by CLASSIFY currency checks; exclude display name; prove UC-003 activation/recovery and focused rule-activation diagnostics.
 
 ### File Contracts
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
 | `tests/Tally.Tests/Classify/Acceptance/ClassifyUc003ApplyTests.cs` | `test` | UC-003 acceptance and recovery matrix | `true` |  |
+| `src/Tally/Features/Classify/Rules/Validate/ValidationReportBuilder.cs` | `modify` | bounded correction: make aggregate report fingerprint independent of per-run validation identity so distinct-key deterministic replay can authorize activation | `true` |  |
+| `src/Tally/Features/Ledger/Actuals/ActualsQueryHandler.cs` | `modify` | bounded correction: make the public classification projection category identity lifecycle fingerprint canonical over identity plus lifecycle only so it matches activation currency checks and remains rename-stable | `true` | Do not include display name; preserve deterministic ordering and fail-closed lifecycle drift. |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| PreviewClassificationApplyCommand.HandleAsync | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| RunClassificationApplyCommand.HandleAsync | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| VerifiedClassifyUc003 | `produces` | UC-CLASSIFY-003 |  |
+| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| PreviewClassificationApplyCommand.HandleAsync | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| RunClassificationApplyCommand.HandleAsync | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| VerifiedClassifyUc003 | `produces` | [UC-CLASSIFY-003](../../../prd/classify/prd.md#uc-classify-003-apply-accepted-classification-decisions) |  |
 
 ### Verification
 
@@ -105,15 +109,15 @@ UC-CLASSIFY-003 proves all-or-none preflight, explicit authority, at-most-once L
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-9oqw` (verified)
-- `covers` -> UC-CLASSIFY-003: Apply accepted classification decisions
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md): UC-003 verifies preview and run as one published authorized-apply workflow.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md): The UC verifies the complete preview and apply saga.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md): Acceptance invokes the published process boundary.
-- `governed-by` -> DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `implements` -> FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run
-- `implements` -> FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations
-- `implements` -> FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes
+- `covers` -> [UC-CLASSIFY-003: Apply accepted classification decisions](../../../prd/classify/prd.md#uc-classify-003-apply-accepted-classification-decisions)
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](rulebook-apply-preview.md): UC-003 verifies preview and run as one published authorized-apply workflow.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](rulebook-apply-run-saga.md): The UC verifies the complete preview and apply saga.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md): Acceptance invokes the published process boundary.
+- `governed-by` -> [DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga](../../../designs/classify/decisions/apply-saga.md)
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `implements` -> [FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run](../../../prd/classify/prd.md#fr-classify-apply-authorization-authorize-a-classification-apply-run)
+- `implements` -> [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations)
+- `implements` -> [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes)
 - `verifies` -> TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT: Verify explicit apply authorization
 - `verifies` -> TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX: Verify every classification apply crash window
 - `verifies` -> TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply

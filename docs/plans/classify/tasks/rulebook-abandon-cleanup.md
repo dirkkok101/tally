@@ -23,20 +23,21 @@ Unreferenced work and recognized crash residue can be removed safely while every
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy | `adr` | `governed-by` | `true` |
-| DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-STATE-STORE: ClassificationStateStore | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-STATE-RECOVERY: State and Recovery | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup](../../../designs/classify/decisions/artifact-retention.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT: Verify retention, abandonment, and cleanup | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md) | `compile` | Retention must recognize feedback and proposal references. |
-| [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](../tasks/rulebook-state-foundation.md) | `compile` | Abandonment and cleanup use the designed tombstone, event, and immutable-history schema. |
+| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](rulebook-feedback-proposals.md) | `compile` | Retention must recognize feedback and proposal references. |
+| [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION: TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](rulebook-state-foundation.md) | `compile` | Abandonment and cleanup use the designed tombstone, event, and immutable-history schema. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md) | `compile` | Abandonment correction enforces rule-version tombstones in activation before and under the authority write lock. |
 
 ## Recipe
 
@@ -69,6 +70,11 @@ Unreferenced work and recognized crash residue can be removed safely while every
 ### Notes
 
 - Startup recovery runs the same fixed ownership and recognized-name policy before new CLASSIFY mutation.
+- Hermes authorization (2026-08-01): abandoned rule-version subjects are non-activatable. ActivateClassificationRuleCommand loads rule tombstones before public Ledger reads and rechecks every candidate rule_version_id under the same writer lock immediately before authority mutation; any tombstone returns stable lifecycle failure and preserves the active pointer. An optional/default ClassificationRecoveryStore dependency may preserve existing composition constructors.
+- No recognized file is unlinked before the authoritative idempotency/reference decision commits. ClassifyArtifactProtection uses an owner-only contained same-filesystem quarantine with an opaque operation ID and 0600 manifest: validate every target first; rename all recognized regular unlocked files into quarantine; on any staging or database failure restore all names before returning failure; after durable tombstone/cleanup event plus terminal idempotency commit, delete the committed quarantine. A crash before commit leaves an uncommitted quarantine that startup restores; a crash after commit leaves a committed quarantine that startup deletes. Symlinks, unknown names, lock conflicts, containment failure, or incomplete manifest fail closed without partial movement.
+- ClassifyStateExtensions performs startup recovery after layout/schema initialization and before returning services for any new CLASSIFY mutation. It resolves quarantine status only from durable tombstone/cleanup-event/idempotency evidence and the protected manifest; it also removes recognized unlocked orphan temporaries under the same fixed policy. It never follows links, accepts caller paths, or scans outside the CLASSIFY root.
+- ClassifyCleanupResult and cleanup_event expose/persist cleanup_id, policy_version, removed_artifact_count, retained_artifact_count, recognized temporary count, expired preview count, and abandoned payload count. removed_artifact_count equals the checked sum of per-kind removal counts; retained count is the recognized protected artifact inventory left after staging/finalization. Public output contains no file name, path, subject ID, description, amount, token, or payload.
+- Use an additive schema migration only when the durable cleanup receipt or quarantine recovery model requires a new column or table; otherwise retain schema version 3 without reinterpretation or historical authority backfill. Cleanup/abandon replay returns the exact terminal receipt and must not stage or delete again. Do not move complete convergence into this bead or modify unrelated operations.
 
 ### File Contracts
 
@@ -82,16 +88,25 @@ Unreferenced work and recognized crash residue can be removed safely while every
 | `src/Tally/Features/Classify/Contract/ClassifyContractMapper.Recovery.cs` | `create` | pure recovery mapping | `true` |  |
 | `tests/Tally.Tests/Classify/Recovery/AbandonCleanupTests.cs` | `test` | retention workflow tests | `true` |  |
 | `tests/Tally.Tests/Classify/Security/ClassifyArtifactProtectionTests.cs` | `test` | filesystem attack matrix | `true` |  |
+| `src/Tally/Features/Classify/Rules/Activate/ActivateClassificationRuleCommand.cs` | `modify` | enforce abandonment tombstones before and under activation write lock | `true` |  |
+| `src/Tally/Contracts/Classify/Operations/ClassifyResults.cs` | `modify` | complete cleanup receipt metadata | `true` |  |
+| `src/Tally/Infrastructure/Classify/Storage/ClassifySchema.cs` | `modify` | additive cleanup receipt and quarantine recovery migration | `true` |  |
+| `src/Tally/Bootstrap/Features/ClassifyStateExtensions.cs` | `modify` | recover committed or uncommitted quarantine before mutation services are returned | `true` |  |
+| `tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs` | `test` | abandoned draft cannot activate and active pointer remains unchanged | `true` |  |
+| `tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs` | `test` | cleanup receipt public schema and disclosure boundary | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassifyStateStore | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| AbandonClassificationStateCommand.HandleAsync | `produces` | DM-CLASSIFY-STATE-STORE |  |
-| CleanupClassificationStateCommand.HandleAsync | `produces` | DM-CLASSIFY-STATE-STORE |  |
-| ClassificationRecoveryStore | `produces` | DM-CLASSIFY-STATE-STORE |  |
-| ClassifyArtifactProtection | `produces` | DM-CLASSIFY-STATE-STORE |  |
+| ClassifyStateStore | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| AbandonClassificationStateCommand.HandleAsync | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| CleanupClassificationStateCommand.HandleAsync | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| ClassificationRecoveryStore | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| ClassifyArtifactProtection | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| ActivateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) | abandonment tombstone enforcement |
+| ClassifyArtifactQuarantine | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) | same-filesystem reversible staging and startup recovery |
+| ClassifyCleanupResult | `produces` | [FR-CLASSIFY-STATE-RETENTION-CLEANUP](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts) | cleanup ID total removed retained and per-kind counts |
 
 ### Verification
 
@@ -116,15 +131,16 @@ Unreferenced work and recognized crash residue can be removed safely while every
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3hcn` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md): Retention must recognize feedback and proposal references.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](../tasks/rulebook-state-foundation.md): Abandonment and cleanup use the designed tombstone, event, and immutable-history schema.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](rulebook-feedback-proposals.md): Retention must recognize feedback and proposal references.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md): Abandonment correction enforces rule-version tombstones in activation before and under the authority write lock.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION: TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](rulebook-state-foundation.md): Abandonment and cleanup use the designed tombstone, event, and immutable-history schema.
 - `governed-by` -> ADR-CORE-0020: RESTRICT-by-Default Delete Taxonomy
-- `governed-by` -> DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts
-- `satisfies` -> NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data
-- `touches` -> DM-CLASSIFY-STATE-STORE: ClassificationStateStore
-- `touches` -> FA-CLASSIFY-STATE-RECOVERY: State and Recovery
+- `governed-by` -> [DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup](../../../designs/classify/decisions/artifact-retention.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts)
+- `satisfies` -> [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data)
+- `touches` -> [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore)
+- `touches` -> [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md)
 - `verifies` -> TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT: Verify retention, abandonment, and cleanup
 
 ## Navigation

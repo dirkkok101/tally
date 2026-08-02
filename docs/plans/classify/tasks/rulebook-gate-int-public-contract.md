@@ -22,26 +22,27 @@ Prove the complete installed public CLASSIFY contract.
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry | `design_decision` | `governed-by` | `true` |
-| FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract](../../../prd/classify/prd.md#fr-classify-contract-discovery-discover-the-classify-command-contract) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively](../../../prd/classify/prd.md#fr-classify-structured-invocation-invoke-classify-operations-non-interactively) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX: Verify the published CLASSIFY contract matrix | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md) | `compile` | Final wiring requires preview and run handlers. |
-| [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](../tasks/rulebook-contract-foundation.md) | `compile` | Final wiring consumes the twelve descriptors and source-generated contracts. |
-| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW. |
-| [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](../tasks/rulebook-outcome-explanation.md) | `compile` | Final wiring requires evaluate and outcome handlers. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md) | `compile` | Final wiring requires save, validate, activate, and retire handlers. |
-| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md) | `compile` | Final wiring requires status, abandon, and cleanup handlers. |
-| [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](../tasks/rulebook-abandon-cleanup.md) | `compile` | Final wiring consumes abandon and cleanup handlers. |
-| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md) | `compile` | Final wiring consumes the preview handler as a distinct public operation. |
-| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md) | `compile` | Final wiring consumes the feedback handler as a distinct public operation. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md) | `compile` | Final wiring consumes the rule-save handler as a distinct public operation. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md) | `compile` | Final wiring consumes the rule-validation handler as a distinct public operation. |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](rulebook-apply-run-saga.md) | `compile` | Final wiring requires preview and run handlers. |
+| [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION: TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](rulebook-contract-foundation.md) | `compile` | Final wiring consumes the twelve descriptors and source-generated contracts. |
+| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW. |
+| [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION: TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](rulebook-outcome-explanation.md) | `compile` | Final wiring requires evaluate and outcome handlers. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md) | `compile` | Final wiring requires save, validate, activate, and retire handlers. |
+| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md) | `compile` | Final wiring requires status, abandon, and cleanup handlers. |
+| [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP: TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](rulebook-abandon-cleanup.md) | `compile` | Final wiring consumes abandon and cleanup handlers. |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](rulebook-apply-preview.md) | `compile` | Final wiring consumes the preview handler as a distinct public operation. |
+| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](rulebook-feedback-proposals.md) | `compile` | Final wiring consumes the feedback handler as a distinct public operation. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md) | `compile` | Final wiring consumes the rule-save handler as a distinct public operation. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md) | `compile` | Final wiring consumes the rule-validation handler as a distinct public operation. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](rulebook-gate-owner-rulebook.md) | `compile` | Final convergence must consume and preserve the earlier approved validation-only public bridge. |
 
 ## Recipe
 
@@ -64,7 +65,7 @@ Prove the complete installed public CLASSIFY contract.
 
 ### Notes
 
-None recorded.
+- Ordering amendment (2026-08-01): TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK / bd-56yx is the earlier sequential owner of the provisional validation-only bridge in Program, LedgerServices, OperationRegistry, and ClassifyValidationExtensions. This convergence task retains final ownership of complete twelve-handler composition, limits, typed process envelopes, and published contract evidence, but must consume/extend the approved rule.validate bridge without duplicating its registry or regressing the owner gate.
 
 ### File Contracts
 
@@ -80,20 +81,20 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassifyOperationModule | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| EvaluateClassificationCommand.HandleAsync | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| GetClassificationOutcomeQuery.HandleAsync | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| PreviewClassificationApplyCommand.HandleAsync | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| RunClassificationApplyCommand.HandleAsync | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| SaveClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| ValidateClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ActivateClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| RetireClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| RecordClassificationFeedbackCommand.HandleAsync | `consumes` | DM-CLASSIFY-FEEDBACK-PROPOSAL |  |
-| GetClassificationStatusQuery.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| AbandonClassificationStateCommand.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| CleanupClassificationStateCommand.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| CompleteClassifyPublicContract | `produces` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
+| ClassifyOperationModule | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| EvaluateClassificationCommand.HandleAsync | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| GetClassificationOutcomeQuery.HandleAsync | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| PreviewClassificationApplyCommand.HandleAsync | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| RunClassificationApplyCommand.HandleAsync | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| SaveClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| ValidateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ActivateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| RetireClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| RecordClassificationFeedbackCommand.HandleAsync | `consumes` | [DM-CLASSIFY-FEEDBACK-PROPOSAL](../../../designs/classify/data-model.md#classificationfeedbackandproposal) |  |
+| GetClassificationStatusQuery.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| AbandonClassificationStateCommand.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| CleanupClassificationStateCommand.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| CompleteClassifyPublicContract | `produces` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
 
 ### Verification
 
@@ -118,20 +119,21 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3g6y` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](../tasks/rulebook-abandon-cleanup.md): Final wiring consumes abandon and cleanup handlers.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md): Final wiring consumes the preview handler as a distinct public operation.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md): Final wiring requires preview and run handlers.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](../tasks/rulebook-contract-foundation.md): Final wiring consumes the twelve descriptors and source-generated contracts.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md): Final wiring consumes the feedback handler as a distinct public operation.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](../tasks/rulebook-outcome-explanation.md): Final wiring requires evaluate and outcome handlers.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md): Final wiring requires save, validate, activate, and retire handlers.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md): Final wiring consumes the rule-save handler as a distinct public operation.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md): Final wiring consumes the rule-validation handler as a distinct public operation.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md): Final wiring requires status, abandon, and cleanup handlers.
-- `governed-by` -> DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry
-- `implements` -> FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract
-- `implements` -> FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP: TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](rulebook-abandon-cleanup.md): Final wiring consumes abandon and cleanup handlers.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](rulebook-apply-preview.md): Final wiring consumes the preview handler as a distinct public operation.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](rulebook-apply-run-saga.md): Final wiring requires preview and run handlers.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION: TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](rulebook-contract-foundation.md): Final wiring consumes the twelve descriptors and source-generated contracts.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](rulebook-feedback-proposals.md): Final wiring consumes the feedback handler as a distinct public operation.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](rulebook-gate-owner-rulebook.md): Final convergence must consume and preserve the earlier approved validation-only public bridge.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION: TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](rulebook-outcome-explanation.md): Final wiring requires evaluate and outcome handlers.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md): Final wiring requires save, validate, activate, and retire handlers.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md): Final wiring consumes the rule-save handler as a distinct public operation.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md): Final wiring consumes the rule-validation handler as a distinct public operation.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md): Final wiring requires status, abandon, and cleanup handlers.
+- `governed-by` -> [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md)
+- `implements` -> [FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract](../../../prd/classify/prd.md#fr-classify-contract-discovery-discover-the-classify-command-contract)
+- `implements` -> [FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively](../../../prd/classify/prd.md#fr-classify-structured-invocation-invoke-classify-operations-non-interactively)
 - `verifies` -> TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX: Verify the published CLASSIFY contract matrix
 
 ## Navigation

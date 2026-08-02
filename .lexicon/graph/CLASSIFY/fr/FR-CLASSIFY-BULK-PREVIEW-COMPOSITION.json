@@ -1,0 +1,71 @@
+{
+  "id": "01KZ0MN3A8RKHW93YW37B8VND0",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-BULK-PREVIEW-COMPOSITION",
+  "title": "Preview a batch selected from outcome discovery",
+  "description": [
+    "Compose classify.outcome.list with the existing selected_outcomes apply.preview contract so an operator can preview a bounded batch without per-outcome CLI calls. Implements G7 and UC-CLASSIFY-007."
+  ],
+  "rationale": [
+    "The correct bulk boundary is explicit outcome selection followed by the shipped frozen preview, not a new apply-all shortcut."
+  ],
+  "priority": 0,
+  "complexity": "S",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "preview exact listed suggestions as one bounded batch"
+  ],
+  "story_so_that": [
+    "I can review frozen apply evidence before any Ledger mutation"
+  ],
+  "acceptance_criteria": [
+    "Given fresh suggestion outcome IDs returned by one evaluation, when the caller submits at most 200 unique IDs using apply.preview selection mode selected_outcomes, then the existing request schema accepts them unchanged and the preview returns frozen selection, category, rule-authority, evaluation, Ledger generation, category lifecycle, and expiry evidence.",
+    "Given unknown, duplicate-only, mixed-evaluation, non-suggestion, stale, archived-category, inactive-rule, or over-200 selection input, when apply.preview validates the batch, then it rejects or accounts for the full selection according to the released contract and persists no partial preview.",
+    "Given broadApplyAllowed is false, when a caller has a list page or active rule-set summary, then neither outcome.list, rule.list, rule-set.active.get, apply.preview, nor apply.run gains an implicit apply-all, unattended exact-rule, or unbounded mutation path.",
+    "Given preview succeeds, when Ledger or authority state changes before apply.run, then apply.run revalidates the frozen preconditions and fails or reports per-item outcomes under the released idempotent saga without applying stale authority.",
+    "Given preview is invoked, when Ledger allocation history is inspected before apply.run, then zero category assignments or corrections were created by discovery or preview."
+  ],
+  "security_criteria": [
+    "Only exact caller-selected outcome IDs cross from discovery into preview; list filters, cursors, or report groups never confer mutation authority."
+  ],
+  "status": "active",
+  "created_at": "2026-08-02T07:05:16.3610184+00:00",
+  "links": [
+    {
+      "id": "01KZ0MWJYTFFRXTJ95PVRQ4DN8",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-AUTHORIZATION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:21.7546991+00:00"
+    },
+    {
+      "id": "01KZ0MWKRV783ZF2KDYF8KREDT",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:22.5891776+00:00"
+    },
+    {
+      "id": "01KZ0MWJ8RNAQ5FXNC9AJD8JD8",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:21.0493664+00:00"
+    },
+    {
+      "id": "01KZ0MN3A9J5616MYMGP19XSNM",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-007",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:05:16.3616561+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KZ0MN3AAFRJ76XZD3RKFQQH2",
+      "target": "P1",
+      "created_at": "2026-08-02T07:05:16.3610184+00:00"
+    }
+  ]
+}

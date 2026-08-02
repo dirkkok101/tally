@@ -1,0 +1,66 @@
+{
+  "id": "01KZ0MN4033TV45ECTYP916S08",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+  "title": "Build a private validation corpus from explicit labels",
+  "description": [
+    "Publish classify.corpus.build as an idempotent local file-writing operation that binds explicit owner labels to one fresh complete Ledger classification_v1 projection and produces JSONL accepted by the shipped private-corpus reader. Implements G7 and UC-CLASSIFY-009."
+  ],
+  "rationale": [
+    "Manual construction can misbind projection lifecycle fields or leak private rows; Tally already owns the authoritative projection and reader contract."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "turn my exact transaction labels into a correctly bound private corpus"
+  ],
+  "story_so_that": [
+    "I can validate rule changes without hand-copying financial rows"
+  ],
+  "acceptance_criteria": [
+    "Given 1 through 10000 explicit labels supplied on stdin, when each label contains one transaction ID, one expected outcome kind, and an expected category ID exactly when that outcome requires one, then corpus.build accepts only those labels and never invents, broadens, or infers a label.",
+    "Given valid labels and a fresh complete classification_v1 evaluation projection, when corpus.build binds rows, then every label matches exactly one projection transaction and the JSONL row reuses the public ordinal, account, source description, amount direction, absolute minor amount, item lifecycle fingerprint, expected category ID, and expected outcome kind.",
+    "Given an explicit absent output path whose parent chain and destination satisfy the Linux owner boundary, when corpus.build writes, then it creates a same-directory 0600 temporary regular file under a 0700 owner-owned non-symlink directory, writes canonical UTF-8 JSONL within the existing row, line, byte, memory, and time bounds, flushes file data, atomically renames without overwrite, and returns aggregate row/byte counts plus corpus, projection, generation, category-lifecycle, normalization, and request fingerprints without returning the path.",
+    "Given the same idempotency key and identical request/projection fingerprints after a successful rename, when corpus.build is retried, then it returns the prior aggregate receipt and does not rewrite or duplicate the corpus; given a changed request under the same key, it returns the typed idempotency conflict.",
+    "Given a missing, duplicate, inconsistent, over-limit, or projection-absent label; stale or incompatible projection; existing destination; symlink; non-regular file; wrong owner; permissive mode; or invalid parent, when corpus.build is invoked, then it returns the typed validation, stale, compatibility, privacy, or limit error and creates no destination file.",
+    "Given cancellation, process interruption, serialization failure, write failure, flush failure, or rename failure, when recovery or cleanup runs, then no partial destination is visible and only a recognized same-directory temporary owned by the current effective UID may be removed; an already-committed valid destination is never deleted.",
+    "Given a successful corpus, when the shipped private-corpus reader and classify.rule.validate consume it, then the reader accepts its canonical rows and no raw row, description, token, amount, label, output path, or source path appears in stdout, stderr, logs, telemetry, graph, or tracked artifacts."
+  ],
+  "security_criteria": [
+    "Private labels and rows enter only through structured stdin and the owner-only destination; process arguments, logs, diagnostics, receipts, and tracked artifacts remain aggregate-only."
+  ],
+  "status": "active",
+  "created_at": "2026-08-02T07:05:17.0607164+00:00",
+  "links": [
+    {
+      "id": "01KZ0MWMGMMPXH36CAT2D8WQ03",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:23.3495436+00:00"
+    },
+    {
+      "id": "01KZ0MWN87WBM2XJV7VPZ693Q4",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:24.1045476+00:00"
+    },
+    {
+      "id": "01KZ0MN405VW7JYGFD0YAWYWQS",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-009",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:05:17.0616782+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KZ0MN4078HRET51XPK5SS7TT",
+      "target": "P1",
+      "created_at": "2026-08-02T07:05:17.0607164+00:00"
+    }
+  ]
+}

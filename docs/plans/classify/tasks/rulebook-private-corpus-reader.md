@@ -22,20 +22,20 @@ Production validation can stream private owner evidence through the deterministi
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun | `data_model` | `touches` | `true` |
-| EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus | `external_dependency` | `references` | `true` |
-| FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup](../../../designs/classify/decisions/artifact-retention.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun](../../../designs/classify/data-model.md#classificationvalidationrun) | `data_model` | `touches` | `true` |
+| [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus) | `external_dependency` | `references` | `true` |
+| [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) | `nfr` | `satisfies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](../tasks/rulebook-deterministic-engine.md) | `compile` | The reader streams rows into the exact production evaluation engine rather than a second evaluator. |
-| [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](../tasks/rulebook-state-foundation.md) | `compile` | Privacy tests inspect the actual CLASSIFY durable-state boundary. |
+| [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE: TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](rulebook-deterministic-engine.md) | `compile` | The reader streams rows into the exact production evaluation engine rather than a second evaluator. |
+| [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION: TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](rulebook-state-foundation.md) | `compile` | Privacy tests inspect the actual CLASSIFY durable-state boundary. |
 
 ## Recipe
 
@@ -83,11 +83,11 @@ Production validation can stream private owner evidence through the deterministi
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationEngine.Evaluate | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| PrivateCorpusReader.ReadAsync | `produces` | DM-CLASSIFY-VALIDATION-RUN |  |
-| CorpusFingerprint | `produces` | DM-CLASSIFY-VALIDATION-RUN |  |
-| OwnerRulebookGateInputManifest | `produces` | EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS |  |
-| OwnerBenefitEvidenceReceipt | `produces` | EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS |  |
+| ClassificationEngine.Evaluate | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| PrivateCorpusReader.ReadAsync | `produces` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| CorpusFingerprint | `produces` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| OwnerRulebookGateInputManifest | `produces` | [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus) |  |
+| OwnerBenefitEvidenceReceipt | `produces` | [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus) |  |
 
 ### Verification
 
@@ -112,15 +112,15 @@ Production validation can stream private owner evidence through the deterministi
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2fdz` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](../tasks/rulebook-deterministic-engine.md): The reader streams rows into the exact production evaluation engine rather than a second evaluator.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](../tasks/rulebook-state-foundation.md): Privacy tests inspect the actual CLASSIFY durable-state boundary.
-- `governed-by` -> DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `implements` -> FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence
-- `implements` -> FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts
-- `references` -> EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus
-- `satisfies` -> NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data
-- `touches` -> DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE: TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](rulebook-deterministic-engine.md): The reader streams rows into the exact production evaluation engine rather than a second evaluator.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION: TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](rulebook-state-foundation.md): Privacy tests inspect the actual CLASSIFY durable-state boundary.
+- `governed-by` -> [DD-CLASSIFY-ARTIFACT-RETENTION: Fixed owner-only retention and recognized-artifact cleanup](../../../designs/classify/decisions/artifact-retention.md)
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `implements` -> [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence)
+- `implements` -> [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts)
+- `references` -> [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus)
+- `satisfies` -> [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data)
+- `touches` -> [DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun](../../../designs/classify/data-model.md#classificationvalidationrun)
 
 ## Navigation
 

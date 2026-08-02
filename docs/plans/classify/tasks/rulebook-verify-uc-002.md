@@ -22,21 +22,21 @@ UC-CLASSIFY-002 proves bounded reproducible explanation and every specified fail
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome](../../../prd/classify/prd.md#fr-classify-outcome-explanation-explain-a-classification-outcome) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT: Verify bounded outcome explanation | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT: Verify every staleness trigger | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-002: Inspect and explain a classification outcome | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-002: Inspect and explain a classification outcome](../../../prd/classify/prd.md#uc-classify-002-inspect-and-explain-a-classification-outcome) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md) | `compile` | Acceptance invokes the published process boundary. |
-| [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](../tasks/rulebook-outcome-explanation.md) | `compile` | The UC consumes the complete explanation and staleness query. |
-| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md) | `compile` | UC-002 verifies outcome and current/stale status through the published workflow. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md) | `compile` | Acceptance invokes the published process boundary. |
+| [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION: TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](rulebook-outcome-explanation.md) | `compile` | The UC consumes the complete explanation and staleness query. |
+| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md) | `compile` | UC-002 verifies outcome and current/stale status through the published workflow. |
 
 ## Recipe
 
@@ -74,10 +74,10 @@ UC-CLASSIFY-002 proves bounded reproducible explanation and every specified fail
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| GetClassificationOutcomeQuery.HandleAsync | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| GetClassificationStatusQuery.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| VerifiedClassifyUc002 | `produces` | UC-CLASSIFY-002 |  |
+| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| GetClassificationOutcomeQuery.HandleAsync | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| GetClassificationStatusQuery.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| VerifiedClassifyUc002 | `produces` | [UC-CLASSIFY-002](../../../prd/classify/prd.md#uc-classify-002-inspect-and-explain-a-classification-outcome) |  |
 
 ### Verification
 
@@ -102,14 +102,14 @@ UC-CLASSIFY-002 proves bounded reproducible explanation and every specified fail
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3cp2` (verified)
-- `covers` -> UC-CLASSIFY-002: Inspect and explain a classification outcome
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md): Acceptance invokes the published process boundary.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](../tasks/rulebook-outcome-explanation.md): The UC consumes the complete explanation and staleness query.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md): UC-002 verifies outcome and current/stale status through the published workflow.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `implements` -> FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome
-- `implements` -> FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes
-- `implements` -> FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history
+- `covers` -> [UC-CLASSIFY-002: Inspect and explain a classification outcome](../../../prd/classify/prd.md#uc-classify-002-inspect-and-explain-a-classification-outcome)
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md): Acceptance invokes the published process boundary.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION: TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](rulebook-outcome-explanation.md): The UC consumes the complete explanation and staleness query.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md): UC-002 verifies outcome and current/stale status through the published workflow.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `implements` -> [FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome](../../../prd/classify/prd.md#fr-classify-outcome-explanation-explain-a-classification-outcome)
+- `implements` -> [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes)
+- `implements` -> [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history)
 - `verifies` -> TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT: Verify bounded outcome explanation
 - `verifies` -> TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT: Verify every staleness trigger
 

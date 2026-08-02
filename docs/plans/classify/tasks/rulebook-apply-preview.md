@@ -22,22 +22,22 @@ The owner receives an expiry-bound read-only preview containing only current exp
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-APPLY-RUN: ClassificationApplyPreviewAndRun | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-APPLY-FEEDBACK: Apply and Feedback | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga](../../../designs/classify/decisions/apply-saga.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-APPLY-RUN: ClassificationApplyPreviewAndRun](../../../designs/classify/data-model.md#classificationapplypreviewandrun) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-APPLY-FEEDBACK: Apply and Feedback](../../../designs/classify/features/apply-feedback/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run](../../../prd/classify/prd.md#fr-classify-apply-authorization-authorize-a-classification-apply-run) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT: Verify explicit apply authorization | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](../tasks/rulebook-gate-int-ledger-contract.md) | `compile` | Preview relies on the proven apply_preflight contract. |
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT. |
-| [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](../tasks/rulebook-outcome-explanation.md) | `compile` | Preview consumes current retained outcomes and complete staleness evaluation. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md) | `compile` | Broad selection consumes exact active rule authority and validation evidence. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](rulebook-gate-int-ledger-contract.md) | `compile` | Preview relies on the proven apply_preflight contract. |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT. |
+| [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION: TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](rulebook-outcome-explanation.md) | `compile` | Preview consumes current retained outcomes and complete staleness evaluation. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md) | `compile` | Broad selection consumes exact active rule authority and validation evidence. |
 
 ## Recipe
 
@@ -69,6 +69,7 @@ The owner receives an expiry-bound read-only preview containing only current exp
 ### Notes
 
 - A preview is authorization evidence, not a promise that later preflight remains current.
+- Hermes review amendment (2026-08-01): the accepted FR requires the published apply.preview result—not only private retained rows—to disclose Evaluation Fingerprint, target/category authority, contributing rule versions, selected transaction identities, exact exclusions and no-suggestion/conflict counts, and bounded preflight evidence. This task owns the narrow ClassifyApplyPreviewResult/mapper/command correction and focused contract tests; no unrelated public surface or payload fields are authorized.
 
 ### File Contracts
 
@@ -77,19 +78,20 @@ The owner receives an expiry-bound read-only preview containing only current exp
 | `src/Tally/Features/Classify/Apply/Preview/PreviewClassificationApplyCommand.cs` | `create` | preview workflow | `true` |  |
 | `src/Tally/Domain/Classify/Apply/ApplyAuthorizationPolicy.cs` | `create` | selection and authority policy | `true` |  |
 | `src/Tally/Infrastructure/Classify/Storage/Apply/ClassificationApplyPreviewStore.cs` | `create` | expiry-bound preview persistence | `true` |  |
-| `src/Tally/Features/Classify/Contract/ClassifyContractMapper.ApplyPreview.cs` | `create` | pure preview mapping | `true` |  |
-| `tests/Tally.Tests/Classify/Apply/ApplyPreviewTests.cs` | `test` | preview contract tests | `true` |  |
+| `src/Tally/Features/Classify/Contract/ClassifyContractMapper.ApplyPreview.cs` | `create` | pure preview mapping and complete public disclosure | `true` |  |
+| `src/Tally/Contracts/Classify/Operations/ClassifyResults.cs` | `modify` | complete bounded public apply-preview disclosure result | `true` |  |
+| `tests/Tally.Tests/Classify/Apply/ApplyPreviewTests.cs` | `test` | preview contract and disclosure tests | `true` |  |
 | `tests/Tally.Tests/Classify/Apply/ApplyAuthorizationTests.cs` | `test` | selection and authority matrix | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| GetClassificationOutcomeQuery.HandleAsync | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| RuleSetStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| PreviewClassificationApplyCommand.HandleAsync | `produces` | DM-CLASSIFY-APPLY-RUN |  |
-| ClassificationApplyPreviewStore | `produces` | DM-CLASSIFY-APPLY-RUN |  |
+| GetClassificationOutcomeQuery.HandleAsync | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| RuleSetStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| PreviewClassificationApplyCommand.HandleAsync | `produces` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| ClassificationApplyPreviewStore | `produces` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
 
 ### Verification
 
@@ -114,16 +116,16 @@ The owner receives an expiry-bound read-only preview containing only current exp
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-gv0z` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](../tasks/rulebook-gate-int-ledger-contract.md): Preview relies on the proven apply_preflight contract.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](../tasks/rulebook-outcome-explanation.md): Preview consumes current retained outcomes and complete staleness evaluation.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md): Broad selection consumes exact active rule authority and validation evidence.
-- `governed-by` -> DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `implements` -> FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run
-- `implements` -> FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes
-- `touches` -> DM-CLASSIFY-APPLY-RUN: ClassificationApplyPreviewAndRun
-- `touches` -> FA-CLASSIFY-APPLY-FEEDBACK: Apply and Feedback
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](rulebook-gate-int-ledger-contract.md): Preview relies on the proven apply_preflight contract.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION: TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](rulebook-outcome-explanation.md): Preview consumes current retained outcomes and complete staleness evaluation.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md): Broad selection consumes exact active rule authority and validation evidence.
+- `governed-by` -> [DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga](../../../designs/classify/decisions/apply-saga.md)
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `implements` -> [FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run](../../../prd/classify/prd.md#fr-classify-apply-authorization-authorize-a-classification-apply-run)
+- `implements` -> [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes)
+- `touches` -> [DM-CLASSIFY-APPLY-RUN: ClassificationApplyPreviewAndRun](../../../designs/classify/data-model.md#classificationapplypreviewandrun)
+- `touches` -> [FA-CLASSIFY-APPLY-FEEDBACK: Apply and Feedback](../../../designs/classify/features/apply-feedback/api-surface.md)
 - `verifies` -> TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT: Verify explicit apply authorization
 
 ## Navigation

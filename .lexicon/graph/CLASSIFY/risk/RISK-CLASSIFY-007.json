@@ -1,0 +1,14 @@
+{
+  "id": "01KZ0M917VTBZ9KX6NT10BKP9H",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "RISK-CLASSIFY-007",
+  "description": [
+    "Paginated discovery or unresolved reporting could leak descriptions, normalized values, private paths, or financial payloads through cursors, logs, diagnostics, or durable state."
+  ],
+  "likelihood": "Medium",
+  "impact": "High",
+  "mitigation": [
+    "Use opaque fingerprint-bound cursors without private values; keep general discovery metadata-only; allow normalized descriptions only in the bounded owner-local unresolved result; add disclosure scans and no-durable-raw-store tests."
+  ],
+  "created_at": "2026-08-02T06:58:41.0206039+00:00"
+}

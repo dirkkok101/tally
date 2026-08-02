@@ -1,0 +1,267 @@
+{
+  "id": "01KZ0NQZT8EX7GVJ46PYKKSC9J",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEMGGZBNB2YHDY0H3A09Y",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-UNRESOLVED-REPORT",
+  "slug": "ERGONOMICS-UNRESOLVED-REPORT",
+  "title": "Report unresolved patterns from fresh Ledger truth",
+  "description": [
+    "Implement classify.unresolved.report identity reads, fresh compatible classification_v1 join, exact accounting, grouping, typed stale failures, and metadata-only observability."
+  ],
+  "objective": [
+    "Return an ephemeral bounded owner-review report over retained no_suggestion outcomes without creating durable descriptions or rule proposals."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-08-02T07:24:19.6572393+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S0FCEG9106HHDFSXB4A31",
+      "bead_id": "bd-3ciw",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:23.4707755+00:00",
+      "created_at": "2026-08-02T08:21:23.4707755+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NQZTBN8408JX808RHHNYE",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTBW27NZ3TFRTPXNKS1",
+      "target": "DD-CLASSIFY-UNRESOLVED-REPORT-BOUNDARY",
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVHPSVG16NH5WB89BC02N",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Report handler consumes the additive request/result/error records."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:16.2826240+00:00"
+    },
+    {
+      "id": "01KZ0NVJH0Y8GSWFV8ZEP8WG5P",
+      "target": "TASK-CLASSIFY-ERGONOMICS-UNRESOLVED-POLICY",
+      "dependency_type": "compile",
+      "reason": [
+        "Fresh-join handler delegates deterministic grouping and hashing to the pure policy."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:26:17.1219928+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NQZTCJXFXVJ2S94RSZ911",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Evaluation/ClassificationUnresolvedStore.cs",
+      "action": "create",
+      "role": "bounded no-suggestion identity reads",
+      "required": 1,
+      "notes": [
+        "No description persistence."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTCHSW12HHQ13YRSXHT",
+      "path": "src/Tally/Features/Classify/Unresolved/Report/GetUnresolvedPatternReportQuery.cs",
+      "action": "create",
+      "role": "fresh-join report vertical slice",
+      "required": 1,
+      "notes": [
+        "No partial result."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTCPT25JC0FNA1EHGC9",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Unresolved.cs",
+      "action": "create",
+      "role": "pure report mapping",
+      "required": 1,
+      "notes": [
+        "Owner-visible result and metadata only."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTCAZBYJACS6VWQXV79",
+      "path": "tests/Tally.Tests/Classify/Unresolved/UnresolvedPatternReportTests.cs",
+      "action": "create",
+      "role": "join accounting stale privacy and no-mutation tests",
+      "required": 1,
+      "notes": [
+        "Synthetic isolated roots."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NZCMW1AZSFR6VPP5K2FV3",
+      "name": "ClassificationUnresolvedStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "notes": [
+        "bounded no-suggestion reader"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:28:22.1717783+00:00"
+    },
+    {
+      "id": "01KZ0NZCMXRAZATWY178N7EGMG",
+      "name": "GetUnresolvedPatternReportQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-UNRESOLVED-REPORT",
+      "notes": [
+        "complete report or typed error"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:28:22.1717783+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXFG131D37CP757H67J3E",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:19.5546545+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NQZTBSZJ0XHJQ1ZKNXZ76",
+      "kind": "acceptance_check",
+      "text": [
+        "The query requires one completed retained evaluation and topN 1 through 500, then loads only no_suggestion transaction identities and joins every identity exactly once to a fresh compatible evaluation-purpose classification_v1 projection."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTCDTDZHYCRK5HT2NPQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Result metadata accounts for eligible no-suggestions, fresh matches, total groups, returned groups, and evaluation/projection/category/rule-set/normalization fingerprints before exposing ordered groups."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTCZBVQZ4176V3DG0B0",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing/expired/abandoned evaluation, retention gap, unmatched/duplicate fresh row, stale generation, incompatible projection, amount overflow, archived lifecycle evidence, or accounting mismatch returns a typed error, null result, and zero writes."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTC51C8X93BRZ1N0F0E",
+      "kind": "acceptance_check",
+      "text": [
+        "The operation creates no table, cache, file, proposal, feedback, rule, activation, or log entry containing description, amount, account, transaction, token, or private path."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTCXJGWEGYYQKQ3M6N5",
+      "kind": "constraint",
+      "text": [
+        "Ledger is read-only through LedgerContractClient and the complete report is built before stdout serialization."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTCVM5TYMF7KMS746V2",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationUnresolvedStore, GetUnresolvedPatternReportQuery, and unresolved mapper"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTCFYZQYVRE0TDAE3GY",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not read live Ledger storage, reconstruct transfer/refund eligibility, persist normalized descriptions, or create rules from groups."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTC2X639J2QJKHGQTXH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not return raw source descriptions or transaction identities; only the owner-visible normalized representative and aggregate scope are allowed."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NQZTBXAZMY2EM64G8W5B7",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTBK139V18JADS0701Z",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    },
+    {
+      "id": "01KZ0NQZTB71HMEYCRTXGNHGR0",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NQZTCK6WJ780A0KR5PA75",
+      "gate_type": "test-evidence",
+      "description": [
+        "Store and log probes prove no durable normalized description report or proposal is created."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NQZTCDQCNMAVAMW10YR7Q",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~UnresolvedPatternReportTests",
+      "expected_result": "exit 0; at least 34 join grouping stale lifecycle accounting privacy and zero-write cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:19.6572393+00:00"
+    }
+  ]
+}

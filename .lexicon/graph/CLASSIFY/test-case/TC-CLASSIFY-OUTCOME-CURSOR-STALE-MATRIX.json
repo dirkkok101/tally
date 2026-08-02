@@ -1,0 +1,42 @@
+{
+  "id": "01KZ0MT8997F8SV06RERMRGRYR",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-OUTCOME-CURSOR-STALE-MATRIX",
+  "slug": "OUTCOME-CURSOR-STALE-MATRIX",
+  "title": "Reject invalid or stale outcome continuations without partial results",
+  "level": "integration",
+  "surface": "contract",
+  "scenario": "unhappy",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A retained evaluation and at least one valid outcome-list continuation exist in an isolated data root.",
+  "steps": "Tamper each cursor field; replay under another evaluation, filter, page size, category lifecycle, active rule set, Ledger generation, expired snapshot, and incompatible projection; inject cancellation and malformed retained evidence.",
+  "expected": "Each case returns the specified typed cursor, stale, lifecycle, compatibility, resource, or integrity error, a null result, zero returned rows, and byte-identical CLASSIFY and Ledger mutation state.",
+  "cleanup": "Remove only the isolated data root.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Evaluation/OutcomeListCursorTests.cs",
+  "owner": "CLASSIFY",
+  "created_at": "2026-08-02T07:08:05.2910856+00:00",
+  "links": [
+    {
+      "id": "01KZ0MVYZSXPKWAVJA2JPE3RP0",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:01.3061139+00:00"
+    },
+    {
+      "id": "01KZ0MW3BS6Y27HY2QARDT6GXR",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PAGINATION-INTEGRITY",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:05.7863418+00:00"
+    },
+    {
+      "id": "01KZ0MW72M5EEJYVFNXX6666QD",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-007",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:09.5899910+00:00"
+    }
+  ]
+}

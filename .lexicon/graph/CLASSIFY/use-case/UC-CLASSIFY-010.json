@@ -1,0 +1,39 @@
+{
+  "id": "01KZ0MGE0B2XFQTDB9CK0BKY8D",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-010",
+  "title": "Review repeated unresolved patterns",
+  "preconditions": "The evaluation and its active rule set are retained and compatible; the caller supplies bounded top-N and minimum-count values; a fresh complete Ledger classification_v1 evaluation projection can be acquired.",
+  "postconditions": "Every no_suggestion row is accounted for; report and group fingerprints detect semantic drift; no raw description or report row is persisted by CLASSIFY; the result proposes owner-review candidates only and creates or activates no rule.",
+  "main_flow": "The caller invokes classify.unresolved.report; CLASSIFY joins retained no_suggestion outcomes to the fresh projection, verifies all lifecycle and fingerprint dimensions, groups production-normalized descriptions by account and direction, computes counts and checked aggregate signed amounts, orders candidates deterministically, and returns only the bounded owner-local report.",
+  "alt_flows": [
+    "Reject expired evaluation, stale Ledger generation, changed active rule set, archived category lifecycle, missing or duplicate projection rows, or incompatible projection with a typed no-result failure.",
+    "Reject over-limit rows, groups, top-N, normalization, checked amount sum, runtime, or memory before returning a partial report.",
+    "Never write descriptions to logs, durable CLASSIFY state, cursors, generated docs, or tracked files."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"A retained completed evaluation contains no_suggestion outcomes and the owner wants bounded candidates for rulebook refinement.\",\"status\":\"draft\"}",
+  "created_at": "2026-08-02T07:02:43.4685271+00:00",
+  "links": [
+    {
+      "id": "01KZ0MQZVPVWHKJX095SRHE8J7",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:51.1281118+00:00"
+    },
+    {
+      "id": "01KZ0MQZ3EG8T3H4XP2WJGFT73",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:50.3519822+00:00"
+    },
+    {
+      "id": "01KZ0MQT5BCERY758A3Y7WG4MX",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:45.2918833+00:00"
+    }
+  ]
+}

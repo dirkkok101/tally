@@ -22,23 +22,23 @@ Every retained workflow state reports bounded lifecycle, mutation possibility, e
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-STATE-STORE: ClassificationStateStore | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-STATE-RECOVERY: State and Recovery | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-STATUS-HISTORY-CONTRACT: Verify safe classification status and history | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-ABANDON-CLEANUP](../tasks/abandon-cleanup.md) | `compile` | Status consumes abandonment tombstones and cleanup events. |
-| [TASK-CLASSIFY-FEEDBACK-PROPOSALS](../tasks/feedback-proposals.md) | `compile` | Status consumes feedback and proposal state. |
-| [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA. |
-| [TASK-CLASSIFY-EVALUATION-WORKFLOW](../tasks/evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW. |
-| [TASK-CLASSIFY-RULE-DRAFT-SAVE](../tasks/rule-draft-save.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE. |
-| [TASK-CLASSIFY-RULE-VALIDATION](../tasks/rule-validation.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULE-VALIDATION. |
+| [TASK-CLASSIFY-ABANDON-CLEANUP: TASK-CLASSIFY-ABANDON-CLEANUP](abandon-cleanup.md) | `compile` | Status consumes abandonment tombstones and cleanup events. |
+| [TASK-CLASSIFY-FEEDBACK-PROPOSALS: TASK-CLASSIFY-FEEDBACK-PROPOSALS](feedback-proposals.md) | `compile` | Status consumes feedback and proposal state. |
+| [TASK-CLASSIFY-APPLY-RUN-SAGA: TASK-CLASSIFY-APPLY-RUN-SAGA](apply-run-saga.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA. |
+| [TASK-CLASSIFY-EVALUATION-WORKFLOW: TASK-CLASSIFY-EVALUATION-WORKFLOW](evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW. |
+| [TASK-CLASSIFY-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULE-DRAFT-SAVE](rule-draft-save.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE. |
+| [TASK-CLASSIFY-RULE-VALIDATION: TASK-CLASSIFY-RULE-VALIDATION](rule-validation.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULE-VALIDATION. |
 
 ## Recipe
 
@@ -86,13 +86,13 @@ Every retained workflow state reports bounded lifecycle, mutation possibility, e
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationRuleStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| ClassificationValidationStore | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationEvaluationStore | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| ClassificationApplyRunStore | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| ClassificationFeedbackStore | `consumes` | DM-CLASSIFY-FEEDBACK-PROPOSAL |  |
-| ClassificationRecoveryStore | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| GetClassificationStatusQuery.HandleAsync | `produces` | DM-CLASSIFY-STATE-STORE |  |
+| ClassificationRuleStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| ClassificationValidationStore | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationEvaluationStore | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassificationApplyRunStore | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| ClassificationFeedbackStore | `consumes` | [DM-CLASSIFY-FEEDBACK-PROPOSAL](../../../designs/classify/data-model.md#classificationfeedbackandproposal) |  |
+| ClassificationRecoveryStore | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| GetClassificationStatusQuery.HandleAsync | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
 
 ### Verification
 
@@ -114,17 +114,17 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-ABANDON-CLEANUP](../tasks/abandon-cleanup.md): Status consumes abandonment tombstones and cleanup events.
-- `depends-on:compile` -> [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md): Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA.
-- `depends-on:compile` -> [TASK-CLASSIFY-EVALUATION-WORKFLOW](../tasks/evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW.
-- `depends-on:compile` -> [TASK-CLASSIFY-FEEDBACK-PROPOSALS](../tasks/feedback-proposals.md): Status consumes feedback and proposal state.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-DRAFT-SAVE](../tasks/rule-draft-save.md): Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-VALIDATION](../tasks/rule-validation.md): Consumes an interface produced by TASK-CLASSIFY-RULE-VALIDATION.
-- `governed-by` -> DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history
-- `touches` -> DM-CLASSIFY-STATE-STORE: ClassificationStateStore
-- `touches` -> FA-CLASSIFY-STATE-RECOVERY: State and Recovery
+- `depends-on:compile` -> [TASK-CLASSIFY-ABANDON-CLEANUP: TASK-CLASSIFY-ABANDON-CLEANUP](abandon-cleanup.md): Status consumes abandonment tombstones and cleanup events.
+- `depends-on:compile` -> [TASK-CLASSIFY-APPLY-RUN-SAGA: TASK-CLASSIFY-APPLY-RUN-SAGA](apply-run-saga.md): Consumes an interface produced by TASK-CLASSIFY-APPLY-RUN-SAGA.
+- `depends-on:compile` -> [TASK-CLASSIFY-EVALUATION-WORKFLOW: TASK-CLASSIFY-EVALUATION-WORKFLOW](evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW.
+- `depends-on:compile` -> [TASK-CLASSIFY-FEEDBACK-PROPOSALS: TASK-CLASSIFY-FEEDBACK-PROPOSALS](feedback-proposals.md): Status consumes feedback and proposal state.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULE-DRAFT-SAVE](rule-draft-save.md): Consumes an interface produced by TASK-CLASSIFY-RULE-DRAFT-SAVE.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-VALIDATION: TASK-CLASSIFY-RULE-VALIDATION](rule-validation.md): Consumes an interface produced by TASK-CLASSIFY-RULE-VALIDATION.
+- `governed-by` -> [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history)
+- `touches` -> [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore)
+- `touches` -> [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md)
 - `verifies` -> TC-CLASSIFY-STATUS-HISTORY-CONTRACT: Verify safe classification status and history
 
 ## Navigation

@@ -338,64 +338,64 @@
       "created_at": "2026-07-31T10:03:40.5096251+00:00"
     },
     {
-      "id": "01KYYWAGP2QQ77BW4YB3NEGVVB",
+      "id": "01KZ0N2220DD2D6XXGRVJ7DS6Y",
       "kind": "note",
       "text": [
         "Hermes authorization (2026-08-01): reserve ClassifyResults.cs, ClassifyJsonContext.cs, and public contract tests so classify.status can expose the already-approved FR-CLASSIFY-STATUS-HISTORY fields. ClassifyStatusResult keeps the common contractVersion, subjectType, subjectId, lifecycleState, mutationMayHaveOccurred, and exactly one nextSafeOperationId, and adds exactly one non-null typed detail matching subjectType; all other details are null."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+      "created_at": "2026-08-02T07:12:21.0558012+00:00"
     },
     {
-      "id": "01KYYWAGP3J0WPHJ9GQECDMKN6",
+      "id": "01KZ0N2220KKDHD0CPHAFZEJ78",
       "kind": "note",
       "text": [
         "Rule detail is bounded and deterministically ordered: activeRuleSetVersionId plus versions for the addressed stable rule identity. Each version contains ruleVersionId, ordered ruleSetVersionIds, lifecycleState, actorId, stable system reasonCode, createdAt, priorRuleVersionId, and ordered successorRuleVersionIds. Never expose owner-entered rule reason prose. If the bounded operation limit would be exceeded, fail with resource limit and no partial history."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+      "created_at": "2026-08-02T07:12:21.0558012+00:00"
     },
     {
-      "id": "01KYYWAGP3AVBPHTVZPHQF1Y1G",
+      "id": "01KZ0N22212FGTF2WXXX8T1DQ6",
       "kind": "note",
       "text": [
         "Validation detail contains candidate/report fingerprints, lifecycle, aggregate total/accounted/suggestion/no-suggestion/conflict/stale counts, activation eligibility when retained, actorId, started/completed timestamps, and a closed retained staleness state derived only from durable metadata. Evaluation detail contains a deterministic fingerprint over retained run metadata, ruleSetVersionId, normalizationVersion, aggregate input/suggestion/no-suggestion/conflict/stale counts, actorId, createdAt, and durable staleness state. Never reread corpus or Ledger data to refresh status."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+      "created_at": "2026-08-02T07:12:21.0558012+00:00"
     },
     {
-      "id": "01KYYWAGP38YD9QE7SK54XXTGZ",
+      "id": "01KZ0N22211FTF7T4S7CF4HDB1",
       "kind": "note",
       "text": [
-        "Preview detail contains preview/evaluation fingerprints and IDs, selected/excluded/no-suggestion/conflict counts, expiry/lifecycle and actor metadata only. Apply detail contains previewId, the retained authorized request fingerprint, applied/already-applied/rejected/failed/unresolved totals, unresolved frontier, replaySafe, resumeSafe, actorId, and start/completion timestamps; never return item transaction/allocation identities or errors."
+        "Preview detail contains preview/Evaluation Fingerprints and IDs, selected/excluded/no-suggestion/conflict counts, expiry/lifecycle and actor metadata only. Apply detail contains previewId, the retained authorized request fingerprint, applied/already-applied/rejected/failed/unresolved totals, unresolved frontier, replaySafe, resumeSafe, actorId, and start/completion timestamps; never return item transaction/allocation identities or errors."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+      "created_at": "2026-08-02T07:12:21.0558012+00:00"
     },
     {
-      "id": "01KYYWAGP3W5KJN1EJV4MX5SCJ",
+      "id": "01KZ0N2221QCKWCE0VY0A8M98X",
       "kind": "note",
       "text": [
-        "Feedback detail contains outcomeId, decisionType, proposalId/state when retained, actorId, stable system reasonCode derived from decision/proposal state, occurredAt, and ordered referenced ruleVersionIds from durable metadata. Never expose feedback free-text reason, transaction/allocation IDs, or reconstruct evidence. Abandonment and cleanup details expose only durable IDs/types, actorId, safe system reason code, timestamps, policy and aggregate/per-kind counts; never free-text reasons or artifact names/paths."
+        "Feedback detail contains outcomeId, decisionType, proposalId/state when retained, actorId, stable system reasonCode derived from decision/proposal state, occurredAt, and ordered referenced ruleVersionIds from durable metadata. Never expose feedback free-text reason, transaction/allocation IDs, or reconstruct evidence. Abandonment and cleanup details expose only durable IDs/types, actorId, stable enumerated system reason code, timestamps, policy and aggregate/per-kind counts; never free-text reasons or artifact names/paths."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+      "created_at": "2026-08-02T07:12:21.0558012+00:00"
     },
     {
-      "id": "01KYYWAGP349C0CPWFJ739TWYY",
+      "id": "01KZ0N2221DEC3TDXE2FX6JCAW",
       "kind": "note",
       "text": [
         "Unknown subject remains stable not-found with no partial result. Missing required durable metadata for a known subject fails integrity rather than synthesizing current state. Arrays and details use explicit source-generated JSON metadata, deterministic ordinal ordering, documented maxima, and no polymorphic/reflection serialization. Update existing sparse-output tests to assert the hard FR fields and privacy exclusions. Do not change requests, unrelated operations, persistence schema, run unit/filtered/full suites, tag, release, or deploy."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-08-01T14:40:49.3452111+00:00"
+      "created_at": "2026-08-02T07:12:21.0558012+00:00"
     }
   ],
   "references": [

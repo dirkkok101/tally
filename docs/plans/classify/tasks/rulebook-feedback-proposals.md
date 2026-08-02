@@ -22,22 +22,22 @@ Owner acceptance, rejection, and correction remain attributable and may suggest 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-FEEDBACK-PROPOSAL: ClassificationFeedbackAndProposal | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-APPLY-FEEDBACK: Apply and Feedback | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-CORRECTION-FEEDBACK: Turn owner corrections into bounded feedback | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-FEEDBACK-PROPOSAL: ClassificationFeedbackAndProposal](../../../designs/classify/data-model.md#classificationfeedbackandproposal) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-APPLY-FEEDBACK: Apply and Feedback](../../../designs/classify/features/apply-feedback/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-CORRECTION-FEEDBACK: Turn owner corrections into bounded feedback](../../../prd/classify/prd.md#fr-classify-correction-feedback-turn-owner-corrections-into-bounded-feedback) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history](../../../prd/classify/prd.md#nfr-classify-attributable-history-retain-attributable-classification-history) | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT: Verify bounded correction feedback | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md) | `compile` | Correction feedback consumes authoritative prior and resulting apply allocation identities. |
-| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md) | `compile` | Proposal provenance references immutable active and historical rule versions. |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](rulebook-apply-run-saga.md) | `compile` | Correction feedback consumes authoritative prior and resulting apply allocation identities. |
+| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md) | `compile` | Proposal provenance references immutable active and historical rule versions. |
 
 ## Recipe
 
@@ -86,11 +86,11 @@ Owner acceptance, rejection, and correction remain attributable and may suggest 
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationEvaluationStore | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| ClassificationApplyRunStore | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| RecordClassificationFeedbackCommand.HandleAsync | `produces` | DM-CLASSIFY-FEEDBACK-PROPOSAL |  |
-| FeedbackProposalBuilder.Build | `produces` | DM-CLASSIFY-FEEDBACK-PROPOSAL |  |
-| ClassificationFeedbackStore | `produces` | DM-CLASSIFY-FEEDBACK-PROPOSAL |  |
+| ClassificationEvaluationStore | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassificationApplyRunStore | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| RecordClassificationFeedbackCommand.HandleAsync | `produces` | [DM-CLASSIFY-FEEDBACK-PROPOSAL](../../../designs/classify/data-model.md#classificationfeedbackandproposal) |  |
+| FeedbackProposalBuilder.Build | `produces` | [DM-CLASSIFY-FEEDBACK-PROPOSAL](../../../designs/classify/data-model.md#classificationfeedbackandproposal) |  |
+| ClassificationFeedbackStore | `produces` | [DM-CLASSIFY-FEEDBACK-PROPOSAL](../../../designs/classify/data-model.md#classificationfeedbackandproposal) |  |
 
 ### Verification
 
@@ -115,16 +115,16 @@ Owner acceptance, rejection, and correction remain attributable and may suggest 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3tzh` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md): Correction feedback consumes authoritative prior and resulting apply allocation identities.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md): Proposal provenance references immutable active and historical rule versions.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `governed-by` -> DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-CORRECTION-FEEDBACK: Turn owner corrections into bounded feedback
-- `satisfies` -> NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history
-- `touches` -> DM-CLASSIFY-FEEDBACK-PROPOSAL: ClassificationFeedbackAndProposal
-- `touches` -> FA-CLASSIFY-APPLY-FEEDBACK: Apply and Feedback
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](rulebook-apply-run-saga.md): Correction feedback consumes authoritative prior and resulting apply allocation identities.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md): Proposal provenance references immutable active and historical rule versions.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-CORRECTION-FEEDBACK: Turn owner corrections into bounded feedback](../../../prd/classify/prd.md#fr-classify-correction-feedback-turn-owner-corrections-into-bounded-feedback)
+- `satisfies` -> [NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history](../../../prd/classify/prd.md#nfr-classify-attributable-history-retain-attributable-classification-history)
+- `touches` -> [DM-CLASSIFY-FEEDBACK-PROPOSAL: ClassificationFeedbackAndProposal](../../../designs/classify/data-model.md#classificationfeedbackandproposal)
+- `touches` -> [FA-CLASSIFY-APPLY-FEEDBACK: Apply and Feedback](../../../designs/classify/features/apply-feedback/api-surface.md)
 - `verifies` -> TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT: Verify bounded correction feedback
 
 ## Navigation

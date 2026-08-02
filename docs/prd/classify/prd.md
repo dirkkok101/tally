@@ -6,12 +6,12 @@
 |-------|-------|
 | **Module Code** | CLASSIFY |
 | **Scope** | comprehensive |
-| **Description** | RECOMMENDED APPROACH A — OWNER-APPROVED DETERMINISTIC RULEBOOK. CLASSIFY queries eligible canonical transactions and active Spend Categories only through the versioned public LEDGER contract. A bounded, versioned normalization step evaluates explicit ordered rules and returns one structured outcome per transaction: deterministic suggestion with match evidence, no suggestion, or conflict. A suggestion never mutates LEDGER. An explicit apply operation uses LEDGER category assignment/correction; OQ-CLASSIFY-4 must decide whether an owner-approved exact rule may batch-apply; if allowed, it occurs only during an explicit invocation with preview evidence, never by a watcher. Corrections remain attributable and may propose a rule change, but do not silently broaden one. Complexity M and within budget: one in-process CLI module, at most one owner-only module store for rule/version/evaluation state, no service or network. Root-problem completeness 9/10. It builds directly on FR-LEDGER-ACTUALS-QUERY, FR-LEDGER-CATEGORY-ASSIGNMENT, FR-LEDGER-CATEGORY-CATALOGUE, FR-LEDGER-CONTRACT-DISCOVERY, and FR-LEDGER-STRUCTURED-INVOCATION while honoring LEDGER NG2 and INGEST NG2. Pros: deterministic, explainable, replayable, correction-aware, and safe for agent use. Cons: normalization and rule lifecycle require discipline; complex merchants can create rule proliferation. Biggest risk: brittle rules can match plausible but wrong transactions after bank-description drift. Stress test: representative held-out transactions must show a material reduction in owner decisions with zero incorrect batch-applied assignments; otherwise stop custom classification and use the do-less path.  ALTERNATIVE B — LOCAL STATISTICAL CLASSIFIER. Train an in-process model from attributable LEDGER assignment history and emit probabilities plus feature explanations; only explicit application mutates LEDGER. Complexity H, beyond the initial M budget, root-problem completeness 8/10, and it still builds on public LEDGER contracts. Pros: can generalize beyond exact recurring descriptions and reduce rule maintenance. Cons: requires enough representative labeled history, model/version lifecycle, evaluation sets, threshold calibration, and explanations that remain meaningful after category or bank drift. Biggest risk: sparse private history produces confident-looking but unstable predictions whose errors contaminate BUDGET and INSIGHTS. Rejected for v1; discovery may preserve it only as a future option if deterministic rules demonstrably plateau and sufficient local labels exist.  ALTERNATIVE C — DO LESS WITH AGENT-GUIDED MANUAL BATCH ASSIGNMENT. Add no classifier state. The AI Agent Host queries uncategorized transactions and active categories through LEDGER, groups likely repeats conversationally, and submits only owner-confirmed assignments through existing LEDGER operations. Complexity L, within budget, root-problem completeness 5/10, and maximal reuse of the current public contract. Pros: little new code, every decision remains explicit, and it is viable immediately after LEDGER. Cons: repeated interpretation remains manual, corrections do not become durable reusable behavior, and results can vary by agent session. Biggest risk: the owner abandons regular categorization as statement volume grows. This is the fallback and kill-criterion outcome, not a straw man.  SELECTION. Choose Approach A because the durable product is not an opaque prediction engine; it is a versioned compilation of owner decisions into reviewable rules and evidence. Keep C as the stop-safe fallback. Do not adopt B unless local evidence later justifies its extra lifecycle and risk. The winner fails if deterministic evidence cannot reduce manual decisions without wrong assignments, if the public LEDGER contract is insufficient, or if useful behavior requires cloud processing.  BOUNDARY SUMMARY. CLASSIFY owns rule definitions, rule versions, suggestion/evaluation outcomes, conflicts, and correction feedback. LEDGER remains authoritative for transaction facts, relationship state, categories, assignments, corrections, actuals, and history. INGEST ends after canonical commit and may only request downstream classification explicitly. BUDGET and INSIGHTS consume LEDGER actuals; CLASSIFY never calculates budgets or reports. CHANNELS owns screens and conversation. Transfers, refunds, voids, supersessions, and archived categories are consumed as LEDGER state, not re-inferred.  SCOPE SIGNALS AND ROUTING. Signals present: sensitive local financial descriptions and rule artifacts; an external AI Agent Host/public LEDGER integration; a likely classification model of at least rules, versions, match evidence, suggestions, feedback, and evaluation runs; a cross-module LEDGER-to-CLASSIFY-to-LEDGER flow consumed by BUDGET/INSIGHTS; and significant unknowns around representative volume, safe features, rule conflicts, approval autonomy, and useful coverage. Five signals are present, with security and significant unknowns independently high-impact. Route to /lex:discovery CLASSIFY before PRD. No new project-wide ADR is required by the selected in-process/public-contract shape; a future statistical model or cloud processing decision would require reassessment and possibly /lex:adr.  DISCOVERY v0.2 — ACTORS, JOB, AND WORKFLOW. Reused project persona P1 Personal Finance Owner; no additional human persona is justified for the sole-owner first release. Job to be done: when canonical transactions arrive, evaluate each category decision once, understand the evidence, and reuse safe owner-approved behavior so recurring bookkeeping becomes consistent without corrupting Ledger facts. Current state: the owner imports or records transactions, queries uncategorized items, repeatedly interprets noisy bank descriptions, assigns categories individually, and later repeats the same judgement. Pain concentrates in repeated interpretation, inconsistent decisions, no reusable correction feedback, and incomplete downstream actuals. Desired state: explicit evaluation produces one suggestion, no-suggestion, or conflict per eligible transaction; the owner can inspect evidence; only an explicit current apply uses public LEDGER operations; rule changes are privately validated and explicitly activated; corrections propose bounded changes; and the AI Agent Host invokes the same versioned contract. UC-CLASSIFY-001 through UC-CLASSIFY-006 capture evaluation, explanation, safe apply, rule lifecycle, correction feedback, and agent discovery.  PRE-MORTEM. Failure 1: description drift or overlapping rules causes plausible wrong categories to be applied at scale, making BUDGET and INSIGHTS confidently wrong; covered by RISK-CLASSIFY-001, -002, and -003 plus zero-error canaries and fail-closed conflicts. Failure 2: recurring decisions are too sparse or rule maintenance costs more than manual LEDGER assignment, so the owner abandons the workflow; covered by RISK-CLASSIFY-005, A1, A3, and the timed kill criteria. Failure 3: descriptions, rules, normalized tokens, or private evidence leak through tracked artifacts, diagnostics, or an agent boundary; covered by RISK-CLASSIFY-004, C5, C9, and EXT-CLASSIFY-HOST-OS-SECURITY.  DEEP INVESTIGATION — CLASSIFICATION SEMANTICS AND RULE SAFETY. The safe v1 semantics are deterministic, read-only evaluation over a versioned allowlist and normalization. One compatible match or multiple matches proposing the same active category may produce one suggestion with all relevant evidence. Incompatible category matches are a Rule Conflict; no implicit priority chooses a winner. No match is an explicit no-suggestion. Suggestion alone never mutates. Concrete fields and predicate grammar remain gated by OQ-CLASSIFY-2 and -3 because the current LEDGER actuals contract names ActualsItem but does not yet define a classification-safe descriptive projection. Pass example: one eligible active transaction matches an active owner-approved rule whose category remains active, so a current suggestion may be explicitly applied. Counterexample: two active rules match the same normalized merchant evidence but propose different categories, so the result is conflict and cannot apply.  DEEP INVESTIGATION — DATA LIFECYCLE AND FEEDBACK. CLASSIFY needs version-addressable rules and rule sets, evaluation fingerprints and outcomes, owner feedback, activation evidence, and private evaluation-run metadata. Ledger remains authoritative for immutable transaction facts, append-only allocation/correction history, relationship/lifecycle state, categories, and idempotent mutations. A correction is feedback against exact provenance and may propose retire, narrow, or replacement behavior; it never generalizes or activates automatically. Category rename preserves the stable identifier; archive/reactivation, transaction void/supersession, relationship or allocation changes, contract/store generation or snapshot changes, and normalization or rule-set changes invalidate affected outcomes. Stale example: a category is archived after preview, so apply is rejected and re-evaluation is required.  DEEP INVESTIGATION — INTEGRATIONS. EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT is a hard outbound API gate for contract discovery, the classification-safe snapshot projection, active categories, history, assignment/correction, and replay. EXT-CLASSIFY-AI-AGENT-HOST is the inbound owner-context client. EXT-CLASSIFY-HOST-OS-SECURITY provides local identity and storage protection. EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS provides private representative and held-out evidence. Validation order is contract compatibility, source or client conformance, fingerprint validation, read-only preview, then explicit mutation. The Ledger/Ingest versioned operation registry, one structured stdout result, stable error/exit categories, metadata-only stderr, and idempotency are accepted analogous prior art. Actions HTTP, Web, EF, controller, tenancy, and hosted-service patterns are rejected as inapplicable to this local CLI module.  DEEP INVESTIGATION — SECURITY, PRIVACY, AND EVALUATION. Selective STRIDE disposition: spoofing and elevation are bounded by A6 and the invoking owner OS identity; any multi-user or remote service invalidates that boundary. Tampering is mitigated by immutable version identities and C10 fingerprint-bound activation/apply. Repudiation is mitigated by attributable owner commands, rule provenance, evaluation reports, and Ledger history. Information disclosure is high relevance: descriptions, normalized tokens, financial values, rules derived from spending, and raw corpus rows remain owner-only, untracked, and absent from diagnostics. Denial/resource abuse is bounded by C11 deterministic limits and no-partial-mutation failure. No network or cloud inference is permitted. Compliance disposition is CHECK: household-only personal use introduces no identified regulated processor or hosted retention duty beyond local financial-data protection; adding cloud processing, third-party data handling, shared users, or a service reopens compliance analysis. The supplied PDFs establish that private source evidence exists, but they are not a canonical 90-day LEDGER sample. OQ-CLASSIFY-1, -2, -3, and -7 therefore route to /lex:spike without exposing raw values in the graph.  DOMAIN DISPOSITIONS. Authentication and authorization — CHECK: one trusted local owner identity; no application login or roles in v1, and A6 invalidation reopens this area. Data model and persistence — DEEP: rules, immutable versions, evaluation fingerprints/outcomes, feedback, activation evidence, retention, and cleanup require design. UI and navigation — N/A: CHANNELS owns screens and conversation; CLASSIFY exposes structured CLI operations. Integrations — DEEP: public LEDGER, Agent Host, Host OS security, and private evidence have explicit validation gates. Background and asynchronous processing — N/A: explicit invocation only; no watcher, daemon, scheduler, or implicit INGEST trigger. Reporting and analytics — CHECK: only classification coverage, conflict, drift, false-apply, and time-saved evidence; budgets and financial insights are out of scope. Notifications — N/A: structured results are returned to the invoker; no alert channel is owned here. Configuration and administration — DEEP: rule draft/activation/retirement, allowed predicates, category invalidation, evidence policy, and limits are owner-managed. Multi-tenancy and isolation — N/A under A6: one household owner and OS boundary; any second user invalidates the assumption. Classification semantics and safety — DEEP: eligibility, exact outcome accounting, conflicts, staleness, preview, and no-silent-mutation invariants govern the PRD. Local security and privacy — DEEP: owner-only permissions, payload-free diagnostics, untracked private evidence, integrity fingerprints, and cleanup require acceptance criteria. Compliance — CHECK with no current regulated or hosted scope; reassess on external processing.  GOAL FEASIBILITY AND EVIDENCE. G1 is medium-high confidence analogous to LEDGER snapshot queries, but the classification projection is not yet proven and is gated by A2/OQ-CLASSIFY-2. G2 is low confidence and assumption-based until A1 and the private evidence spike prove useful coverage without false apply. G3 is medium-high confidence analogous to Ledger assignment and idempotency, contingent on published runtime conformance. G4 is medium confidence and assumption-based because useful narrow feedback must be proven on representative corrections. G5 is high confidence analogous to Ledger and Ingest operation registries. G6 is medium-low confidence and assumption-based until the owner-only corpus and temporal hold-out procedure are exercised. No goal depends on a remote service.  KILL-CRITERION AUDIT. The recurrence/manual-time criterion is not triggered but cannot yet be measured; OQ-CLASSIFY-1 and A1 require a private post-INGEST timed spike before implementation planning. The 50-percent reduction and zero incorrect batch-apply criterion is not triggered but cannot yet be measured; OQ-CLASSIFY-7 and A5 gate any broad apply. The public LEDGER sufficiency criterion is not triggered because the graph defines snapshot queries, categories, assignment/correction, discovery, and structured invocation, but its classification-safe projection is incomplete; A2/OQ-CLASSIFY-2 must either close the public gap or route work back to LEDGER before CLASSIFY implementation. The data-locality criterion is not triggered: the selected approach is in-process, owner-only, and network-free. All four remain monitored.  DISCOVERY HANDOFF. The PRD may proceed with suggestion-only default behavior, explicit owner-approved exact-rule batch authority, fail-closed conflicts, fingerprint-bound staleness, private validation, and the public-contract boundary as requirements. Before implementation planning, run the private recurrence/timing and evaluation-corpus spikes. Before technical design fixes a predicate grammar, resolve the classification-safe LEDGER projection and normalization spike. If those results trip a kill criterion, choose the do-less agent-guided LEDGER workflow rather than weakening safety.  DISCOVERY TRACEABILITY AND CROSS-AREA INTERACTIONS. P1 is the primary actor for every CLASSIFY use case. G1 maps to UC-CLASSIFY-001. G2 maps to UC-CLASSIFY-001, UC-CLASSIFY-002, and UC-CLASSIFY-004. G3 maps to UC-CLASSIFY-003. G4 maps to UC-CLASSIFY-005. G5 maps to UC-CLASSIFY-006. G6 maps to UC-CLASSIFY-004. Cross-area fail-closed rules: loss of the trusted owner OS boundary blocks all reads and writes; an unavailable private corpus blocks rule activation but does not rewrite the last active rule set; a category or transaction lifecycle change, correction, relationship change, rule retirement, normalization change, or contract/snapshot mismatch stales pending preview and blocks apply; snapshot expiry or a resource limit aborts evaluation without partial mutation; and an interrupted apply is reconciled only through Ledger idempotency and per-transaction results. |
-| **Why Now** | INGEST is now fully specified to create canonical transactions at statement scale, while LEDGER already owns category catalogue and attributable assignment/correction. CLASSIFY must define the safe post-commit feedback boundary before BUDGET and INSIGHTS rely on category coverage. |
+| **Description** | SHIPPED BASELINE. CLASSIFY 0.3.3 is production-usable as a local deterministic owner-rulebook classifier. The released Native-AOT CLI publishes twelve classify.* operations for rule lifecycle, evaluation, single-outcome explanation, explicit preview/apply, feedback, status, abandonment, and cleanup. The final module gate passed 5,609 tests. Owner validation over 617 eligible transactions produced 146 suggestions and 471 no-suggestions with zero conflicts, stale results, or drift canaries and identical replay evidence; the active 14-rule set retains broadApplyAllowed=false and no Ledger category mutations were made by that evaluation-only validation. Ledger classification_v1 and mutation preconditions are released public dependencies. Historical automatic-discovery failure and its kill criteria remain preserved; they do not describe the shipped owner-authored rulebook path.  INCREMENT PROBLEM. Real operator use exposed throughput and discoverability friction, not classifier-engine correctness defects: obtaining 146 selectable outcomes through one classify.outcome.get process per transaction exceeded a five-minute orchestration timeout; active rule-set and rule-version discovery are indirect; constructing a correctly bound private validation corpus is manual and error-prone; and repeated no_suggestion patterns cannot be reviewed as a bounded owner-local report.  APPROACH A — EXPLICIT ERGONOMICS QUERIES AND ONE SAFE LOCAL BUILDER (selected). Add paginated outcome and rule discovery, an explicit active-rule-set summary, a bounded unresolved-pattern report, and an idempotent owner-only corpus builder. Compose bulk preview from returned outcome IDs and the unchanged selected_outcomes contract. Complexity M. Pros: preserves explicit authority, typed operations, deterministic pagination, existing Ledger truth, and the no-implicit-apply boundary. Cons: adds five public operations and cursor/storage query code.  APPROACH B — GENERIC SEARCH/REPORT ACTION. Add one generic classify.query operation with discriminator-shaped filters and outputs. Complexity M. Rejected because it weakens schema discovery, source-generated JSON precision, typed errors, stable operation ownership, and independent limits.  APPROACH C — DO LESS IN THE ORCHESTRATOR. Keep the twelve-operation surface and script one classify.outcome.get process per row while hand-authoring corpora. Complexity L. Rejected because measured operator use already exceeded the five-minute orchestration window and the workaround duplicates privacy-sensitive binding logic outside Tally.  BOUNDARIES. The core engine, grammar, rule authority, apply saga, feedback semantics, and broadApplyAllowed=false policy remain unchanged. No autonomous merchant intelligence, automatic rule creation or activation, background worker, cloud/ML/fuzzy/regex behavior, private raw-description store, or apply-everything shortcut is introduced. Owner-visible descriptions may appear only in the bounded unresolved report result and private corpus file; they never enter logs, graph, tracked docs, cursor payloads, durable report state, or general discovery operations. This increment stays inside CLASSIFY as a new post-release plan rather than a new module. |
+| **Why Now** | The 0.3.3 rulebook is active in evaluation-only mode and has been exercised against the real Ledger. Its 23.66 percent safe suggestion coverage is usable, but the current one-row discovery path makes routine review and rulebook refinement too slow and brittle. The next release should improve operator composition before expanding rule authority or classifier intelligence. |
 
 ## Problem Statement
 
-Surface pain: transaction descriptions vary by bank and period, so assigning every transaction manually will not scale and inconsistent assignments weaken budget analysis. 5 Whys: Why classify? BUDGET and INSIGHTS need stable category membership, while LEDGER correctly keeps uncategorized spend explicit. Why is manual assignment insufficient? INGEST will increase the number and recurrence of canonical transactions, and the owner must repeatedly interpret noisy descriptions. Why not let an agent simply guess? Unrecorded guesses are inconsistent, cannot explain confidence, and do not reuse corrections safely. Why do corrections not solve the next transaction today? LEDGER preserves attributable assignments but CLASSIFY has no deterministic feedback contract that turns an owner decision into reusable evidence. Root problem: Tally lacks an auditable, local feedback loop that converts canonical transaction evidence and prior owner-approved decisions into deterministic category suggestions and explicit assignments without rewriting source facts or silently distorting actuals. Without CLASSIFY, the owner repeats the same judgement, uncategorized spend accumulates, and downstream budget and insight results remain incomplete. The sole Personal Finance Owner discovers a versioned CLASSIFY command through the AI Agent Host, evaluates uncategorized canonical transactions, reviews rule evidence or an explicit no-suggestion/conflict result, applies accepted decisions through public LEDGER operations, and uses later corrections to improve future rule proposals.
+CLASSIFY is shipped and correct, but an owner or Hermes agent cannot efficiently discover evaluation outcomes, inspect the active rulebook, assemble a fresh private validation corpus, or review repeated unresolved descriptions through bounded public operations. The concrete regression is that enumerating 146 outcomes with one classify.outcome.get process per row exceeded a five-minute orchestration timeout. The missing product capability is operator throughput and discoverability while preserving explicit selection, owner-only privacy, Ledger authority, and fail-closed mutation.
 
 ## Goals
 
@@ -23,6 +23,7 @@ Surface pain: transaction descriptions vary by bank and period, so assigning eve
 | G4 | Turn explicit owner decisions and corrections into attributable, reversible Classification Feedback. Evidence [assumption]: correction provenance can support useful narrow rule proposals without automatic generalization; validate with representative correction cases. | Each rule proposal or change identifies the supporting owner decision, scope, reason, and version; activation is explicit, prior versions remain inspectable, correction can retire or replace unsafe behavior, and feedback never rewrites LEDGER history. |
 | G5 | Expose a non-interactive, self-documenting CLASSIFY contract that an AI Agent Host can invoke safely. Evidence [analogous]: FR-LEDGER-CONTRACT-DISCOVERY, FR-LEDGER-STRUCTURED-INVOCATION, and the INGEST operation registry prove the local process-contract shape. | Evaluate, inspect, apply, explain, rule-manage, and status operations expose versioned schemas, deterministic structured results and errors, metadata-only diagnostics, stable exit categories, and compatibility checks before processing or mutation. |
 | G6 | Validate each candidate normalization or Rule Set Version against private representative and held-out evidence before activation or broad apply. Evidence [assumption]: an owner-only corpus can measure coverage, conflicts, drift, and incorrect-application canaries without committing financial payloads. | Every activation candidate produces a fingerprint-bound deterministic report that accounts for all evidence rows and blocks activation on any incorrect-application canary, stale input, or unexplained conflict; raw evidence remains owner-only and untracked. |
+| G7 | Let the owner or Hermes discover, select, explain, and refine retained CLASSIFY evidence through bounded deterministic public operations without one CLI process per outcome. | A 146-row selectable outcome result is obtainable with one initial classify.outcome.list call plus bounded cursor calls, while all discovery, report, and corpus-builder safety gates pass with zero Ledger mutation. |
 
 ## Non-Goals
 
@@ -37,6 +38,7 @@ Surface pain: transaction descriptions vary by bank and period, so assigning eve
 | NG7 | Provide web, messaging, or other human-facing classification screens and conversations. | The CHANNELS module's future PRD and design own every web, messaging, navigation, translation, accessibility, and human conversation surface. CLASSIFY is contract-only now because its product boundary is the channel-neutral structured CLI consumed by the owner or AI Agent Host. |
 | NG8 | Train or ship a statistical, neural, or generic machine-learning classification platform in the first release. | Representative labeled history and evaluation evidence do not yet justify model lifecycle and opacity; deterministic rules are selected and manual assignment remains the fallback. |
 | NG9 | Retroactively rewrite existing category assignments merely because a rule or normalization version changes. | Historical assignments remain authoritative in LEDGER until an explicit reasoned correction is invoked; evaluation may identify candidates but cannot silently rewrite them. |
+| NG10 | Add autonomous merchant intelligence, inferred rules, implicit apply-all, automatic rule activation, cloud or model inference, fuzzy matching, regex, arbitrary expressions, or a background worker. | This increment improves throughput and discoverability around the production-usable deterministic engine; it does not change classifier intelligence or authority. |
 
 ## Success Metrics
 
@@ -51,6 +53,7 @@ Surface pain: transaction descriptions vary by bank and period, so assigning eve
 | Owner-rulebook safety | Not measured; the owner-authored implementation and private pre-authority gate are not built. | 100 percent of private candidate rows accounted for exactly once; zero incorrect applications; zero unexplained incompatible conflicts; deterministic fingerprints replay identically; every drift canary remains explicit; zero private payload disclosures. | Before rule activation, exact-rule broad apply, or PLAN-CLASSIFY-RULEBOOK-V1 module completion | No |
 | Owner-rulebook coverage | Not measured; candidate values remain owner-only and untracked. | Report exact aggregate suggestion, no-suggestion, conflict, stale, and total counts plus coverage percentage; no minimum coverage is invented before private validation. | At the owner-rulebook pre-authority gate | No |
 | Owner-rulebook decision and time benefit | Not measured; benefit must be timed on the explicit owner-authored workflow. | Report decisions before and after plus owner minutes before and after. If the owner judges benefit insufficient, broad authority remains blocked until an explicit product decision; no automatic 50 percent threshold applies. | Before exact-rule broad apply or PLAN-CLASSIFY-RULEBOOK-V1 module completion | No |
+| Outcome discovery process efficiency for the motivating 146-result evaluation | 146 classify.outcome.get process launches exceeded a five-minute orchestration timeout. | One initial classify.outcome.list query plus at most one continuation for pageSize 500 returns all 146 selectable rows, with deterministic replay and zero private description disclosure. | - | Yes |
 
 ## Personas
 
@@ -90,7 +93,7 @@ Surface pain: transaction descriptions vary by bank and period, so assigning eve
 | C9 | Private evaluation evidence isolation: Raw representative and held-out rows, descriptions, normalized tokens, and rule-derived payloads remain outside Git and owner-only. CLASSIFY persists or exports only necessary protected local state, source fingerprints, aggregate metrics, and safe decisions; diagnostic channels never contain financial payloads. | technical |
 | C10 | Integrity-bound evaluation and apply: Every outcome and activation report is bound to the exact LEDGER snapshot or store generation, classification projection contract, category catalogue, normalization, rule-set, and evidence fingerprints. Any mismatch makes the outcome stale and blocks activation or mutation. | technical |
 | C11 | Bounded local evaluation: Every evaluation and candidate validation advertises and enforces deterministic transaction, rule, evidence-row, memory, and processing-time limits. Exceeding a limit returns a stable structured failure and performs no activation or LEDGER mutation. | technical |
-| C12 | Canonical CLASSIFY operation vocabulary: The shared Tally operation registry must expose exactly the first-release CLASSIFY capabilities classify.evaluate, classify.outcome.get, classify.apply.preview, classify.apply.run, classify.rule.save, classify.rule.validate, classify.rule.activate, classify.rule.retire, classify.feedback.record, classify.status, classify.abandon, and classify.cleanup. Design may choose CLI token paths but may not merge away or silently add product capabilities. | technical |
+| C12 | Released CLASSIFY operation baseline and versioned expansion: Tally 0.3.3 publishes the first-release twelve-operation CLASSIFY inventory: classify.evaluate, classify.outcome.get, classify.apply.preview, classify.apply.run, classify.rule.save, classify.rule.validate, classify.rule.activate, classify.rule.retire, classify.feedback.record, classify.status, classify.abandon, and classify.cleanup. These identifiers and their 1.0 request/result/error semantics remain compatible. Later additive operations are permitted only through an explicit accepted versioned decision, published schema inventory, source-generated JSON registration, handler composition, compatibility tests, and release notes; an existing capability may not be merged away or silently changed. | technical |
 | C13 | Local owner authority and CHANNELS ownership: P1 acts through the invoking trusted OS identity; CLASSIFY defines no application permissions, roles, tenant scope, role templates, seeded users, menus, navigation, translation catalogues, frontend keys, or browser behavior. Any human-facing surface and its permission, translation, navigation, and accessibility contract belongs to the CHANNELS module's future PRD and design. | business |
 
 ## Risks
@@ -103,6 +106,7 @@ Surface pain: transaction descriptions vary by bank and period, so assigning eve
 | RISK-CLASSIFY-004 | Transaction descriptions, normalized tokens, rules, or evaluation artifacts may disclose sensitive spending behavior through logs, files, or agent output. | Medium | High | Keep state owner-only and local, avoid raw-payload logging or serialization, return only necessary structured evidence, and include security canaries in discovery and verification. |
 | RISK-CLASSIFY-005 | Representative history may contain too few recurring labeled decisions for a custom rule engine to save meaningful owner time. | High | Medium | Measure baseline volume and repeat rate during discovery, retain agent-guided manual assignment as the do-less fallback, and enforce the monitored effort/coverage kill criteria before PRD and planning. |
 | RISK-CLASSIFY-006 | CLASSIFY may couple to private or unstable LEDGER behavior before the public query and assignment contracts are implemented. | Medium | High | Use contract discovery and compatibility gates, depend only on FR-LEDGER-ACTUALS-QUERY and public category operations, and stop planning if the public boundary cannot supply required behavior. |
+| RISK-CLASSIFY-007 | Paginated discovery or unresolved reporting could leak descriptions, normalized values, private paths, or financial payloads through cursors, logs, diagnostics, or durable state. | Medium | High | Use opaque fingerprint-bound cursors without private values; keep general discovery metadata-only; allow normalized descriptions only in the bounded owner-local unresolved result; add disclosure scans and no-durable-raw-store tests. |
 
 ## Open Questions
 
@@ -165,19 +169,23 @@ Surface pain: transaction descriptions vary by bank and period, so assigning eve
 
 | Ref | Title | Depth | Actor | Status |
 |-----|-------|-------|-------|--------|
-| UC-CLASSIFY-001 | Evaluate eligible transactions | 2 | P1 | draft |
-| UC-CLASSIFY-002 | Inspect and explain a classification outcome | 2 | P1 | draft |
-| UC-CLASSIFY-003 | Apply accepted classification decisions | 3 | P1 | draft |
-| UC-CLASSIFY-004 | Manage and validate deterministic rules | 3 | P1 | draft |
-| UC-CLASSIFY-005 | Use a correction as bounded feedback | 2 | P1 | draft |
-| UC-CLASSIFY-006 | Discover and invoke the CLASSIFY agent contract | 2 | P1 | draft |
+| UC-CLASSIFY-001 | Evaluate eligible transactions | 2 | P1 | implemented |
+| UC-CLASSIFY-002 | Inspect and explain a classification outcome | 2 | P1 | implemented |
+| UC-CLASSIFY-003 | Apply accepted classification decisions | 3 | P1 | implemented |
+| UC-CLASSIFY-004 | Manage and validate deterministic rules | 3 | P1 | implemented |
+| UC-CLASSIFY-005 | Use a correction as bounded feedback | 2 | P1 | implemented |
+| UC-CLASSIFY-006 | Discover and invoke the shipped CLASSIFY v0.3.3 agent contract | 2 | P1 | implemented |
+| UC-CLASSIFY-007 | Discover outcomes and preview an explicit batch | 3 | P1 | draft |
+| UC-CLASSIFY-008 | Inspect rules and the active rule set | 2 | P1 | draft |
+| UC-CLASSIFY-009 | Build a private validation corpus from explicit owner labels | 3 | P1 | draft |
+| UC-CLASSIFY-010 | Review repeated unresolved patterns | 2 | P1 | draft |
 
 ### UC-CLASSIFY-001: Evaluate eligible transactions
 
 - **Primary Actor:** P1
 - **Trigger:** The owner explicitly requests classification after canonical transactions exist in LEDGER.
 - **Depth Tier:** 2
-- **Status:** draft
+- **Status:** implemented
 
 **Preconditions:**
 
@@ -203,7 +211,7 @@ LEDGER is unchanged; every eligible transaction is accounted for in stable order
 - **Primary Actor:** P1
 - **Trigger:** The owner or AI Agent Host requests the reason for a suggestion, no-suggestion, conflict, or stale result.
 - **Depth Tier:** 2
-- **Status:** draft
+- **Status:** implemented
 
 **Preconditions:**
 
@@ -228,7 +236,7 @@ The owner can reproduce why the outcome occurred without exposing unrelated tran
 - **Primary Actor:** P1
 - **Trigger:** The owner explicitly selects current suggestions or invokes an approved exact-rule apply after reviewing preview evidence.
 - **Depth Tier:** 3
-- **Status:** draft
+- **Status:** implemented
 
 **Preconditions:**
 
@@ -254,7 +262,7 @@ Successful assignments are attributable in LEDGER; source facts remain unchanged
 - **Primary Actor:** P1
 - **Trigger:** The owner creates, changes, retires, or proposes activation of a classification rule.
 - **Depth Tier:** 3
-- **Status:** draft
+- **Status:** implemented
 
 **Preconditions:**
 
@@ -280,7 +288,7 @@ The active rule set is immutable and version-addressable; superseded versions re
 - **Primary Actor:** P1
 - **Trigger:** The owner corrects a category assignment in LEDGER or marks a prior CLASSIFY result unsafe.
 - **Depth Tier:** 2
-- **Status:** draft
+- **Status:** implemented
 
 **Preconditions:**
 
@@ -301,12 +309,12 @@ The correction remains authoritative in LEDGER; the transaction-level feedback r
 - Reject a proposed replacement that broadens into conflicts or an archived category.
 - Preserve prior rule and evaluation history when retiring unsafe behavior.
 
-### UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract
+### UC-CLASSIFY-006: Discover and invoke the shipped CLASSIFY v0.3.3 agent contract
 
 - **Primary Actor:** P1
 - **Trigger:** The AI Agent Host needs to discover CLASSIFY capabilities or invoke a classification workflow for the owner.
 - **Depth Tier:** 2
-- **Status:** draft
+- **Status:** implemented
 
 **Preconditions:**
 
@@ -314,7 +322,7 @@ CLASSIFY is locally available to the owner process and exposes a versioned contr
 
 **Scenario:**
 
-The owner or Hermes agent first discovers the twelve schemas and compatibility metadata. It saves each deliberate owner-authored rule only through classify.rule.save, validates the inactive candidate set through classify.rule.validate against owner-only aggregate evidence, and requests classify.rule.activate only after the gate passes. It then invokes classify.evaluate, reads each retained result through classify.outcome.get, obtains a read-only classify.apply.preview for an explicit selection or transaction correction, and invokes classify.apply.run only for that current authorized preview. It records accept, reject, or correct decisions through classify.feedback.record; any feedback-derived proposal remains inactive and must re-enter rule.save, rule.validate, and rule.activate. It uses classify.status for lifecycle and replay state, classify.abandon for unreferenced drafts or runs, classify.cleanup for recognized artifacts, and classify.rule.retire for explicit lifecycle retirement.
+At the shipped v0.3.3 baseline, the owner or Hermes agent discovers the twelve published CLASSIFY schemas and compatibility metadata. It saves each deliberate owner-authored rule only through classify.rule.save, validates the inactive candidate set through classify.rule.validate against owner-only aggregate evidence, and requests classify.rule.activate only after the gate passes. It then invokes classify.evaluate, reads a retained result through classify.outcome.get, obtains a read-only classify.apply.preview for an explicit selection or transaction correction, and invokes classify.apply.run only for that current authorized preview. It records accept, reject, or correct decisions through classify.feedback.record; any feedback-derived proposal remains inactive and must re-enter rule.save, rule.validate, and rule.activate. It uses classify.status for lifecycle and replay state, classify.abandon for unreferenced drafts or runs, classify.cleanup for recognized artifacts, and classify.rule.retire for explicit lifecycle retirement. The additive operator-ergonomics workflow and its five planned discovery/private-tool operations are specified by UC-CLASSIFY-007 through UC-CLASSIFY-010 and DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT; they do not rewrite this implemented baseline.
 
 **Postconditions:**
 
@@ -327,23 +335,128 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 - Do not emit transaction descriptions, normalized tokens, rules, or financial values to diagnostic logs.
 - Fail closed when owner identity, local file permissions, or downstream compatibility cannot be established.
 
+### UC-CLASSIFY-007: Discover outcomes and preview an explicit batch
+
+- **Primary Actor:** P1
+- **Trigger:** A completed evaluation exists and the owner or Hermes needs to review or select more than one retained outcome.
+- **Depth Tier:** 3
+- **Status:** draft
+
+**Preconditions:**
+
+The evaluation is retained and completed; the caller has the trusted owner actor context; the public CLASSIFY schemas are discoverable; any continuation belongs to the same evaluation, filters, page size, and fingerprint.
+
+**Scenario:**
+
+The caller invokes classify.outcome.list with an evaluation ID and bounded filters; follows the opaque continuation until the required rows are available; invokes classify.outcome.get only when deeper single-row evidence is needed; selects exact returned outcome IDs; and sends those IDs in the existing selected_outcomes mode to classify.apply.preview before any optional classify.apply.run.
+
+**Postconditions:**
+
+Every returned row is deterministically ordered and attributable to the retained evaluation; the selected preview is frozen and idempotent; no Ledger mutation occurs before an explicit apply.run; broadApplyAllowed=false never authorizes unattended or implicit bulk mutation.
+
+**Failure Paths:**
+
+- Reject a malformed, expired, cross-evaluation, cross-filter, cross-page-size, or fingerprint-mismatched cursor with a typed error and no partial page.
+- Reject an expired or missing evaluation, stale Ledger generation, archived suggested category, missing active rule set, or integrity mismatch without a partial result or mutation.
+- Reject oversized pages or selected batches before preview durability and preserve the existing explicit-selection boundary.
+
+### UC-CLASSIFY-008: Inspect rules and the active rule set
+
+- **Primary Actor:** P1
+- **Trigger:** The owner or Hermes needs to understand which immutable rule versions exist and which set currently governs evaluation or apply authority.
+- **Depth Tier:** 2
+- **Status:** draft
+
+**Preconditions:**
+
+The trusted owner actor context and public CLASSIFY schema inventory are available; rule storage is readable; any continuation is bound to the first-page rule high-water mark and filters.
+
+**Scenario:**
+
+The caller invokes classify.rule-set.active.get for the current activation summary, then pages classify.rule.list with optional logical rule, lifecycle, category, or active-membership filters and uses returned safe metadata to choose rule.save, rule.validate, rule.activate, rule.retire, or status operations.
+
+**Postconditions:**
+
+The caller can reconcile rule identities, immutable versions, active membership, validation and activation authority, broadApplyAllowed, trusted gate receipt fingerprints, normalization, categories, and lifecycle timestamps without private corpus data or owner free-text disclosure.
+
+**Failure Paths:**
+
+- Return a typed not-found result when no active rule set exists; never invent an empty authority.
+- Reject invalid or drifted cursors and impossible lifecycle or membership state without a partial page.
+- Never expose corpus paths, raw validation rows, source descriptions, secrets, authority claims, or predicate operands beyond the already-public rule predicate contract.
+
+### UC-CLASSIFY-009: Build a private validation corpus from explicit owner labels
+
+- **Primary Actor:** P1
+- **Trigger:** The owner has an explicit bounded set of transaction labels and needs a correctly bound private JSONL corpus for classify.rule.validate.
+- **Depth Tier:** 3
+- **Status:** draft
+
+**Preconditions:**
+
+Every label supplies a transaction ID plus an expected outcome kind and any required expected category ID; an explicit owner-local output path is supplied; a fresh complete Ledger classification_v1 evaluation projection is available.
+
+**Scenario:**
+
+The caller submits labels on stdin to classify.corpus.build; CLASSIFY validates bounds and label consistency, drains one fresh Ledger projection, binds every label to exactly one projection row, writes canonical JSONL to a same-directory owner-only temporary file, flushes and atomically renames it to a new regular destination, and returns aggregate metadata and fingerprints only.
+
+**Postconditions:**
+
+The destination is a 0600 owner-owned regular file inside a 0700 owner-owned non-symlink directory; every row comes from one explicit label and one fresh projection member; the file is accepted by the existing private-corpus reader; stdout and logs contain no descriptions, amounts, rows, labels, or path.
+
+**Failure Paths:**
+
+- Reject missing, duplicate, invented, inconsistent, oversized, or projection-absent labels with no destination file.
+- Reject symlink, non-regular, existing destination, non-owner, or permissive parent/destination boundaries before writing private rows.
+- On cancellation, write failure, flush failure, or crash before rename, leave no partial destination and recover or safely clean only the recognized same-directory temporary artifact.
+
+### UC-CLASSIFY-010: Review repeated unresolved patterns
+
+- **Primary Actor:** P1
+- **Trigger:** A retained completed evaluation contains no_suggestion outcomes and the owner wants bounded candidates for rulebook refinement.
+- **Depth Tier:** 2
+- **Status:** draft
+
+**Preconditions:**
+
+The evaluation and its active rule set are retained and compatible; the caller supplies bounded top-N and minimum-count values; a fresh complete Ledger classification_v1 evaluation projection can be acquired.
+
+**Scenario:**
+
+The caller invokes classify.unresolved.report; CLASSIFY joins retained no_suggestion outcomes to the fresh projection, verifies all lifecycle and fingerprint dimensions, groups production-normalized descriptions by account and direction, computes counts and checked aggregate signed amounts, orders candidates deterministically, and returns only the bounded owner-local report.
+
+**Postconditions:**
+
+Every no_suggestion row is accounted for; report and group fingerprints detect semantic drift; no raw description or report row is persisted by CLASSIFY; the result proposes owner-review candidates only and creates or activates no rule.
+
+**Failure Paths:**
+
+- Reject expired evaluation, stale Ledger generation, changed active rule set, archived category lifecycle, missing or duplicate projection rows, or incompatible projection with a typed no-result failure.
+- Reject over-limit rows, groups, top-N, normalization, checked amount sum, runtime, or memory before returning a partial report.
+- Never write descriptions to logs, durable CLASSIFY state, cursors, generated docs, or tracked files.
+
 ## Functional Requirements
 
 | Ref Code | Title | Priority |
 |----------|-------|----------|
 | FR-CLASSIFY-APPLY-AUTHORIZATION | Authorize a Classification Apply Run | Critical |
 | FR-CLASSIFY-APPLY-EXECUTION | Apply authorized decisions through public LEDGER operations | Critical |
+| FR-CLASSIFY-BULK-PREVIEW-COMPOSITION | Preview a batch selected from outcome discovery | Critical |
 | FR-CLASSIFY-CONTRACT-DISCOVERY | Discover the CLASSIFY command contract | Critical |
 | FR-CLASSIFY-CORRECTION-FEEDBACK | Turn owner corrections into bounded feedback | High |
 | FR-CLASSIFY-DETERMINISTIC-EVALUATION | Evaluate deterministic classification outcomes | Critical |
 | FR-CLASSIFY-ELIGIBLE-PROJECTION | Obtain the eligible classification projection | Critical |
+| FR-CLASSIFY-OUTCOME-DISCOVERY | List retained classification outcomes | Critical |
 | FR-CLASSIFY-OUTCOME-EXPLANATION | Explain a classification outcome | High |
 | FR-CLASSIFY-OUTCOME-INVALIDATION | Invalidate Stale Classification Outcomes | Critical |
+| FR-CLASSIFY-PRIVATE-CORPUS-BUILDER | Build a private validation corpus from explicit labels | Critical |
 | FR-CLASSIFY-RULE-LIFECYCLE | Manage versioned deterministic rules | Critical |
 | FR-CLASSIFY-RULE-VALIDATION | Validate candidate rule sets against private evidence | Critical |
+| FR-CLASSIFY-RULEBOOK-DISCOVERY | List rule versions and summarize the active rule set | Critical |
 | FR-CLASSIFY-STATE-RETENTION-CLEANUP | Retain attributable state and clean derived artifacts | High |
 | FR-CLASSIFY-STATUS-HISTORY | Inspect classification status and history | High |
 | FR-CLASSIFY-STRUCTURED-INVOCATION | Invoke CLASSIFY operations non-interactively | Critical |
+| FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT | Report repeated unresolved classification patterns | High |
 
 ### FR-CLASSIFY-APPLY-AUTHORIZATION: Authorize a Classification Apply Run
 
@@ -377,6 +490,20 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 6. Given the same apply identity and semantically identical request, when apply is retried, then CLASSIFY returns the prior terminal item results and creates no second category mutation.
 7. Given an apply identity reused with different selection, category, mode, fingerprint, or reason, when apply is retried, then CLASSIFY returns a stable conflict and preserves the original results.
 8. Given interruption between item submissions, when the same apply run is resumed, then completed items reconcile from durable results and processing continues only from the exact unresolved frontier.
+
+### FR-CLASSIFY-BULK-PREVIEW-COMPOSITION: Preview a batch selected from outcome discovery
+
+- **Priority:** Critical
+- **Description:** Compose classify.outcome.list with the existing selected_outcomes apply.preview contract so an operator can preview a bounded batch without per-outcome CLI calls. Implements G7 and UC-CLASSIFY-007.
+- **Rationale:** The correct bulk boundary is explicit outcome selection followed by the shipped frozen preview, not a new apply-all shortcut.
+
+**Acceptance Criteria:**
+
+1. Given fresh suggestion outcome IDs returned by one evaluation, when the caller submits at most 200 unique IDs using apply.preview selection mode selected_outcomes, then the existing request schema accepts them unchanged and the preview returns frozen selection, category, rule-authority, evaluation, Ledger generation, category lifecycle, and expiry evidence.
+2. Given unknown, duplicate-only, mixed-evaluation, non-suggestion, stale, archived-category, inactive-rule, or over-200 selection input, when apply.preview validates the batch, then it rejects or accounts for the full selection according to the released contract and persists no partial preview.
+3. Given broadApplyAllowed is false, when a caller has a list page or active rule-set summary, then neither outcome.list, rule.list, rule-set.active.get, apply.preview, nor apply.run gains an implicit apply-all, unattended exact-rule, or unbounded mutation path.
+4. Given preview succeeds, when Ledger or authority state changes before apply.run, then apply.run revalidates the frozen preconditions and fails or reports per-item outcomes under the released idempotent saga without applying stale authority.
+5. Given preview is invoked, when Ledger allocation history is inspected before apply.run, then zero category assignments or corrections were created by discovery or preview.
 
 ### FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract
 
@@ -445,6 +572,22 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 10. Given transactions across accounts that contribute to one shared budget pool, when CLASSIFY evaluates them, then category identity remains cross-account and no per-account budget envelope or classifier rule set is inferred; account.id is inspected only when an explicit rule condition states that descriptor meaning differs.
 11. Given active transfer principal or linked-refund state, when eligibility is determined, then CLASSIFY consumes the Ledger-owned relationship outcome and never reconstructs transfer or refund linkage from description evidence.
 
+### FR-CLASSIFY-OUTCOME-DISCOVERY: List retained classification outcomes
+
+- **Priority:** Critical
+- **Description:** Publish classify.outcome.list as a bounded snapshot-bound query over one retained evaluation so an owner or Hermes agent can discover selectable outcomes without one process per transaction. Implements G7 and UC-CLASSIFY-007.
+- **Rationale:** The shipped single-outcome query is correct but cannot enumerate a batch within the motivating orchestration timeout.
+
+**Acceptance Criteria:**
+
+1. Given a completed retained evaluation ID and pageSize from 1 through 500, when classify.outcome.list is invoked without a continuation, then it returns the first filtered page ordered by ordinal then transaction ID, overall and filtered totals, returned count, evaluation and result fingerprints, and an opaque continuation when rows remain.
+2. Given bounded filters for outcome kind, suggested category ID, contributing rule-version ID, stale state, or transaction ID, when outcome.list succeeds, then every returned item satisfies every supplied filter and the filter fingerprint is bound into the continuation.
+3. Given a returned item, when it is inspected, then it contains outcome ID, transaction ID, ordinal, kind, a stable reason code or bounded reason text, suggested category ID and display name when applicable, contributing rule-version IDs, matched field keys, conflict summary, stale dimensions, and the permitted next operation without a source description, amount, normalized value, corpus path, or raw rule payload.
+4. Given an opaque continuation, when the same evaluation, filters, page size, Evaluation Fingerprint, category lifecycle fingerprint, rule-set fingerprint, and Ledger generation remain current, then the next call resumes after the last ordinal and transaction ID with no duplicate or omitted row.
+5. Given a malformed, expired, cross-evaluation, cross-filter, cross-page-size, or fingerprint-mismatched continuation, when outcome.list is invoked, then it returns a typed CLASSIFY cursor or stale error with a null result and no partial page.
+6. Given a missing, abandoned, incomplete, or expired evaluation; a missing active rule set; an archived suggested category; a stale Ledger generation; incompatible classification_v1 projection; or impossible row accounting, when outcome.list is invoked, then it fails closed with the typed lifecycle, not-found, stale, compatibility, or integrity error and performs no CLASSIFY or Ledger mutation.
+7. Given the motivating completed evaluation with 146 outcomes and pageSize 500, when an owner-local published executable invokes outcome.list, then all 146 selectable rows are returned by one initial CLI process and no per-outcome process is required.
+
 ### FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome
 
 - **Priority:** High
@@ -483,6 +626,22 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 13. Given the normalization version changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.
 14. Given the active Rule Set Version changes, when a prior outcome is inspected or applied, then CLASSIFY identifies that changed fingerprint dimension and blocks apply.
 15. Given a stale outcome, when the owner requests the permitted next operation, then CLASSIFY returns re-evaluate and does not return correction or apply.
+
+### FR-CLASSIFY-PRIVATE-CORPUS-BUILDER: Build a private validation corpus from explicit labels
+
+- **Priority:** Critical
+- **Description:** Publish classify.corpus.build as an idempotent local file-writing operation that binds explicit owner labels to one fresh complete Ledger classification_v1 projection and produces JSONL accepted by the shipped private-corpus reader. Implements G7 and UC-CLASSIFY-009.
+- **Rationale:** Manual construction can misbind projection lifecycle fields or leak private rows; Tally already owns the authoritative projection and reader contract.
+
+**Acceptance Criteria:**
+
+1. Given 1 through 10000 explicit labels supplied on stdin, when each label contains one transaction ID, one expected outcome kind, and an expected category ID exactly when that outcome requires one, then corpus.build accepts only those labels and never invents, broadens, or infers a label.
+2. Given valid labels and a fresh complete classification_v1 evaluation projection, when corpus.build binds rows, then every label matches exactly one projection transaction and the JSONL row reuses the public ordinal, account, source description, amount direction, absolute minor amount, item lifecycle fingerprint, expected category ID, and expected outcome kind.
+3. Given an explicit absent output path whose parent chain and destination satisfy the Linux owner boundary, when corpus.build writes, then it creates a same-directory 0600 temporary regular file under a 0700 owner-owned non-symlink directory, writes canonical UTF-8 JSONL within the existing row, line, byte, memory, and time bounds, flushes file data, atomically renames without overwrite, and returns aggregate row/byte counts plus corpus, projection, generation, category-lifecycle, normalization, and request fingerprints without returning the path.
+4. Given the same idempotency key and identical request/projection fingerprints after a successful rename, when corpus.build is retried, then it returns the prior aggregate receipt and does not rewrite or duplicate the corpus; given a changed request under the same key, it returns the typed idempotency conflict.
+5. Given a missing, duplicate, inconsistent, over-limit, or projection-absent label; stale or incompatible projection; existing destination; symlink; non-regular file; wrong owner; permissive mode; or invalid parent, when corpus.build is invoked, then it returns the typed validation, stale, compatibility, privacy, or limit error and creates no destination file.
+6. Given cancellation, process interruption, serialization failure, write failure, flush failure, or rename failure, when recovery or cleanup runs, then no partial destination is visible and only a recognized same-directory temporary owned by the current effective UID may be removed; an already-committed valid destination is never deleted.
+7. Given a successful corpus, when the shipped private-corpus reader and classify.rule.validate consume it, then the reader accepts its canonical rows and no raw row, description, token, amount, label, output path, or source path appears in stdout, stderr, logs, telemetry, graph, or tracked artifacts.
 
 ### FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules
 
@@ -524,6 +683,22 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 9. Given a validation report, when it is persisted or exported, then it contains corpus fingerprints and aggregate outcomes but no raw transaction description, normalized token, financial value, or expected-outcome row.
 10. Given an owner-authored candidate rulebook, when its pre-authority gate runs, then every private row is accounted for exactly once, incorrect applications and unexplained incompatible conflicts are zero, coverage and no-suggestion totals are explicit, drift canaries and deterministic fingerprints are stable, and owner decision and time benefit are measured.
 11. Given owner-authored safety passes but measured benefit is insufficient for broad authority, when activation or exact-rule broad apply is considered, then CLASSIFY requires an explicit product decision and does not invent a 50 percent benefit threshold.
+
+### FR-CLASSIFY-RULEBOOK-DISCOVERY: List rule versions and summarize the active rule set
+
+- **Priority:** Critical
+- **Description:** Publish classify.rule.list and classify.rule-set.active.get as bounded owner-local queries over immutable rule and activation history. Implements G7 and UC-CLASSIFY-008.
+- **Rationale:** The shipped status query can inspect a known rule version but cannot discover the catalogue or summarize the current authority from an empty-state-safe public entry point.
+
+**Acceptance Criteria:**
+
+1. Given rule versions exist and pageSize from 1 through 500, when classify.rule.list is invoked, then it returns a deterministic page ordered by created timestamp then rule-version ID with total, filtered, returned, and continuation metadata.
+2. Given filters for logical rule ID, lifecycle state, category ID, or active-rule-set membership, when rule.list succeeds, then every item satisfies every supplied filter and the first-page high-water mark plus filter fingerprint are bound into the opaque continuation.
+3. Given a rule-list item, when it is returned, then it contains logical rule ID, immutable rule-version ID, prior version ID, category ID, current category display name, category lifecycle enum, normalization version, effective rule lifecycle state, active membership, broad-apply authority, provenance, scope hash, lifecycle timestamps, and canonical conditions only within the already-public closed predicate contract.
+4. Given an active rule set, when classify.rule-set.active.get is invoked, then it returns ruleSetVersionId, broadApplyAllowed, activation and validation IDs, trusted gate receipt ID and fingerprint, normalization version, ordered activated rule-version IDs, lifecycle timestamps and status, activation epoch, and category ID, current display name, and lifecycle enum for every member category.
+5. Given no active rule set exists, when rule-set.active.get is invoked, then it returns the typed not-found result and never fabricates an empty authority or accepts a caller-supplied authority flag.
+6. Given an invalid, expired, cross-filter, cross-page-size, or high-water-mismatched rule continuation or impossible membership/lifecycle history, when a discovery query is invoked, then it returns a typed cursor or integrity error with no partial page.
+7. Given either rule discovery operation succeeds or fails, when durable state and diagnostics are inspected, then no corpus path, raw validation row, source description, secret, owner free-text reason, or predicate token beyond the public rule predicate contract has been persisted or logged.
 
 ### FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts
 
@@ -572,6 +747,22 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 5. Given a mutating rule, feedback, abandon, cleanup, or apply operation, when its request lacks required actor context or idempotency identity, then CLASSIFY rejects it before mutation.
 6. Given any successful or expected-failure invocation, when stderr is inspected, then it contains metadata-only diagnostics and no serialized request, result, or financial payload.
 
+### FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT: Report repeated unresolved classification patterns
+
+- **Priority:** High
+- **Description:** Publish classify.unresolved.report as a bounded read-only owner-local report over retained no_suggestion outcomes joined to one fresh compatible Ledger classification_v1 projection. Implements G7 and UC-CLASSIFY-010.
+- **Rationale:** The owner needs deterministic review candidates for rulebook refinement without creating a second raw-description store or automatic discovery path.
+
+**Acceptance Criteria:**
+
+1. Given a retained completed evaluation, topN from 1 through 500, and minimumCount from 2 through 500, when unresolved.report is invoked, then it joins every retained no_suggestion outcome to exactly one member of a fresh complete compatible classification_v1 evaluation projection before producing any result.
+2. Given compatible joined rows, when groups are built, then CLASSIFY uses the evaluation normalization version and groups by normalized description, account ID, and amount direction; each group returns deterministic rank, count, account and direction scope, checked aggregate signed amount, representative owner-visible normalized description, and a drift-detecting group fingerprint.
+3. Given a successful report, when its accounting is checked, then noSuggestionOutcomeCount equals joinedRowCount and equals candidateRowCount plus belowMinimumRowCount; totals include distinct, candidate, returned, omitted, and bounded request counts; candidates order by count descending then normalized description, account ID, direction, and fingerprint using ordinal comparison.
+4. Given identical semantic evaluation, projection, rule-set, normalization, filters, and bounds, when unresolved.report is replayed, then group and report fingerprints plus ordered candidate content are identical even if a fresh Ledger snapshot ID and expiry differ.
+5. Given an expired, missing, incomplete, or abandoned evaluation; stale Ledger generation; changed active rule set; changed normalization; archived category lifecycle; missing or duplicate projection member; incompatible projection; checked amount overflow; or row, group, runtime, or memory limit breach, when unresolved.report is invoked, then it returns a typed no-result error and no partial report.
+6. Given unresolved.report succeeds, when CLASSIFY durable state, temporary files, logs, and rule history are inspected, then no raw description, normalized description, amount, report row, private path, or new durable report exists and zero rule drafts, proposals, activations, previews, applies, or Ledger mutations occurred.
+7. Given the owner chooses a candidate, when future rule work begins, then the candidate confers no authority: rule.save creates only a draft and the released validation plus explicit activation lifecycle remains mandatory.
+
 ## Non-Functional Requirements
 
 | Ref Code | Title | Category | Priority |
@@ -580,7 +771,10 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 | NFR-CLASSIFY-ATTRIBUTABLE-HISTORY | Retain attributable classification history | data_integrity | Critical |
 | NFR-CLASSIFY-BOUNDED-EVALUATION | Bound local classification work | performance | High |
 | NFR-CLASSIFY-DETERMINISTIC-INTEGRITY | Preserve deterministic classification integrity | data_integrity | Critical |
+| NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY | Protect and recover operator ergonomics artifacts | security | Critical |
 | NFR-CLASSIFY-LOCAL-DATA-PROTECTION | Protect local classification data | security | Critical |
+| NFR-CLASSIFY-OPERATOR-THROUGHPUT | Bound operator discovery process count and latency | performance | Critical |
+| NFR-CLASSIFY-PAGINATION-INTEGRITY | Preserve deterministic snapshot-bound discovery pages | data_integrity | Critical |
 | NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY | Preserve public contract compatibility boundaries | architecture | Critical |
 | NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION | Operate as a self-contained local classifier | operability | Critical |
 
@@ -624,15 +818,45 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 - **Description:** Classification outcomes, evidence, validation reports, and accounting totals must remain reproducible for one exact Evaluation Fingerprint.
 - **Rationale:** Determinism is the safety property that makes rule behavior reviewable and repeatable.
 
+### NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY: Protect and recover operator ergonomics artifacts
+
+- **Category:** security
+- **Priority:** Critical
+- **Target:** Zero source descriptions, normalized descriptions, amounts, labels, corpus paths, output paths, raw rows, serialized requests, or secrets appear in logs, stderr, telemetry, graph, tracked artifacts, process arguments, or general discovery results. Permitted private-payload surfaces are limited to owner-local structured request input, the explicit owner-local unresolved.report success result, and the authorized 0600 corpus output file. For 100 percent of injected corpus-write interruption points, no partial destination is visible and only a recognized owner-owned same-directory temporary is recoverable or removable.
+- **Load Condition:** Success, every typed failure, cancellation, process kill before and after flush/rename, symlink swap attempts, wrong UID, permissive mode, existing destination, malformed private input, and cleanup/retry.
+- **Measurement:** Disclosure scans over stdout/stderr/logs/database/temp/tracked paths, Linux mode and effective-UID assertions, symlink race tests, injected atomic-write crash matrix, idempotent retry tests, and private-reader conformance.
+- **Description:** New query results, cursors, private corpus writes, reports, logs, and failures must preserve the existing Linux owner-only and no-private-diagnostics boundary.
+- **Rationale:** The increment intentionally handles private payloads at three narrow owner-local boundaries: structured request ingress, the unresolved-pattern result, and the authorized corpus output. Every other surface must remain metadata-only and crash-safe.
+
 ### NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data
 
 - **Category:** security
 - **Priority:** Critical
-- **Target:** Zero private payload disclosures in process arguments, logs, stderr, crash diagnostics, telemetry, or tracked artifacts; 100% of persisted CLASSIFY directories and files use 0700 and 0600 respectively where supported; zero retained raw corpus copies or orphan temporary artifacts after success, failure, crash recovery, abandonment, and cleanup.
+- **Target:** Zero private payload disclosures in process arguments, logs, stderr, crash diagnostics, telemetry, or tracked artifacts; 100% of persisted CLASSIFY directories and files use 0700 and 0600 respectively where supported; zero retained CLASSIFY-managed duplicate raw corpus copies or orphan temporary artifacts after success, failure, crash recovery, abandonment, and cleanup. The explicitly requested owner-private corpus destination is the authorized output, not a managed duplicate, and remains subject to the private-corpus lifecycle boundary.
 - **Load Condition:** Normal and failed evaluation, validation, rule lifecycle, apply, feedback, status, abandon, cleanup, and process-startup recovery.
 - **Measurement:** Filesystem permission inspection, tracked-file scans, payload and secret canaries, diagnostics capture, crash injection, and temporary-artifact inventory.
 - **Description:** Rules, feedback, transaction descriptions, normalized tokens, validation evidence, and derived artifacts remain within the sole-owner local trust boundary.
 - **Rationale:** Classification state reveals spending behavior even when Ledger facts remain protected.
+
+### NFR-CLASSIFY-OPERATOR-THROUGHPUT: Bound operator discovery process count and latency
+
+- **Category:** performance
+- **Priority:** Critical
+- **Target:** On the supported release host, a 146-row outcome result is obtained from the published executable by one initial classify.outcome.list process with pageSize 500; any larger bounded result uses exactly ceiling(filteredCount/pageSize) CLI processes, each completes within 5 seconds and 256 MiB peak resident memory, and no operation performs one CLI process or one Ledger subprocess per returned row.
+- **Load Condition:** Completed evaluations from 0 through 10000 rows, page sizes 1 and 500, every supported filter, maximum evidence per outcome, and cold plus warm local process starts.
+- **Measurement:** Installed Native-AOT tests record CLI invocation count, wall time, peak resident memory, exact returned row accounting, cursor count, and verify that child-process count equals zero; exact-limit and one-over-limit cases are separate.
+- **Description:** Outcome and rule discovery must replace per-row process orchestration with bounded pages while retaining the existing local resource ceilings.
+- **Rationale:** The motivating 146 single-get orchestration exceeded five minutes despite correct engine behavior.
+
+### NFR-CLASSIFY-PAGINATION-INTEGRITY: Preserve deterministic snapshot-bound discovery pages
+
+- **Category:** data_integrity
+- **Priority:** Critical
+- **Target:** For 100 percent of outcome.list and rule.list calls, identical semantic inputs return byte-stable ordered item content and fingerprints; every row appears exactly once across a complete cursor walk; malformed, expired, replayed-under-different-request, cross-evaluation, cross-filter, cross-page-size, generation-drifted, or high-water-mismatched cursors return typed errors and zero result rows.
+- **Load Condition:** Empty, single-page, multi-page, concurrent rule append, evaluation expiry, category lifecycle drift, rule-set drift, Ledger generation drift, cursor tamper, cursor replay, cancellation, and one-over-bound cases.
+- **Measurement:** Property and published-process tests over cursor encode/decode, canonical hashes, deterministic order, complete page walks, concurrent append high-water behavior, failure envelopes, and store no-mutation snapshots.
+- **Description:** Every paginated CLASSIFY query must be a no-partial-result projection over immutable or high-water-bound state with opaque request-bound continuations.
+- **Rationale:** Opaque continuations are authority-bearing read context; accepting them outside the frozen request would silently omit, duplicate, or misrepresent rows.
 
 ### NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries
 
@@ -688,7 +912,7 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 - **Validation Basis:** source_and_client
 - **Validation Status:** validated
 - **Owner:** LEDGER
-- **Description:** Validated current-state claim from installed Tally 0.3.2 schema discovery and current main source: snapshot actuals, transaction detail, active categories, idempotent assignment, and correction exist; classification_v1 and allocation revision preconditions do not. PLAN-CLASSIFY-RULEBOOK-V1 owns the bounded Ledger extension and published-contract gate before any CLASSIFY consumer. No private Ledger storage access is authorized.
+- **Description:** Released and validated in Tally 0.3.3: ledger.actuals.query publishes purpose=evaluation and purpose=apply_preflight with itemProjection=classification_v1, frozen pagination, active category identity/lifecycle metadata, store generation and snapshot expiry, and bounded revision-bearing mutation preconditions. CLASSIFY consumes this public contract through LedgerContractClient only; private Ledger storage access and reconstruction of transfer, refund, allocation, void, supersession, or eligibility semantics remain forbidden.
 
 ### EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus
 
@@ -721,6 +945,7 @@ The host can orchestrate the workflow without scraping prose, bypassing owner in
 | Version | Date | Changes |
 |---------|------|---------|
 | viability-2026-07-30 | 2026-07-30T16:59:12.3681300+00:00 | Resolved OQ-CLASSIFY-1, OQ-CLASSIFY-2, OQ-CLASSIFY-3, and OQ-CLASSIFY-7 from an aggregate-only installed-CLI spike; recorded two triggered and two clear monitored kill criteria; measured failed decision-reduction and zero-disclosure gates; accepted DD-CLASSIFY-VIABILITY-DISPOSITION; deferred 13 FRs; invalidated the unreleased full Ledger classification dependency; archived PLAN-CLASSIFY-V1 without beads. |
+| 0.8 | 2026-08-02T08:31:22.5124613+00:00 | Specified and compiled PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1 after clean exhaustive review 20260802T081251218Z-1d91fb6b: five additive operations, 13 verified beads, 20 compile dependencies, three-bead ready frontier, shipped 0.3.3 compatibility, bounded discovery, private corpus publication, unresolved reporting, and no product implementation. |
 | 0.7 | 2026-07-31T09:33:11.3975768+00:00 | Compiled PLAN-CLASSIFY-RULEBOOK-V1 after clean exhaustive review 20260731T091656318Z-e371a2df: 30 verified beads, three-bead ready frontier, owner-rulebook pre-authority gate, and preserved automatic-discovery disposition. |
 | 0.6 | 2026-07-31T08:27:04.3796415+00:00 | Owner-rulebook replacement design: preserved failed automatic discovery, added explicit provenance, Ledger baseline, private pre-authority gate, and owner or Hermes command sequence |
 | 0.5 | 2026-07-19T06:18:59.6690244+00:00 | Implementation plan activated: defined 30 zero-context tasks across five sub-plans; added Ledger, public-contract, private-viability, security, graph-quality, six use-case, and final module gates; mapped upstream Ledger and Ingest blockers; achieved 169 of 169 plan coverage with two clean audit rounds and all task contexts below 2500 tokens. |

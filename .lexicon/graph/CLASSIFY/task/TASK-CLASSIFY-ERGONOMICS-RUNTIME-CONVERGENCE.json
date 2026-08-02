@@ -1,0 +1,327 @@
+{
+  "id": "01KZ0NTDVXE50RV8TQ7P57C3SB",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEN8X7GGP71FRF4PBB5C4",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-RUNTIME-CONVERGENCE",
+  "slug": "ERGONOMICS-RUNTIME-CONVERGENCE",
+  "title": "Publish five operations through the runtime registry",
+  "description": [
+    "Add operation IDs, descriptors, limits, error inventories, CLI paths, explicit DI construction, JSON handlers, and registry entries for the five completed slices."
+  ],
+  "objective": [
+    "Converge completed handlers into one discoverable 105-operation Native-AOT contract while preserving every released CLASSIFY schema."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-08-02T07:25:39.5817537+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S09EB467EWW8NPQ9DN1YX",
+      "bead_id": "bd-rly1",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:17.3879164+00:00",
+      "created_at": "2026-08-02T08:21:17.3879164+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NTDVZ7X2N4CKSXMD1KGQX",
+      "target": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZBZNQV6KWH6JKS1VW",
+      "target": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVN2MZD0TAQA9GCJBWDPS",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CORPUS-BUILDER",
+      "dependency_type": "compile",
+      "reason": [
+        "Only the completed protected mutation handler may be published."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:26:19.7337641+00:00"
+    },
+    {
+      "id": "01KZ0NVKG9DBXMTY6XBYRNKA37",
+      "target": "TASK-CLASSIFY-ERGONOMICS-OUTCOME-LIST",
+      "dependency_type": "compile",
+      "reason": [
+        "Only completed outcome handlers may be published."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:18.1223550+00:00"
+    },
+    {
+      "id": "01KZ0NVM9BBGECBRKT4C5448AP",
+      "target": "TASK-CLASSIFY-ERGONOMICS-RULE-DISCOVERY",
+      "dependency_type": "compile",
+      "reason": [
+        "Only completed rule handlers may be published."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:26:18.9244281+00:00"
+    },
+    {
+      "id": "01KZ0NVP0DPW39J4A3XG960AYC",
+      "target": "TASK-CLASSIFY-ERGONOMICS-UNRESOLVED-REPORT",
+      "dependency_type": "compile",
+      "reason": [
+        "Only the completed ephemeral report handler may be published."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:26:20.6858203+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NTDVZNGX9M5ASDKFK10CG",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyOperationIds.cs",
+      "action": "modify",
+      "role": "five additive stable IDs",
+      "required": 1,
+      "notes": [
+        "No released ID change."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZETRZ7QYDJFJDSB78",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyOperationModule.cs",
+      "action": "modify",
+      "role": "descriptors limits errors and schema targets",
+      "required": 1,
+      "notes": [
+        "Exactly 17 CLASSIFY entries."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZC2VY7SHMKBS0Y0QG",
+      "path": "src/Tally/Bootstrap/Features/ClassifyExtensions.cs",
+      "action": "modify",
+      "role": "explicit construction and JSON handlers",
+      "required": 1,
+      "notes": [
+        "No reflection or plugin scan."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZN2T5HKPK160BBR2F",
+      "path": "src/Tally/Cli/OperationRegistry.cs",
+      "action": "modify",
+      "role": "105-operation global registry inventory",
+      "required": 1,
+      "notes": [
+        "Preserve all existing order-independent IDs."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZ57WDZW5RTXA6Y5TD",
+      "path": "tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs",
+      "action": "modify",
+      "role": "descriptor and limits matrix",
+      "required": 1,
+      "notes": [
+        "Assert five additive entries."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZ21ZPQ2H1FM5BYPN7",
+      "path": "tests/Tally.Tests/Classify/Contract/ClassifyPublishedContractTests.cs",
+      "action": "modify",
+      "role": "installed/public schema matrix",
+      "required": 1,
+      "notes": [
+        "Freeze twelve old fingerprints."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NZEBFA186S69QHFZ2V5B6",
+      "name": "ClassifyOperationModule.Operations",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "notes": [
+        "17 explicit descriptors"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:28:23.9180525+00:00"
+    },
+    {
+      "id": "01KZ0NZEBGZD96RGN0SS4G9VS6",
+      "name": "ClassifyOperationBundle.CreateServicesAsync",
+      "direction": "produces",
+      "contract_ref_code": "MD-CLASSIFY-MASTER",
+      "notes": [
+        "five concrete handlers"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:28:23.9180525+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NTDVZ5WYBMWAX708V4ADW",
+      "kind": "acceptance_check",
+      "text": [
+        "OperationRegistry and system.schema list exactly 105 operations and 17 CLASSIFY operations, including the five exact IDs and CLI paths from DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZDKF9GT1J3CPWHE7T",
+      "kind": "acceptance_check",
+      "text": [
+        "outcome.list, rule.list, rule-set.active.get, and unresolved.report are query/non-idempotent descriptors; corpus.build is mutation/requires-idempotency; every limit and typed error maps to the designed exit class."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZH8KZP25CCB6QR9Z1",
+      "kind": "acceptance_check",
+      "text": [
+        "ClassifyOperationBundle creates every dependency explicitly, composes each source-generated handler, passes CancellationToken, and descriptor-only discovery opens no data root, Ledger store, or private corpus."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZ84GR2M4BD7HPQ6H2",
+      "kind": "acceptance_check",
+      "text": [
+        "Installed/public schema tests prove the twelve 0.3.3 fingerprints remain identical and all five additive schemas match the graph contracts."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZYX3EJZTWPWNZW1FK",
+      "kind": "constraint",
+      "text": [
+        "All feature tasks and composition tests must pass before the inventory target is asserted."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZ8K2BFPQ24BTW99DR",
+      "kind": "expected_output",
+      "text": [
+        "Five published descriptors and explicit runtime handler composition"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZH40YPZYB26CNZVX3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not publish a stub, reflection handler, generic invoke discriminator, hidden operation, status extension, preview extension, or handler that opens private Ledger storage."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZ5TR7TK6BH3MRC0V1",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not tag, release, install, deploy, mutate live data, or update the product version in this task."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NTDVZ7WKA65P3NDT49E6X",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZ01HQ3KEA6PPNV9EC",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZSCHTGV5108PFCQDW",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZ6GSY0YHAWKRRCH75",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZCP0QS93C8Q2GWW6N",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDVZ642QYFWM7CQENK6D",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NTDW00ZYFG73G2V2BN4AK",
+      "gate_type": "test-evidence",
+      "description": [
+        "Schema diff contains only five additive operation families and no released-field mutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NTDVZQAMC0C0TTE8N6MAB",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyOperationContractTests",
+      "expected_result": "exit 0; descriptor limit error mutability idempotency source-generation and count matrix passes",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    },
+    {
+      "id": "01KZ0NTDW0X18KNSZZ2TX60A97",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyPublishedContractTests",
+      "expected_result": "exit 0; installed-compatible 105/17 inventory and twelve frozen fingerprints pass",
+      "required": 1,
+      "timeout_seconds": 600,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+    }
+  ]
+}

@@ -15,8 +15,8 @@ Implement preview, explicitly authorized replay-safe apply, recovery, status, ab
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md) | Authorize exact apply previews | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md) | Execute the replay-safe apply saga | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md) | Record bounded correction feedback | `ready` | 1 |
-| [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](../tasks/rulebook-abandon-cleanup.md) | Abandon state and clean recognized artifacts | `ready` | 1 |
-| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md) | Expose bounded classification status | `ready` | 1 |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: Authorize exact apply previews](../tasks/rulebook-apply-preview.md) | Authorize exact apply previews | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: Execute the replay-safe apply saga](../tasks/rulebook-apply-run-saga.md) | Execute the replay-safe apply saga | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: Record bounded correction feedback](../tasks/rulebook-feedback-proposals.md) | Record bounded correction feedback | `ready` | 1 |
+| [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP: Abandon state and clean recognized artifacts](../tasks/rulebook-abandon-cleanup.md) | Abandon state and clean recognized artifacts | `ready` | 1 |
+| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: Expose bounded classification status](../tasks/rulebook-status-workflow.md) | Expose bounded classification status | `ready` | 1 |

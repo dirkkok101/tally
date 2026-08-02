@@ -22,11 +22,11 @@ Published Ledger descriptors, projection behavior, mutation preconditions, and p
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts | `data_model` | `touches` | `true` |
-| EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract | `external_dependency` | `references` | `true` |
-| FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) | `data_model` | `touches` | `true` |
+| [EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract](../../../prd/classify/prd.md#ext-classify-ledger-public-contract-ledger-public-contract) | `external_dependency` | `references` | `true` |
+| [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection) | `requirement` | `implements` | `true` |
 | TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract | `task` | `blocked-by` | `true` |
 | TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT: Verify the eligible classification projection | `test_case` | `verifies` | `true` |
@@ -35,7 +35,7 @@ Published Ledger descriptors, projection behavior, mutation preconditions, and p
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CONTRACT](../tasks/rulebook-ledger-classification-contract.md) | `compile` | The gate executes the projection and mutation contracts produced by this task. |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CONTRACT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CONTRACT](rulebook-ledger-classification-contract.md) | `compile` | The gate executes the projection and mutation contracts produced by this task. |
 
 ## Recipe
 
@@ -79,9 +79,9 @@ Published Ledger descriptors, projection behavior, mutation preconditions, and p
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationProjectionRequest | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| LedgerCategoryMutationPreconditions | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| VerifiedLedgerClassificationContract | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
+| ClassificationProjectionRequest | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| LedgerCategoryMutationPreconditions | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| VerifiedLedgerClassificationContract | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
 
 ### Verification
 
@@ -107,12 +107,12 @@ Generated from task provenance, task dependency, task reference, and bead-ref gr
 
 - `bead-ref` -> `bd-2q0i` (verified)
 - `blocked-by` -> TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CONTRACT](../tasks/rulebook-ledger-classification-contract.md): The gate executes the projection and mutation contracts produced by this task.
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `implements` -> FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations
-- `implements` -> FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection
-- `references` -> EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract
-- `touches` -> DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CONTRACT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CONTRACT](rulebook-ledger-classification-contract.md): The gate executes the projection and mutation contracts produced by this task.
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `implements` -> [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations)
+- `implements` -> [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection)
+- `references` -> [EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract](../../../prd/classify/prd.md#ext-classify-ledger-public-contract-ledger-public-contract)
+- `touches` -> [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts)
 - `verifies` -> TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply
 - `verifies` -> TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT: Verify the eligible classification projection
 

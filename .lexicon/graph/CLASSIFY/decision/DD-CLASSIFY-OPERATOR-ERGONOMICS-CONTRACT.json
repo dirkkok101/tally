@@ -1,0 +1,82 @@
+{
+  "id": "01KZ0N585ANYEGNB0VH2KM0WX5",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+  "title": "Add five explicit operator discovery and private-tool operations",
+  "description": [
+    "Defines the additive public surface and compatibility boundary for bounded CLASSIFY operator ergonomics."
+  ],
+  "decision": [
+    "Add classify.outcome.list, classify.rule.list, classify.rule-set.active.get, classify.corpus.build, and classify.unresolved.report under contract version 1.0. Keep all twelve 0.3.3 request/result/error schemas compatible. Do not extend classify.status or classify.apply.preview: outcome.list composes with the existing selected_outcomes preview mode and its 200-outcome maximum. The resulting published inventory is 105 total operations and 17 CLASSIFY operations. All five operations use the existing typed envelope, source-generated JSON, operation registry, module handler composition, exit-code mapping, idempotency conventions, and metadata-only diagnostics."
+  ],
+  "rationale": [
+    "Separate operations keep mutability, limits, privacy, and lifecycle semantics inspectable. A status extension would alter a strict released result shape, and a preview extension is unnecessary because explicit outcome IDs already provide the required batch contract."
+  ],
+  "alternatives": [
+    "Change classify.status; rejected to preserve its released schema. Add apply-all or preview-by-filter; rejected because it weakens explicit selection and broadApplyAllowed=false. Use one generic discovery operation; rejected because rule, outcome, corpus, and unresolved-report authority differ."
+  ],
+  "consequences": [
+    "The operation registry and contract inventory gain five additive entries. Existing clients remain valid. Rollback removes only the five new descriptors/handlers before release or restores the prior binary after release; durable engine state remains readable by 0.3.3, while a corpus file written by the new builder remains an ordinary private validation corpus."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Classify/Contract/ClassifyOperationIds.cs\"]}",
+  "created_at": "2026-08-02T07:14:05.6116244+00:00",
+  "links": [
+    {
+      "id": "01KZ0N7JJ1XDCVTZCPASH9MY2S",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+      "rel": "supersedes",
+      "created_at": "2026-08-02T07:15:21.7942538+00:00"
+    },
+    {
+      "id": "01KZ0N6QY63VJJQDRKM2Y1ERA3",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-BULK-PREVIEW-COMPOSITION",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:54.5352020+00:00"
+    },
+    {
+      "id": "01KZ0N6P8VPTWCF7WARTYS1GGE",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:52.8279736+00:00"
+    },
+    {
+      "id": "01KZ0N6RRCM6E4E89R97GJ3GP7",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:55.3732030+00:00"
+    },
+    {
+      "id": "01KZ0N6Q320HQ357M7A0D2ZFK4",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:53.6670897+00:00"
+    },
+    {
+      "id": "01KZ0N6SJZS57SSMFV4E38XE4A",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:56.2243165+00:00"
+    },
+    {
+      "id": "01KZ0N6TDC294Q5BTH53WXB95Z",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:57.0689028+00:00"
+    },
+    {
+      "id": "01KZ0NC997DDE5YF2PN9TA0ZYM",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-ERGONOMICS-PUBLISHED-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-08-02T07:17:56.1359609+00:00"
+    }
+  ]
+}

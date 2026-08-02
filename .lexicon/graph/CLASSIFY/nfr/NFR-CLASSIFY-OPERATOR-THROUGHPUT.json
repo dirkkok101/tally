@@ -1,0 +1,18 @@
+{
+  "id": "01KZ0MP0A52CN85568MS096JK7",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-OPERATOR-THROUGHPUT",
+  "title": "Bound operator discovery process count and latency",
+  "description": [
+    "Outcome and rule discovery must replace per-row process orchestration with bounded pages while retaining the existing local resource ceilings."
+  ],
+  "category": "performance",
+  "target": "On the supported release host, a 146-row outcome result is obtained from the published executable by one initial classify.outcome.list process with pageSize 500; any larger bounded result uses exactly ceiling(filteredCount/pageSize) CLI processes, each completes within 5 seconds and 256 MiB peak resident memory, and no operation performs one CLI process or one Ledger subprocess per returned row.",
+  "load_condition": "Completed evaluations from 0 through 10000 rows, page sizes 1 and 500, every supported filter, maximum evidence per outcome, and cold plus warm local process starts.",
+  "measurement": "Installed Native-AOT tests record CLI invocation count, wall time, peak resident memory, exact returned row accounting, cursor count, and verify that child-process count equals zero; exact-limit and one-over-limit cases are separate.",
+  "rationale": [
+    "The motivating 146 single-get orchestration exceeded five minutes despite correct engine behavior."
+  ],
+  "priority": 0,
+  "created_at": "2026-08-02T07:05:46.0537625+00:00"
+}

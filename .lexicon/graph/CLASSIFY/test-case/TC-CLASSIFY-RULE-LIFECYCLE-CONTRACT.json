@@ -8,10 +8,11 @@
   "surface": "persistence",
   "scenario": "unhappy",
   "automation": "automated",
-  "status": "planned",
+  "status": "implemented",
   "preconditions": "Supported and unsupported predicates, active and archived categories, passing validation evidence, and an existing active rule are available.",
   "steps": "Save valid and invalid drafts; activate a validated draft; retire and replace active rules; inspect prior versions; rename the referenced category; submit feedback without activation.",
   "expected": "Draft save records immutable owner_authored or feedback_derived provenance without granting authority; validation is required; explicit activation creates one successor Rule Set Version; retirement preserves history; category rename preserves stable identity; feedback proposals remain inactive; no save, feedback, or lifecycle transition mutates Ledger.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs",
   "owner": "CLASSIFY implementation",
   "created_at": "2026-07-19T04:21:09.2066888+00:00",
   "links": [

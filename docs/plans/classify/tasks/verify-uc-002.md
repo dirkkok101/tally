@@ -22,17 +22,17 @@ UC-CLASSIFY-002 proves bounded reproducible explanation and every specified fail
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
 | TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT: Verify bounded outcome explanation | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT: Verify every staleness trigger | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-002: Inspect and explain a classification outcome | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-002: Inspect and explain a classification outcome](../../../prd/classify/prd.md#uc-classify-002-inspect-and-explain-a-classification-outcome) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-OUTCOME-EXPLANATION](../tasks/outcome-explanation.md) | `compile` | The UC consumes the complete explanation and staleness query. |
-| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md) | `compile` | Acceptance invokes the published process boundary. |
+| [TASK-CLASSIFY-OUTCOME-EXPLANATION: TASK-CLASSIFY-OUTCOME-EXPLANATION](outcome-explanation.md) | `compile` | The UC consumes the complete explanation and staleness query. |
+| [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md) | `compile` | Acceptance invokes the published process boundary. |
 
 ## Recipe
 
@@ -70,8 +70,8 @@ UC-CLASSIFY-002 proves bounded reproducible explanation and every specified fail
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| GetClassificationOutcomeQuery.HandleAsync | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| VerifiedClassifyUc002 | `produces` | UC-CLASSIFY-002 |  |
+| GetClassificationOutcomeQuery.HandleAsync | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| VerifiedClassifyUc002 | `produces` | [UC-CLASSIFY-002](../../../prd/classify/prd.md#uc-classify-002-inspect-and-explain-a-classification-outcome) |  |
 
 ### Verification
 
@@ -93,10 +93,10 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `covers` -> UC-CLASSIFY-002: Inspect and explain a classification outcome
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](../tasks/gate-int-public-contract.md): Acceptance invokes the published process boundary.
-- `depends-on:compile` -> [TASK-CLASSIFY-OUTCOME-EXPLANATION](../tasks/outcome-explanation.md): The UC consumes the complete explanation and staleness query.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
+- `covers` -> [UC-CLASSIFY-002: Inspect and explain a classification outcome](../../../prd/classify/prd.md#uc-classify-002-inspect-and-explain-a-classification-outcome)
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-GATE-INT-PUBLIC-CONTRACT](gate-int-public-contract.md): Acceptance invokes the published process boundary.
+- `depends-on:compile` -> [TASK-CLASSIFY-OUTCOME-EXPLANATION: TASK-CLASSIFY-OUTCOME-EXPLANATION](outcome-explanation.md): The UC consumes the complete explanation and staleness query.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
 - `verifies` -> TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT: Verify bounded outcome explanation
 - `verifies` -> TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT: Verify every staleness trigger
 

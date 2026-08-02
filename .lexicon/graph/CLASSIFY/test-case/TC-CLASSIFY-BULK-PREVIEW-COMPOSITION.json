@@ -1,0 +1,35 @@
+{
+  "id": "01KZ0MT9RW445PSR2GJ7A0XKQS",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-BULK-PREVIEW-COMPOSITION",
+  "slug": "BULK-PREVIEW-COMPOSITION",
+  "title": "Verify bounded selected-outcome preview composition",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A completed evaluation contains at least 201 suggestions under an active rule set, with broadApplyAllowed both false and true in separate isolated fixtures.",
+  "steps": "List suggestions, preview exact batches of 1 and 200 IDs, submit duplicate, mixed-evaluation, unknown, stale, archived-category, non-suggestion, and 201-ID selections, then drift authority before apply.run.",
+  "expected": "The existing selected_outcomes schema is unchanged; valid previews freeze exact evidence without Ledger mutation; invalid or oversized batches have no partial preview; broadApplyAllowed=false never authorizes implicit or unattended apply; apply-time drift fails closed.",
+  "cleanup": "Remove only the isolated data root.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Apply/OutcomeListPreviewCompositionTests.cs",
+  "owner": "CLASSIFY",
+  "created_at": "2026-08-02T07:08:06.8130573+00:00",
+  "links": [
+    {
+      "id": "01KZ0MW0H5XZPA5AWB6ZYXEZVQ",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-BULK-PREVIEW-COMPOSITION",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:02.8869127+00:00"
+    },
+    {
+      "id": "01KZ0MW7VDABGQDXXSPX1A1M5S",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-007",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:10.3827664+00:00"
+    }
+  ]
+}

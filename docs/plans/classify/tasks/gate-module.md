@@ -22,15 +22,15 @@ CLASSIFY v1 is reproducibly buildable, tested, Native-AOT compatible, locally se
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
-| NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries | `nfr` | `satisfies` | `true` |
-| NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/classify/prd.md#nfr-classify-public-contract-compatibility-preserve-public-contract-compatibility-boundaries) | `nfr` | `satisfies` | `true` |
+| [NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier](../../../prd/classify/prd.md#nfr-classify-self-contained-local-operation-operate-as-a-self-contained-local-classifier) | `nfr` | `satisfies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md) | `compile` | Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates. |
+| [TASK-CLASSIFY-GATE-GRAPH-QUALITY: TASK-CLASSIFY-GATE-GRAPH-QUALITY](gate-graph-quality.md) | `compile` | Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates. |
 
 ## Recipe
 
@@ -103,10 +103,10 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-GATE-GRAPH-QUALITY](../tasks/gate-graph-quality.md): Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates.
-- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
-- `satisfies` -> NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries
-- `satisfies` -> NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier
+- `depends-on:compile` -> [TASK-CLASSIFY-GATE-GRAPH-QUALITY: TASK-CLASSIFY-GATE-GRAPH-QUALITY](gate-graph-quality.md): Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates.
+- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
+- `satisfies` -> [NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/classify/prd.md#nfr-classify-public-contract-compatibility-preserve-public-contract-compatibility-boundaries)
+- `satisfies` -> [NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier](../../../prd/classify/prd.md#nfr-classify-self-contained-local-operation-operate-as-a-self-contained-local-classifier)
 
 ## Navigation
 

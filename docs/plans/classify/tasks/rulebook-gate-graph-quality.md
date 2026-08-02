@@ -22,24 +22,24 @@ One reproducible evidence marker proves the implemented CLASSIFY graph is comple
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-VIABILITY-DISPOSITION: Stop CLASSIFY v1 after the private viability spike | `design_decision` | `governed-by` | `true` |
-| FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path](../../../designs/classify/decisions/owner-rulebook-replacement.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-VIABILITY-DISPOSITION: Stop CLASSIFY v1 after the private viability spike](../../../designs/classify/decisions/viability-disposition.md) | `design_decision` | `governed-by` | `true` |
+| [FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract](../../../prd/classify/prd.md#fr-classify-contract-discovery-discover-the-classify-command-contract) | `requirement` | `implements` | `true` |
 | PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates | `pattern` | `governed-by` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](../tasks/rulebook-gate-owner-rulebook.md) | `compile` | Graph evidence requires the private viability result. |
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md) | `compile` | Graph evidence requires the complete public contract marker. |
-| [TASK-CLASSIFY-RULEBOOK-GATE-SECURITY](../tasks/rulebook-gate-security.md) | `compile` | Graph evidence requires security evidence. |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001](../tasks/rulebook-verify-uc-001.md) | `compile` | Graph evidence requires UC-CLASSIFY-001 evidence. |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002](../tasks/rulebook-verify-uc-002.md) | `compile` | Graph evidence requires UC-CLASSIFY-002 evidence. |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003](../tasks/rulebook-verify-uc-003.md) | `compile` | Graph evidence requires UC-CLASSIFY-003 evidence. |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-004](../tasks/rulebook-verify-uc-004.md) | `compile` | Graph evidence requires UC-CLASSIFY-004 evidence. |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-005](../tasks/rulebook-verify-uc-005.md) | `compile` | Graph evidence requires UC-CLASSIFY-005 evidence. |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006](../tasks/rulebook-verify-uc-006.md) | `compile` | Graph evidence requires UC-CLASSIFY-006 evidence. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](rulebook-gate-owner-rulebook.md) | `compile` | Graph evidence requires the private viability result. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md) | `compile` | Graph evidence requires the complete public contract marker. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-SECURITY: TASK-CLASSIFY-RULEBOOK-GATE-SECURITY](rulebook-gate-security.md) | `compile` | Graph evidence requires security evidence. |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001](rulebook-verify-uc-001.md) | `compile` | Graph evidence requires UC-CLASSIFY-001 evidence. |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002](rulebook-verify-uc-002.md) | `compile` | Graph evidence requires UC-CLASSIFY-002 evidence. |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003](rulebook-verify-uc-003.md) | `compile` | Graph evidence requires UC-CLASSIFY-003 evidence. |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-004: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-004](rulebook-verify-uc-004.md) | `compile` | Graph evidence requires UC-CLASSIFY-004 evidence. |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-005: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-005](rulebook-verify-uc-005.md) | `compile` | Graph evidence requires UC-CLASSIFY-005 evidence. |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006](rulebook-verify-uc-006.md) | `compile` | Graph evidence requires UC-CLASSIFY-006 evidence. |
 
 ## Recipe
 
@@ -82,15 +82,15 @@ One reproducible evidence marker proves the implemented CLASSIFY graph is comple
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| ClassifySecurityGateEvidence | `consumes` | NFR-CLASSIFY-LOCAL-DATA-PROTECTION |  |
+| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| ClassifySecurityGateEvidence | `consumes` | [NFR-CLASSIFY-LOCAL-DATA-PROTECTION](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) |  |
 | VerifiedOwnerRulebookGateReceipt | `consumes` | TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE |  |
-| VerifiedClassifyUc001 | `consumes` | UC-CLASSIFY-001 |  |
-| VerifiedClassifyUc002 | `consumes` | UC-CLASSIFY-002 |  |
-| VerifiedClassifyUc003 | `consumes` | UC-CLASSIFY-003 |  |
-| VerifiedClassifyUc004 | `consumes` | UC-CLASSIFY-004 |  |
-| VerifiedClassifyUc005 | `consumes` | UC-CLASSIFY-005 |  |
-| VerifiedClassifyUc006 | `consumes` | UC-CLASSIFY-006 |  |
+| VerifiedClassifyUc001 | `consumes` | [UC-CLASSIFY-001](../../../prd/classify/prd.md#uc-classify-001-evaluate-eligible-transactions) |  |
+| VerifiedClassifyUc002 | `consumes` | [UC-CLASSIFY-002](../../../prd/classify/prd.md#uc-classify-002-inspect-and-explain-a-classification-outcome) |  |
+| VerifiedClassifyUc003 | `consumes` | [UC-CLASSIFY-003](../../../prd/classify/prd.md#uc-classify-003-apply-accepted-classification-decisions) |  |
+| VerifiedClassifyUc004 | `consumes` | [UC-CLASSIFY-004](../../../prd/classify/prd.md#uc-classify-004-manage-and-validate-deterministic-rules) |  |
+| VerifiedClassifyUc005 | `consumes` | [UC-CLASSIFY-005](../../../prd/classify/prd.md#uc-classify-005-use-a-correction-as-bounded-feedback) |  |
+| VerifiedClassifyUc006 | `consumes` | [UC-CLASSIFY-006](../../../prd/classify/prd.md#uc-classify-006-discover-and-invoke-the-shipped-classify-v033-agent-contract) |  |
 | ClassifyGraphQualityEvidence | `produces` |  |  |
 
 ### Verification
@@ -116,19 +116,19 @@ One reproducible evidence marker proves the implemented CLASSIFY graph is comple
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1yaj` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md): Graph evidence requires the complete public contract marker.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](../tasks/rulebook-gate-owner-rulebook.md): Graph evidence requires the private viability result.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-SECURITY](../tasks/rulebook-gate-security.md): Graph evidence requires security evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001](../tasks/rulebook-verify-uc-001.md): Graph evidence requires UC-CLASSIFY-001 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002](../tasks/rulebook-verify-uc-002.md): Graph evidence requires UC-CLASSIFY-002 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003](../tasks/rulebook-verify-uc-003.md): Graph evidence requires UC-CLASSIFY-003 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-004](../tasks/rulebook-verify-uc-004.md): Graph evidence requires UC-CLASSIFY-004 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-005](../tasks/rulebook-verify-uc-005.md): Graph evidence requires UC-CLASSIFY-005 evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006](../tasks/rulebook-verify-uc-006.md): Graph evidence requires UC-CLASSIFY-006 evidence.
-- `governed-by` -> DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path
-- `governed-by` -> DD-CLASSIFY-VIABILITY-DISPOSITION: Stop CLASSIFY v1 after the private viability spike
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md): Graph evidence requires the complete public contract marker.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](rulebook-gate-owner-rulebook.md): Graph evidence requires the private viability result.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-SECURITY: TASK-CLASSIFY-RULEBOOK-GATE-SECURITY](rulebook-gate-security.md): Graph evidence requires security evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001](rulebook-verify-uc-001.md): Graph evidence requires UC-CLASSIFY-001 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002](rulebook-verify-uc-002.md): Graph evidence requires UC-CLASSIFY-002 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003](rulebook-verify-uc-003.md): Graph evidence requires UC-CLASSIFY-003 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-004: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-004](rulebook-verify-uc-004.md): Graph evidence requires UC-CLASSIFY-004 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-005: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-005](rulebook-verify-uc-005.md): Graph evidence requires UC-CLASSIFY-005 evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006: TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006](rulebook-verify-uc-006.md): Graph evidence requires UC-CLASSIFY-006 evidence.
 - `governed-by` -> PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES: Implementation Plan Quality Gates
-- `implements` -> FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract
+- `governed-by` -> [DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path](../../../designs/classify/decisions/owner-rulebook-replacement.md)
+- `governed-by` -> [DD-CLASSIFY-VIABILITY-DISPOSITION: Stop CLASSIFY v1 after the private viability spike](../../../designs/classify/decisions/viability-disposition.md)
+- `implements` -> [FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract](../../../prd/classify/prd.md#fr-classify-contract-discovery-discover-the-classify-command-contract)
 
 ## Navigation
 

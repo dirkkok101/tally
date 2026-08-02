@@ -22,13 +22,13 @@ Explicit authorized assignments and corrections reach Ledger at most once per it
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DIAG-CLASSIFY-APPLY-SAGA: Preview preflight and replay-safe apply saga | `design_diagram` | `touches` | `false` |
-| DM-CLASSIFY-APPLY-RUN: ClassificationApplyPreviewAndRun | `data_model` | `touches` | `true` |
-| FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-APPLY-RECOVERY: Recover Classification Apply Runs deterministically | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga](../../../designs/classify/decisions/apply-saga.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-CLASSIFY-APPLY-SAGA: Preview preflight and replay-safe apply saga](../../../designs/classify/diagrams/apply-saga.md) | `design_diagram` | `touches` | `false` |
+| [DM-CLASSIFY-APPLY-RUN: ClassificationApplyPreviewAndRun](../../../designs/classify/data-model.md#classificationapplypreviewandrun) | `data_model` | `touches` | `true` |
+| [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-APPLY-RECOVERY: Recover Classification Apply Runs deterministically](../../../prd/classify/prd.md#nfr-classify-apply-recovery-recover-classification-apply-runs-deterministically) | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX: Verify every classification apply crash window | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply | `test_case` | `verifies` | `true` |
 
@@ -36,8 +36,8 @@ Explicit authorized assignments and corrections reach Ledger at most once per it
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md) | `compile` | Apply consumes the exact expiry-bound preview and selected-item preconditions. |
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md) | `compile` | Apply consumes the public assignment and correction methods with frozen preconditions. |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](rulebook-apply-preview.md) | `compile` | Apply consumes the exact expiry-bound preview and selected-item preconditions. |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md) | `compile` | Apply consumes the public assignment and correction methods with frozen preconditions. |
 
 ## Recipe
 
@@ -88,12 +88,12 @@ Explicit authorized assignments and corrections reach Ledger at most once per it
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationApplyPreviewStore | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| LedgerContractClient.AssignCategoryAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| LedgerContractClient.CorrectCategoryAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| RunClassificationApplyCommand.HandleAsync | `produces` | DM-CLASSIFY-APPLY-RUN |  |
-| ClassificationApplyRunStore | `produces` | DM-CLASSIFY-APPLY-RUN |  |
+| ClassificationApplyPreviewStore | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| LedgerContractClient.AssignCategoryAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| LedgerContractClient.CorrectCategoryAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| RunClassificationApplyCommand.HandleAsync | `produces` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| ClassificationApplyRunStore | `produces` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
 
 ### Verification
 
@@ -118,15 +118,15 @@ Explicit authorized assignments and corrections reach Ledger at most once per it
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2ffc` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md): Apply consumes the exact expiry-bound preview and selected-item preconditions.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md): Apply consumes the public assignment and correction methods with frozen preconditions.
-- `governed-by` -> DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations
-- `satisfies` -> NFR-CLASSIFY-APPLY-RECOVERY: Recover Classification Apply Runs deterministically
-- `touches` -> DIAG-CLASSIFY-APPLY-SAGA: Preview preflight and replay-safe apply saga
-- `touches` -> DM-CLASSIFY-APPLY-RUN: ClassificationApplyPreviewAndRun
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](rulebook-apply-preview.md): Apply consumes the exact expiry-bound preview and selected-item preconditions.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md): Apply consumes the public assignment and correction methods with frozen preconditions.
+- `governed-by` -> [DD-CLASSIFY-APPLY-SAGA: Expiry-bound preview and per-item idempotent Ledger saga](../../../designs/classify/decisions/apply-saga.md)
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-APPLY-EXECUTION: Apply authorized decisions through public LEDGER operations](../../../prd/classify/prd.md#fr-classify-apply-execution-apply-authorized-decisions-through-public-ledger-operations)
+- `satisfies` -> [NFR-CLASSIFY-APPLY-RECOVERY: Recover Classification Apply Runs deterministically](../../../prd/classify/prd.md#nfr-classify-apply-recovery-recover-classification-apply-runs-deterministically)
+- `touches` -> [DIAG-CLASSIFY-APPLY-SAGA: Preview preflight and replay-safe apply saga](../../../designs/classify/diagrams/apply-saga.md)
+- `touches` -> [DM-CLASSIFY-APPLY-RUN: ClassificationApplyPreviewAndRun](../../../designs/classify/data-model.md#classificationapplypreviewandrun)
 - `verifies` -> TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX: Verify every classification apply crash window
 - `verifies` -> TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply
 

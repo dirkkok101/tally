@@ -15,13 +15,13 @@ Prove the twelve-operation public contract, use cases, privacy and security, det
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md) | Wire and prove the complete CLASSIFY contract | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-GATE-SECURITY](../tasks/rulebook-gate-security.md) | Validate CLASSIFY local data security | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001](../tasks/rulebook-verify-uc-001.md) | Verify eligible deterministic evaluation | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002](../tasks/rulebook-verify-uc-002.md) | Verify outcome explanation and staleness | `ready` | 1 |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003](../tasks/rulebook-verify-uc-003.md) | Verify authorized apply and recovery | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-004](../tasks/rulebook-verify-uc-004.md) | Verify rule management and validation | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-005](../tasks/rulebook-verify-uc-005.md) | Verify bounded correction feedback | `ready` | 1 |
-| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006](../tasks/rulebook-verify-uc-006.md) | Verify agent contract discovery and invocation | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY](../tasks/rulebook-gate-graph-quality.md) | Converge CLASSIFY graph and evidence quality | `ready` | 1 |
-| [TASK-CLASSIFY-RULEBOOK-GATE-MODULE](../tasks/rulebook-gate-module.md) | Complete the CLASSIFY v1 module gate | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete CLASSIFY contract](../tasks/rulebook-gate-int-public-contract.md) | Wire and prove the complete CLASSIFY contract | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-GATE-SECURITY: Validate CLASSIFY local data security](../tasks/rulebook-gate-security.md) | Validate CLASSIFY local data security | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-001: Verify eligible deterministic evaluation](../tasks/rulebook-verify-uc-001.md) | Verify eligible deterministic evaluation | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-002: Verify outcome explanation and staleness](../tasks/rulebook-verify-uc-002.md) | Verify outcome explanation and staleness | `ready` | 1 |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-003: Verify authorized apply and recovery](../tasks/rulebook-verify-uc-003.md) | Verify authorized apply and recovery | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-004: Verify rule management and validation](../tasks/rulebook-verify-uc-004.md) | Verify rule management and validation | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-005: Verify bounded correction feedback](../tasks/rulebook-verify-uc-005.md) | Verify bounded correction feedback | `ready` | 1 |
+| [TASK-CLASSIFY-RULEBOOK-VERIFY-UC-006: Verify agent contract discovery and invocation](../tasks/rulebook-verify-uc-006.md) | Verify agent contract discovery and invocation | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY: Converge CLASSIFY graph and evidence quality](../tasks/rulebook-gate-graph-quality.md) | Converge CLASSIFY graph and evidence quality | `ready` | 1 |
+| [TASK-CLASSIFY-RULEBOOK-GATE-MODULE: Complete the CLASSIFY v1 module gate](../tasks/rulebook-gate-module.md) | Complete the CLASSIFY v1 module gate | `ready` | 0 |

@@ -1,0 +1,207 @@
+{
+  "id": "01KZ0NQZ1DJX79AT0DB1MFBTGF",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEMGGZBNB2YHDY0H3A09Y",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-UNRESOLVED-POLICY",
+  "slug": "ERGONOMICS-UNRESOLVED-POLICY",
+  "title": "Define deterministic unresolved grouping policy",
+  "description": [
+    "Implement the pure grouping, ordering, top-N, fingerprint, and disclosure policy for owner-visible unresolved review."
+  ],
+  "objective": [
+    "Produce bounded repeat-pattern aggregates with checked arithmetic and drift fingerprints without persistence or rule authority."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-08-02T07:24:18.8625423+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S0DZYWH6FQWY4T4MFW0KY",
+      "bead_id": "bd-elq8",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:22.0468399+00:00",
+      "created_at": "2026-08-02T08:21:22.0468399+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NQZ1FD0K6325A2261MKA9",
+      "target": "DD-CLASSIFY-UNRESOLVED-REPORT-BOUNDARY",
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NQZ1FF4KK85EWWSZ05FYW",
+      "path": "src/Tally/Domain/Classify/Unresolved/UnresolvedPatternGroupingPolicy.cs",
+      "action": "create",
+      "role": "pure grouping and ordering policy",
+      "required": 1,
+      "notes": [
+        "Checked arithmetic and top-N."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1GEFJ9TVB3SQ0ZSC1W",
+      "path": "src/Tally/Domain/Classify/Unresolved/UnresolvedPatternFingerprint.cs",
+      "action": "create",
+      "role": "canonical drift fingerprint",
+      "required": 1,
+      "notes": [
+        "Ordinal canonical serialization."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1GSK4NPT726NWGZ30T",
+      "path": "tests/Tally.Tests/Classify/Unresolved/UnresolvedPatternGroupingPolicyTests.cs",
+      "action": "create",
+      "role": "property boundary overflow and privacy tests",
+      "required": 1,
+      "notes": [
+        "Synthetic values only."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NQZ1GZ4QD1GVM7XAW8P8E",
+      "name": "UnresolvedPatternGroupingPolicy",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-UNRESOLVED-REPORT",
+      "notes": [
+        "ordered bounded groups"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXEN287DQS89N1W7YS3HX",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-DETERMINISTIC-INTEGRITY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:18.6911811+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NQZ1FQN7ZAS0V6NEXTWSM",
+      "kind": "acceptance_check",
+      "text": [
+        "The group key is normalizationVersion, normalizedDescription, accountId, and amountDirection using ordinal equality; counts and signed/absolute minor-unit totals use checked arithmetic."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1FZ95E3QS0S39209E0",
+      "kind": "acceptance_check",
+      "text": [
+        "Ordering is count descending, then normalizedDescription, accountId, and direction ordinal; topN accepts 1 through 500 and identical inputs yield identical group fingerprints."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1FYR44Y83EKFFF12XW",
+      "kind": "acceptance_check",
+      "text": [
+        "The pure result exposes owner-visible normalized description and aggregates but contains no transaction IDs, source paths, rule proposal, activation, feedback, or durable artifact instruction."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1FSGWE797W0RN4D8VY",
+      "kind": "acceptance_check",
+      "text": [
+        "Overflow, over-limit, empty normalization version, invalid direction, and impossible row accounting return typed failures with no partial groups."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1FCTABAGYX1D3KATRT",
+      "kind": "constraint",
+      "text": [
+        "The policy is pure, deterministic, bounded, and independent of storage or Ledger access."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1FK1GMWXHHHCSDEAZQ",
+      "kind": "expected_output",
+      "text": [
+        "UnresolvedPatternGroupingPolicy and canonical group fingerprint vectors"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1F1614MBS1BSFJSB54",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not add fuzzy clustering, merchant inference, regex, token persistence, priority, rule creation, or model scoring."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    },
+    {
+      "id": "01KZ0NQZ1F1Z8J8TG6XCWS09CK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not log group descriptions, amounts, account IDs, or input rows from the policy."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NQZ1FGHZ1NT7J7B3RYBWC",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NQZ1G6QHGJ9XK3AT4YK36",
+      "gate_type": "test-evidence",
+      "description": [
+        "Property vectors prove deterministic groups and checked totals under permutation."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NQZ1G8PGM9G325NDX9J3Q",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~UnresolvedPatternGroupingPolicyTests",
+      "expected_result": "exit 0; at least 28 grouping ordering top-N overflow fingerprint and disclosure cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.8625423+00:00"
+    }
+  ]
+}

@@ -22,25 +22,25 @@ Every retained workflow state reports bounded lifecycle, mutation possibility, e
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-STATE-STORE: ClassificationStateStore | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-STATE-RECOVERY: State and Recovery | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-STATUS-HISTORY-CONTRACT: Verify bounded classification status and history | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](../tasks/rulebook-abandon-cleanup.md) | `compile` | Status consumes abandonment tombstones and cleanup events. |
-| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA. |
-| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW. |
-| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md) | `compile` | Status consumes feedback and proposal state. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md) | `compile` | Status reports the active immutable RuleSetVersion produced by the lifecycle task. |
-| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md) | `compile` | Status reports retained previews even when no apply run exists. |
+| [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP: TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](rulebook-abandon-cleanup.md) | `compile` | Status consumes abandonment tombstones and cleanup events. |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](rulebook-apply-run-saga.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA. |
+| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW. |
+| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](rulebook-feedback-proposals.md) | `compile` | Status consumes feedback and proposal state. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md) | `compile` | Status reports the active immutable RuleSetVersion produced by the lifecycle task. |
+| [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](rulebook-apply-preview.md) | `compile` | Status reports retained previews even when no apply run exists. |
 
 ## Recipe
 
@@ -63,7 +63,12 @@ Every retained workflow state reports bounded lifecycle, mutation possibility, e
 
 ### Notes
 
-None recorded.
+- Hermes authorization (2026-08-01): reserve ClassifyResults.cs, ClassifyJsonContext.cs, and public contract tests so classify.status can expose the already-approved FR-CLASSIFY-STATUS-HISTORY fields. ClassifyStatusResult keeps the common contractVersion, subjectType, subjectId, lifecycleState, mutationMayHaveOccurred, and exactly one nextSafeOperationId, and adds exactly one non-null typed detail matching subjectType; all other details are null.
+- Rule detail is bounded and deterministically ordered: activeRuleSetVersionId plus versions for the addressed stable rule identity. Each version contains ruleVersionId, ordered ruleSetVersionIds, lifecycleState, actorId, stable system reasonCode, createdAt, priorRuleVersionId, and ordered successorRuleVersionIds. Never expose owner-entered rule reason prose. If the bounded operation limit would be exceeded, fail with resource limit and no partial history.
+- Validation detail contains candidate/report fingerprints, lifecycle, aggregate total/accounted/suggestion/no-suggestion/conflict/stale counts, activation eligibility when retained, actorId, started/completed timestamps, and a closed retained staleness state derived only from durable metadata. Evaluation detail contains a deterministic fingerprint over retained run metadata, ruleSetVersionId, normalizationVersion, aggregate input/suggestion/no-suggestion/conflict/stale counts, actorId, createdAt, and durable staleness state. Never reread corpus or Ledger data to refresh status.
+- Preview detail contains preview/Evaluation Fingerprints and IDs, selected/excluded/no-suggestion/conflict counts, expiry/lifecycle and actor metadata only. Apply detail contains previewId, the retained authorized request fingerprint, applied/already-applied/rejected/failed/unresolved totals, unresolved frontier, replaySafe, resumeSafe, actorId, and start/completion timestamps; never return item transaction/allocation identities or errors.
+- Feedback detail contains outcomeId, decisionType, proposalId/state when retained, actorId, stable system reasonCode derived from decision/proposal state, occurredAt, and ordered referenced ruleVersionIds from durable metadata. Never expose feedback free-text reason, transaction/allocation IDs, or reconstruct evidence. Abandonment and cleanup details expose only durable IDs/types, actorId, stable enumerated system reason code, timestamps, policy and aggregate/per-kind counts; never free-text reasons or artifact names/paths.
+- Unknown subject remains stable not-found with no partial result. Missing required durable metadata for a known subject fails integrity rather than synthesizing current state. Arrays and details use explicit source-generated JSON metadata, deterministic ordinal ordering, documented maxima, and no polymorphic/reflection serialization. Update existing sparse-output tests to assert the hard FR fields and privacy exclusions. Do not change requests, unrelated operations, persistence schema, run unit/filtered/full suites, tag, release, or deploy.
 
 ### File Contracts
 
@@ -75,20 +80,24 @@ None recorded.
 | `src/Tally/Bootstrap/Features/ClassifyRecoveryExtensions.cs` | `create` | explicit recovery registration | `true` |  |
 | `tests/Tally.Tests/Classify/Recovery/ClassificationStatusTests.cs` | `test` | state matrix tests | `true` |  |
 | `tests/Tally.Tests/Classify/Recovery/StatusPrivacyTests.cs` | `test` | no-reread and disclosure tests | `true` |  |
+| `src/Tally/Contracts/Classify/Operations/ClassifyResults.cs` | `modify` | bounded typed public status detail records | `true` |  |
+| `src/Tally/Contracts/Classify/ClassifyJsonContext.cs` | `modify` | Native-AOT status detail source generation | `true` |  |
+| `tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs` | `test` | public status schema fingerprint and privacy boundary | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationRuleStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| RuleSetStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| ClassificationValidationStore | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationEvaluationStore | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| ClassificationApplyPreviewStore | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| ClassificationApplyRunStore | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| ClassificationFeedbackStore | `consumes` | DM-CLASSIFY-FEEDBACK-PROPOSAL |  |
-| ClassificationRecoveryStore | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| GetClassificationStatusQuery.HandleAsync | `produces` | DM-CLASSIFY-STATE-STORE |  |
+| ClassificationRuleStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| RuleSetStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| ClassificationValidationStore | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationEvaluationStore | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassificationApplyPreviewStore | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| ClassificationApplyRunStore | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| ClassificationFeedbackStore | `consumes` | [DM-CLASSIFY-FEEDBACK-PROPOSAL](../../../designs/classify/data-model.md#classificationfeedbackandproposal) |  |
+| ClassificationRecoveryStore | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| GetClassificationStatusQuery.HandleAsync | `produces` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| ClassifyStatusResult | `produces` | [FR-CLASSIFY-STATUS-HISTORY](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history) | bounded envelope with exactly one typed subject detail |
 
 ### Verification
 
@@ -113,19 +122,19 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3tpm` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](../tasks/rulebook-abandon-cleanup.md): Status consumes abandonment tombstones and cleanup events.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](../tasks/rulebook-apply-preview.md): Status reports retained previews even when no apply run exists.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](../tasks/rulebook-apply-run-saga.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md): Status consumes feedback and proposal state.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md): Status reports the active immutable RuleSetVersion produced by the lifecycle task.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION.
-- `governed-by` -> DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history
-- `touches` -> DM-CLASSIFY-STATE-STORE: ClassificationStateStore
-- `touches` -> FA-CLASSIFY-STATE-RECOVERY: State and Recovery
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP: TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](rulebook-abandon-cleanup.md): Status consumes abandonment tombstones and cleanup events.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW: TASK-CLASSIFY-RULEBOOK-APPLY-PREVIEW](rulebook-apply-preview.md): Status reports retained previews even when no apply run exists.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA: TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA](rulebook-apply-run-saga.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-APPLY-RUN-SAGA.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](rulebook-feedback-proposals.md): Status consumes feedback and proposal state.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md): Status reports the active immutable RuleSetVersion produced by the lifecycle task.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION.
+- `governed-by` -> [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history)
+- `touches` -> [DM-CLASSIFY-STATE-STORE: ClassificationStateStore](../../../designs/classify/data-model.md#classificationstatestore)
+- `touches` -> [FA-CLASSIFY-STATE-RECOVERY: State and Recovery](../../../designs/classify/features/state-recovery/api-surface.md)
 - `verifies` -> TC-CLASSIFY-STATUS-HISTORY-CONTRACT: Verify bounded classification status and history
 
 ## Navigation

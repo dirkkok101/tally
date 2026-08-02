@@ -20,7 +20,7 @@ One atomic ordered evaluation, exact fingerprint dimensions, one outcome per pro
 
 ### Schema
 
-evaluation_run(evaluation_id PK, operation_idempotency_id UNIQUE, rule_set_version_id, normalization_version, ledger_contract_version, projection_version, store_generation_fingerprint, snapshot_id, snapshot_expires_at, category_lifecycle_fingerprint, ordered_items_fingerprint, input_count, suggestion_count, no_suggestion_count, conflict_count, stale_count, lifecycle_state, actor, created_at); classification_outcome(outcome_id PK, evaluation_id FK, ordinal, transaction_id, outcome_type, category_id?, item_lifecycle_fingerprint, safe_reason, UNIQUE(evaluation_id, ordinal), UNIQUE(evaluation_id, transaction_id)); match_evidence(outcome_id FK, rule_version_id, condition_id, field_key, predicate_kind, normalized_value_hash, PK(outcome_id, rule_version_id, condition_id))
+evaluation_run(evaluation_id PK, operation_idempotency_id UNIQUE, rule_set_version_id, normalization_version, ledger_contract_version, projection_version, store_generation_fingerprint, snapshot_id, snapshot_expires_at, category_lifecycle_fingerprint, ordered_items_fingerprint, input_count, suggestion_count, no_suggestion_count, conflict_count, stale_count, lifecycle_state, actor, created_at); classification_outcome(outcome_id PK, evaluation_id FK, ordinal, transaction_id, outcome_type, category_id?, item_lifecycle_fingerprint, safe_reason, UNIQUE(evaluation_id, ordinal), UNIQUE(evaluation_id, transaction_id)); match_evidence(outcome_id FK, rule_version_id, condition_id, field_key, predicate_kind, normalized_value_hash, PK(outcome_id, rule_version_id, condition_id)) Public ClassifyOutcomeGetResult returns retained evaluation/outcome/transaction identity, ordinal and kind; normalization_version; rule_set_version_id; suggested category ID/current display name when applicable; stable safe_reason; ordered contributing rule version IDs; ordered allowed matched field keys; ordered conflict proposals of immutable rule_version_id and proposed_category_id; stale flag and changed dimensions; and nullable permitted_next_operation whose only stale/unappliable value is classify.evaluate. No predicate value, normalized hash, source description, request, or unrelated rule payload is exposed. Display-name-only rename of the same active category ID remains fresh when every semantic lifecycle/input dimension is unchanged; archive/reactivation/identity or any other drift remains stale.
 
 ## ClassificationFeedbackAndProposal
 
@@ -52,6 +52,36 @@ Source-generated versioned request, result, error, descriptor, limit, mutability
 
 OperationDescriptor(operation_id, contract_version, request_schema, result_schema, error_schema, exit_category, mutability, idempotency, limits, compatibility); EvaluateRequest(actor, idempotency_key, contract_version); OutcomeGetRequest(evaluation_id, transaction_id); ApplySelection=SelectedOutcomes(outcome_ids[])|ExactRule(rule_version_id)|ExplicitCorrections(items[transaction_id,outcome_id,current_category_id,target_category_id,reason]); ApplyPreviewRequest(evaluation_id, selection); ApplyRunRequest(preview_id, apply_id); RuleSaveRequest(rule_id, prior_version_id, category_id, normalization_version, conditions, reason); RuleValidateRequest(candidate_ids, corpus_source); RuleActivateRequest(validation_id, broad_apply_allowed, reason); RuleRetireRequest(rule_version_id, reason); FeedbackRecordRequest(outcome_id, decision, ledger_allocation_refs, reason); StatusRequest(subject_type, subject_id); AbandonRequest(subject_type, subject_id, reason); CleanupRequest(policy_version); ClassifyResultEnvelope(contract_version, operation_id, outcome, result_or_error, correlation_ref). Common mutation envelope requires actor and idempotency key; selection union rejects mixed modes and corrections always require exact transaction, outcome, current and target category, and reason.
 
+## ClassificationOutcomePage
+
+**Ref Code:** DM-CLASSIFY-OUTCOME-PAGE
+
+Bounded public page over retained evaluation outcomes, enriched only with current public Ledger/category metadata required for selection and explanation.
+
+### Schema
+
+Request: contractVersion, evaluationId, optional outcomeKind/suggestedCategoryId/contributingRuleVersionId/staleState/transactionId filters, pageSize 1..500, optional opaque continuation. Result: evaluationId, evaluationFingerprint, resultFingerprint, ruleSetFingerprint, categoryLifecycleFingerprint, ledgerGeneration, overallCount, filteredCount, returnedCount, ordered items, optional continuation. Item: outcomeId, transactionId, ordinal, kind, stableReasonCode or boundedReasonText, optional suggestedCategoryId/displayName, ordered contributingRuleVersionIds, ordered matchedFieldKeys, optional bounded conflictSummary, staleDimensions, permittedNextOperation. Cursor: version, operationId, request/filter fingerprint, snapshot fingerprints, expiry, lastOrdinal, lastTransactionId. No description, amount, normalized value, corpus path, serialized request, or authority claim.
+
+## PrivateClassificationCorpusBuild
+
+**Ref Code:** DM-CLASSIFY-PRIVATE-CORPUS-BUILD
+
+Idempotent exact-label request and aggregate-only atomic-publication receipt for the existing private validation JSONL corpus.
+
+### Schema
+
+Request: contractVersion, idempotencyKey, explicit absolute outputPath, complete fresh classification_v1 projection envelope, owner labels array 1..10000 of transactionId plus expectedOutcome and expectedCategoryId when applicable. Every transactionId is unique and resolves exactly once. Limits: 10000 rows and existing PrivateCorpusLimits maximum bytes. Receipt: buildId, idempotencyFingerprint, projection/lifecycle/category fingerprints, labelCount, writtenRowCount, writtenByteCount, corpusFingerprint, terminalState, replayed; never outputPath or row data. Publication state is recognized temporary -> validated complete -> atomic rename -> terminal receipt. Recovery accepts only an exact fingerprint match or removes/restores only its recognized temporary.
+
+## ClassificationRuleDiscovery
+
+**Ref Code:** DM-CLASSIFY-RULE-DISCOVERY
+
+Immutable rule-version catalogue pages and the current active rule-set authority summary.
+
+### Schema
+
+RuleListRequest: contractVersion, optional logicalRuleId/lifecycle/categoryId/activeMembership filters, pageSize 1..500, optional opaque continuation. RulePage: overallCount, filteredCount, returnedCount, highWaterCreatedAt/highWaterRuleVersionId fingerprints inside cursor, ordered items, optional continuation. RuleItem: logicalRuleId, ruleVersionId, priorRuleVersionId, categoryId/displayName/lifecycle, normalizationVersion, effectiveLifecycle, activeMembership, broadApplyAllowed, provenance enum, scopeHash, created/validated/activated/retired timestamps, canonical closed-contract conditions. ActiveRuleSetResult: ruleSetVersionId, broadApplyAllowed, activationId, validationId, trustedGateReceiptId/fingerprint, normalizationVersion, activationEpoch, lifecycle status/timestamps, ordered ruleVersionIds, category ID/display/lifecycle tuples. No corpus metadata or owner reason prose.
+
 ## ClassificationRuleLifecycle
 
 **Ref Code:** DM-CLASSIFY-RULE-LIFECYCLE
@@ -60,7 +90,7 @@ Immutable logical rules, versions, conditions, rule sets, activation evidence, b
 
 ### Schema
 
-classification_rule(rule_id PK, created_at, created_by); rule_version(rule_version_id PK, rule_id FK, prior_version_id?, normalization_version, category_id, scope_hash, rule_origin=owner_authored|feedback_derived, source_feedback_id?, reason, lifecycle_state, broad_apply_allowed, validation_run_id?, created_at, created_by); rule_condition(rule_version_id FK, ordinal, typed_condition, PK(rule_version_id, ordinal)); rule_set_version(rule_set_version_id PK, prior_rule_set_version_id?, normalization_version, validation_run_id, reason, created_at, created_by); rule_set_member(rule_set_version_id FK, rule_version_id FK, PK(rule_set_version_id, rule_version_id)); active_rule_set(singleton PK, rule_set_version_id FK, activation_epoch); rule_lifecycle_event(event_id PK, subject_id, prior_state, resulting_state, replacement_id?, reason, actor, occurred_at). Origin records provenance only and never grants activation or apply authority.
+classification_rule(rule_id PK, created_at, created_by); rule_version(rule_version_id PK, rule_id FK, prior_version_id?, normalization_version, category_id, scope_hash, rule_origin=owner_authored|feedback_derived, source_feedback_id?, reason, lifecycle_state, broad_apply_allowed, validation_run_id?, created_at, created_by); rule_condition(rule_version_id FK, ordinal, typed_condition, PK(rule_version_id, ordinal)); rule_set_version(rule_set_version_id PK, prior_rule_set_version_id?, normalization_version, validation_run_id, reason, created_at, created_by); rule_set_member(rule_set_version_id FK, rule_version_id FK, PK(rule_set_version_id, rule_version_id)); active_rule_set(singleton PK, rule_set_version_id FK, activation_epoch); rule_lifecycle_event(event_id PK, subject_id, prior_state, resulting_state, replacement_id?, reason, actor, occurred_at). Origin records provenance only and never grants activation or apply authority. rule_set_version also stores owner_rulebook_gate_receipt_id and owner_rulebook_gate_receipt_fingerprint as immutable authority provenance; new activation requires a trusted granted receipt bound to its representative validation run and exact candidate/projection/category/normalization/store-generation evidence.
 
 ## ClassificationRuleVocabulary
 
@@ -70,7 +100,7 @@ Closed code-owned field, predicate, value, and normalization descriptors that ma
 
 ### Schema
 
-NormalizationDescriptor(version, unicode_form, case_fold, punctuation_policy, whitespace_policy, preserves_digits, preserves_token_order, max_input_length); FieldDescriptor(field_key, value_type, allowed_predicates, max_value_length); PredicateDescriptor(predicate_kind, operand_type, cardinality); RuleCondition(condition_id, ordinal, field_key, predicate_kind, value_text?, value_minor_min?, value_minor_max?, enum_value?); allowed fields: description.normalized, account.id, amount.direction, amount.absolute_minor; logical composition: AND only
+NormalizationDescriptor(version, unicode_form, case_fold, punctuation_policy, whitespace_policy, preserves_digits, preserves_token_order, max_input_length); FieldDescriptor(field_key, value_type, allowed_predicates, max_value_length); PredicateDescriptor(predicate_kind, operand_type, cardinality), where equals uses operand_type=field_value and the selected FieldDescriptor.value_type resolves text, enum direction, or exact absolute-minor payload; RuleCondition(condition_id, ordinal, field_key, predicate_kind, value_text?, value_minor_min?, value_minor_max?, enum_value?); duplicate conditions are equal canonical semantic conditions after normalization with ordinal excluded; allowed fields: description.normalized, account.id, amount.direction, amount.absolute_minor; logical composition: AND only
 
 ## ClassificationStateStore
 
@@ -80,7 +110,17 @@ Owner-only raw-SQLite schema, migrations, idempotency, guarded state transitions
 
 ### Schema
 
-classify_store_meta(schema_version, store_id, created_at); operation_idempotency(idempotency_key PK, operation_id, contract_version, request_fingerprint, terminal_result, created_at); active_normalization(singleton PK, normalization_version, activation_epoch); abandonment_tombstone(tombstone_id PK, subject_type, subject_id, reason, actor, abandoned_at, removed_payload_count); cleanup_event(cleanup_id PK, policy_version, recognized_removed_count, expired_preview_count, abandoned_payload_count, actor, occurred_at); immutable-table UPDATE and DELETE guards; mutable run transitions require expected prior state; SQLite foreign_keys ON, WAL, synchronous FULL, bounded busy handling, user_version migrations
+classify_store_meta(schema_version, store_id, created_at); operation_idempotency(idempotency_key PK, operation_id, contract_version, request_fingerprint, terminal_result, created_at); active_normalization(singleton PK, normalization_version, activation_epoch); abandonment_tombstone(tombstone_id PK, subject_type, subject_id, reason, actor, abandoned_at, removed_payload_count); cleanup_event(cleanup_id PK, policy_version, recognized_removed_count, expired_preview_count, abandoned_payload_count, actor, occurred_at); immutable-table UPDATE and DELETE guards; mutable run transitions require expected prior state; SQLite foreign_keys ON, WAL, synchronous FULL, bounded busy handling, user_version migrations Recovery extension: cleanup_event also stores removed_artifact_count and retained_artifact_count. Recognized artifact removal uses an owner-only contained same-filesystem quarantine with opaque operation identity and protected manifest. Staging occurs only after writer-locked idempotency/reference validation; database failure restores staged names before returning failure. Startup before any CLASSIFY mutation restores uncommitted quarantine or deletes committed quarantine according to durable tombstone/cleanup-event/idempotency evidence. Activation checks abandonment_tombstone for every candidate rule version before and during the authority write. Public cleanup receipt contains cleanup_id, policy_version, aggregate removed/retained counts, and per-kind counts only.
+
+## ClassificationUnresolvedPatternReport
+
+**Ref Code:** DM-CLASSIFY-UNRESOLVED-REPORT
+
+Ephemeral deterministic top-N aggregation of retained no_suggestion outcomes joined to a fresh compatible Ledger projection.
+
+### Schema
+
+Request: contractVersion, evaluationId, topN 1..500, optional accountId and amountDirection filters. Result: evaluation/projection/category/rule-set/normalization fingerprints, eligibleNoSuggestionCount, matchedFreshRowCount, groupCount, returnedGroupCount, ordered groups. Group key: normalizationVersion + normalizedDescription + accountId + amountDirection. Group: representativeNormalizedDescription, accountId, direction, transactionCount, checkedSignedAmountMinorTotal, checkedAbsoluteAmountMinorTotal, groupFingerprint. No durable result, continuation, paths, raw source description, transaction IDs, rule proposal, or authority.
 
 ## ClassificationValidationRun
 
@@ -90,4 +130,4 @@ Aggregate-only private candidate evidence that distinguishes owner-authored vali
 
 ### Schema
 
-validation_run(validation_run_id PK, candidate_fingerprint, rule_origin, corpus_fingerprint, expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint, normalization_version, started_at, completed_at?, lifecycle_state, actor); validation_report(validation_run_id PK/FK, total_rows, accounted_rows, suggestion_count, no_suggestion_count, conflict_count, stale_count, coverage_basis_points, drift_canary_count, incorrect_application_canary_count, unexplained_conflict_count, owner_decision_count_before, owner_decision_count_after, owner_minutes_before?, owner_minutes_after?, report_fingerprint); safety requires accounted_rows=total_rows, zero incorrect applications, zero unexplained conflicts, and deterministic fingerprints; benefit is reported without a preset 50 percent owner-authored threshold; no raw corpus row, description, normalized token, financial value, expected outcome, or path column
+validation_run(validation_run_id PK, candidate_fingerprint, rule_origin, corpus_fingerprint, expected_outcome_fingerprint, projection_contract_version, category_lifecycle_fingerprint, normalization_version, started_at, completed_at?, lifecycle_state, actor); validation_report(validation_run_id PK/FK, total_rows, accounted_rows, suggestion_count, no_suggestion_count, conflict_count, stale_count, coverage_basis_points, drift_canary_count, incorrect_application_canary_count, unexplained_conflict_count, owner_decision_count_before, owner_decision_count_after, owner_minutes_before?, owner_minutes_after?, report_fingerprint); safety requires accounted_rows=total_rows, zero incorrect applications, zero unexplained conflicts, and deterministic fingerprints; benefit is reported without a preset 50 percent owner-authored threshold; no raw corpus row, description, normalized token, financial value, expected outcome, or path column Owner-rulebook gate extension: public rule.validate result exposes candidate, corpus, expected-outcome, projection version and frozen snapshot/store-generation, category-lifecycle, normalization, report, and outcomes-canonical fingerprints plus exact aggregate row/canary counters. Validation binds every private row identity and lifecycle fingerprint to one complete public Ledger classification_v1 snapshot before evaluation. Gate orchestration runs representative, independent replay, and temporal hold-out validations and emits a production-defined aggregate-only VerifiedOwnerRulebookGateReceipt; no raw row or path is durable. owner_rulebook_gate_receipt(receipt_id PK, representative_validation_run_id FK, replay_validation_run_id FK, hold_out_validation_run_id FK, candidate_fingerprint, projection_version, snapshot_id, store_generation_fingerprint, receipt_fingerprint, authority_granted, block_code?, aggregate_receipt_json, created_at, actor) is immutable and aggregate-only. validation_run/report retain projection snapshot/store-generation identity, outcomes_canonical_hash, activation_eligible, and every aggregate field needed to deterministically reconstruct and revalidate the receipt; no private row or path is durable.

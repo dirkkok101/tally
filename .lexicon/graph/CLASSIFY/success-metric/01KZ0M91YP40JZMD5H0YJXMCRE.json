@@ -1,0 +1,9 @@
+{
+  "id": "01KZ0M91YP40JZMD5H0YJXMCRE",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "metric": "Outcome discovery process efficiency for the motivating 146-result evaluation",
+  "current": "146 classify.outcome.get process launches exceeded a five-minute orchestration timeout.",
+  "target": "One initial classify.outcome.list query plus at most one continuation for pageSize 500 returns all 146 selectable rows, with deterministic replay and zero private description disclosure.",
+  "measured": 1,
+  "created_at": "2026-08-02T06:58:41.7515137+00:00"
+}

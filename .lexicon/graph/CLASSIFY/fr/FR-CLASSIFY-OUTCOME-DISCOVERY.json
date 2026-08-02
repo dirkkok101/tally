@@ -1,0 +1,73 @@
+{
+  "id": "01KZ0MN1R7B37AKGSCSCDAZTFF",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+  "title": "List retained classification outcomes",
+  "description": [
+    "Publish classify.outcome.list as a bounded snapshot-bound query over one retained evaluation so an owner or Hermes agent can discover selectable outcomes without one process per transaction. Implements G7 and UC-CLASSIFY-007."
+  ],
+  "rationale": [
+    "The shipped single-outcome query is correct but cannot enumerate a batch within the motivating orchestration timeout."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "page and filter all outcomes from one evaluation"
+  ],
+  "story_so_that": [
+    "I can select a batch and request deeper explanation only where needed"
+  ],
+  "acceptance_criteria": [
+    "Given a completed retained evaluation ID and pageSize from 1 through 500, when classify.outcome.list is invoked without a continuation, then it returns the first filtered page ordered by ordinal then transaction ID, overall and filtered totals, returned count, evaluation and result fingerprints, and an opaque continuation when rows remain.",
+    "Given bounded filters for outcome kind, suggested category ID, contributing rule-version ID, stale state, or transaction ID, when outcome.list succeeds, then every returned item satisfies every supplied filter and the filter fingerprint is bound into the continuation.",
+    "Given a returned item, when it is inspected, then it contains outcome ID, transaction ID, ordinal, kind, a stable reason code or bounded reason text, suggested category ID and display name when applicable, contributing rule-version IDs, matched field keys, conflict summary, stale dimensions, and the permitted next operation without a source description, amount, normalized value, corpus path, or raw rule payload.",
+    "Given an opaque continuation, when the same evaluation, filters, page size, Evaluation Fingerprint, category lifecycle fingerprint, rule-set fingerprint, and Ledger generation remain current, then the next call resumes after the last ordinal and transaction ID with no duplicate or omitted row.",
+    "Given a malformed, expired, cross-evaluation, cross-filter, cross-page-size, or fingerprint-mismatched continuation, when outcome.list is invoked, then it returns a typed CLASSIFY cursor or stale error with a null result and no partial page.",
+    "Given a missing, abandoned, incomplete, or expired evaluation; a missing active rule set; an archived suggested category; a stale Ledger generation; incompatible classification_v1 projection; or impossible row accounting, when outcome.list is invoked, then it fails closed with the typed lifecycle, not-found, stale, compatibility, or integrity error and performs no CLASSIFY or Ledger mutation.",
+    "Given the motivating completed evaluation with 146 outcomes and pageSize 500, when an owner-local published executable invokes outcome.list, then all 146 selectable rows are returned by one initial CLI process and no per-outcome process is required."
+  ],
+  "security_criteria": [
+    "The query never returns or logs source descriptions, normalized values, amounts, private paths, serialized requests, or caller-supplied authority claims; cursors contain only versioned bounded metadata and fingerprints."
+  ],
+  "status": "active",
+  "created_at": "2026-08-02T07:05:14.7603141+00:00",
+  "links": [
+    {
+      "id": "01KZ0MWFYK53TSHDT85TYPYCKD",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:18.6766313+00:00"
+    },
+    {
+      "id": "01KZ0MWED07K5DDWQ5MNMCH01Z",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:17.0895733+00:00"
+    },
+    {
+      "id": "01KZ0MWF6CYTEWBGYFGQXJQVJ7",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:17.9014289+00:00"
+    },
+    {
+      "id": "01KZ0MN1R9529EQQ8B7Y859058",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-007",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:05:14.7613681+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KZ0MN1RBZXDEVBX5VRXQ9EC7",
+      "target": "P1",
+      "created_at": "2026-08-02T07:05:14.7603141+00:00"
+    }
+  ]
+}

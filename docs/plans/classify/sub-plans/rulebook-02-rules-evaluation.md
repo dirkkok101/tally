@@ -15,7 +15,7 @@ Implement normalization, deterministic AND-only matching, conflicts, explanation
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md) | Activate and retire immutable rule sets | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-EVALUATION-INPUT](../tasks/rulebook-evaluation-input.md) | Acquire bounded Ledger evaluation input | `ready` | 1 |
-| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md) | Evaluate and persist classification outcomes | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION](../tasks/rulebook-outcome-explanation.md) | Explain and invalidate retained outcomes | `ready` | 1 |
+| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: Activate and retire immutable rule sets](../tasks/rulebook-rule-activation-lifecycle.md) | Activate and retire immutable rule sets | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-EVALUATION-INPUT: Acquire bounded Ledger evaluation input](../tasks/rulebook-evaluation-input.md) | Acquire bounded Ledger evaluation input | `ready` | 1 |
+| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: Evaluate and persist classification outcomes](../tasks/rulebook-evaluation-workflow.md) | Evaluate and persist classification outcomes | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-OUTCOME-EXPLANATION: Explain and invalidate retained outcomes](../tasks/rulebook-outcome-explanation.md) | Explain and invalidate retained outcomes | `ready` | 1 |

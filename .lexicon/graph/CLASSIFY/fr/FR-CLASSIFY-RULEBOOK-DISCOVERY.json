@@ -1,0 +1,66 @@
+{
+  "id": "01KZ0MN2G8AAPN12TX2CW3CMZT",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+  "title": "List rule versions and summarize the active rule set",
+  "description": [
+    "Publish classify.rule.list and classify.rule-set.active.get as bounded owner-local queries over immutable rule and activation history. Implements G7 and UC-CLASSIFY-008."
+  ],
+  "rationale": [
+    "The shipped status query can inspect a known rule version but cannot discover the catalogue or summarize the current authority from an empty-state-safe public entry point."
+  ],
+  "priority": 0,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "discover every rule version and the active rule-set authority"
+  ],
+  "story_so_that": [
+    "I can safely decide what to validate, activate, retire, or inspect"
+  ],
+  "acceptance_criteria": [
+    "Given rule versions exist and pageSize from 1 through 500, when classify.rule.list is invoked, then it returns a deterministic page ordered by created timestamp then rule-version ID with total, filtered, returned, and continuation metadata.",
+    "Given filters for logical rule ID, lifecycle state, category ID, or active-rule-set membership, when rule.list succeeds, then every item satisfies every supplied filter and the first-page high-water mark plus filter fingerprint are bound into the opaque continuation.",
+    "Given a rule-list item, when it is returned, then it contains logical rule ID, immutable rule-version ID, prior version ID, category ID, current category display name, category lifecycle enum, normalization version, effective rule lifecycle state, active membership, broad-apply authority, provenance, scope hash, lifecycle timestamps, and canonical conditions only within the already-public closed predicate contract.",
+    "Given an active rule set, when classify.rule-set.active.get is invoked, then it returns ruleSetVersionId, broadApplyAllowed, activation and validation IDs, trusted gate receipt ID and fingerprint, normalization version, ordered activated rule-version IDs, lifecycle timestamps and status, activation epoch, and category ID, current display name, and lifecycle enum for every member category.",
+    "Given no active rule set exists, when rule-set.active.get is invoked, then it returns the typed not-found result and never fabricates an empty authority or accepts a caller-supplied authority flag.",
+    "Given an invalid, expired, cross-filter, cross-page-size, or high-water-mismatched rule continuation or impossible membership/lifecycle history, when a discovery query is invoked, then it returns a typed cursor or integrity error with no partial page.",
+    "Given either rule discovery operation succeeds or fails, when durable state and diagnostics are inspected, then no corpus path, raw validation row, source description, secret, owner free-text reason, or predicate token beyond the public rule predicate contract has been persisted or logged."
+  ],
+  "security_criteria": [
+    "Rule predicates are disclosed only through the existing closed owner-local predicate contract; corpus rows, descriptions, private paths, and authority claims are never accepted or returned."
+  ],
+  "status": "active",
+  "created_at": "2026-08-02T07:05:15.5294791+00:00",
+  "links": [
+    {
+      "id": "01KZ0MWGQX8A015EWQFRMGT2Q1",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:19.4871323+00:00"
+    },
+    {
+      "id": "01KZ0MWHGAPTFH9RQMK2GB399J",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:20.2673642+00:00"
+    },
+    {
+      "id": "01KZ0MN2GAJKM4BZFYYHT4F5FM",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-008",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:05:15.5305347+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KZ0MN2GCXAFXYVSXAMCS7QWA",
+      "target": "P1",
+      "created_at": "2026-08-02T07:05:15.5294791+00:00"
+    }
+  ]
+}

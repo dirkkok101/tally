@@ -1,0 +1,35 @@
+{
+  "id": "01KZ0MT7H5BW0CG74294VHZV82",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-OUTCOME-LIST-CONTRACT",
+  "slug": "OUTCOME-LIST-CONTRACT",
+  "title": "Verify paginated outcome discovery",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A completed evaluation has suggestion, no_suggestion, conflict, and stale-capable rows plus active category and rule evidence in an isolated data root.",
+  "steps": "Invoke the published schema and Native-AOT classify.outcome.list boundary for empty, one-page, and multi-page evaluations; apply every supported filter; walk every continuation; pass returned outcome IDs unchanged to selected_outcomes preview.",
+  "expected": "Pages are ordered by ordinal then transaction ID; totals and fields are exact; every row appears once; filters compose with AND semantics; list-to-preview composition needs no per-outcome process and performs zero Ledger mutation.",
+  "cleanup": "Remove only the isolated data root.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Evaluation/OutcomeListTests.cs",
+  "owner": "CLASSIFY",
+  "created_at": "2026-08-02T07:08:04.5179574+00:00",
+  "links": [
+    {
+      "id": "01KZ0MVY8ANQ0JDGG89AJSQH9N",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:00.5554841+00:00"
+    },
+    {
+      "id": "01KZ0MW68RHY16VKY5PY0GD02A",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-007",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:08.7624001+00:00"
+    }
+  ]
+}

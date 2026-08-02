@@ -1,0 +1,314 @@
+{
+  "id": "01KZ0NQYB6WCWREQA2Y7FB0DVX",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEMGGZBNB2YHDY0H3A09Y",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-CORPUS-BUILDER",
+  "slug": "ERGONOMICS-CORPUS-BUILDER",
+  "title": "Build and atomically publish an owner-private corpus",
+  "description": [
+    "Implement classify.corpus.build using the shared mapper, existing operation idempotency store, owner-only filesystem protections, bounded atomic publication, and aggregate-only recovery receipts."
+  ],
+  "objective": [
+    "Create a validator-compatible JSONL corpus from explicit labels without disclosing rows or publishing partial output."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-08-02T07:24:18.1511489+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S0A3DX15KFXKPDA0F1T0Y",
+      "bead_id": "bd-1cik",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:18.0619854+00:00",
+      "created_at": "2026-08-02T08:21:18.0619854+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NQYB8AYWXXCBQ2ZMZ5MV7",
+      "target": "DD-CLASSIFY-ARTIFACT-RETENTION",
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB8E44JJ3YDJVQ53Y5R",
+      "target": "DD-CLASSIFY-PRIVATE-CORPUS-PUBLICATION",
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB8WJZ04EGG51YNZ6WX",
+      "target": "DD-CLASSIFY-STATE-STORE",
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVFZS53XHZ2QM382ACXH6",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Corpus handler consumes the additive request/result/error records."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:14.5229238+00:00"
+    },
+    {
+      "id": "01KZ0NVGVDW977TPMDCK6GJ7ZP",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CORPUS-MAPPER",
+      "dependency_type": "compile",
+      "reason": [
+        "Publication must reuse the proven exact-label mapper."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:26:15.4064210+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NQYB9YB8YCT4QGBEK4D4E",
+      "path": "src/Tally/Infrastructure/Classify/Corpus/PrivateCorpusWriter.cs",
+      "action": "create",
+      "role": "protected atomic JSONL writer",
+      "required": 1,
+      "notes": [
+        "Recognized same-directory temporary only."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9DE5B9ZHGHKCF54D7",
+      "path": "src/Tally/Features/Classify/Corpus/Build/BuildPrivateClassificationCorpusCommand.cs",
+      "action": "create",
+      "role": "corpus build vertical slice",
+      "required": 1,
+      "notes": [
+        "Existing idempotency store and shared mapper."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9CT1QXMQ88WEJFAP0",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.Corpus.cs",
+      "action": "create",
+      "role": "aggregate-only result mapping",
+      "required": 1,
+      "notes": [
+        "Never return outputPath."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9H0PZS3PE5TYE8ZVC",
+      "path": "tests/Tally.Tests/Classify/Validation/PrivateCorpusBuilderTests.cs",
+      "action": "create",
+      "role": "binding publication replay and failure tests",
+      "required": 1,
+      "notes": [
+        "Owner-only disposable roots."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB90GT9YVDJPSDRNPM1",
+      "path": "tests/Tally.Tests/Classify/Validation/PrivateCorpusWriterRecoveryTests.cs",
+      "action": "create",
+      "role": "crash window filesystem attack matrix",
+      "required": 1,
+      "notes": [
+        "No live data."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NZAZ228Z8KE4J2GRGVJPG",
+      "name": "ClassificationProjectionCorpusMapper",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-PRIVATE-CORPUS-BUILD",
+      "notes": [
+        "bound rows"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:28:20.4495751+00:00"
+    },
+    {
+      "id": "01KZ0NZAZ2EWDJF5NN53TDS43Y",
+      "name": "PrivateCorpusWriter",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-PRIVATE-CORPUS-BUILD",
+      "notes": [
+        "atomic private artifact"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:28:20.4495751+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXDVH0RSNWF0RBDAFG76T",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:17.8738028+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NQYB8KWYYDWYE4FM0EKJY",
+      "kind": "acceptance_check",
+      "text": [
+        "The command requires actor, idempotency key, explicit absolute destination, fresh complete projection, and 1 through 10000 unique explicit labels; it records only a canonical request hash and aggregate terminal result in the existing operation_idempotency table."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9CSDH557HKKV3HEY1",
+      "kind": "acceptance_check",
+      "text": [
+        "Owner UID, 0700 parent, containment, no symlink, regular-file identity, link count, destination non-overwrite, and byte/row limits are validated before publication."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9VJ02QAG7BRNHS188",
+      "kind": "acceptance_check",
+      "text": [
+        "A same-directory recognized temporary is opened at 0600 before bytes, completely written and flushed, validated by PrivateCorpusReader, atomically renamed, and followed by parent metadata flush before terminal success."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9YHB65HV78S4SG1JX",
+      "kind": "acceptance_check",
+      "text": [
+        "Success returns build ID, projection/lifecycle fingerprints, label/row/byte counts, corpus fingerprint, terminal state, and replay flag; it excludes destination and all financial payload."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9B6T9ATPBGMAKF3YC",
+      "kind": "acceptance_check",
+      "text": [
+        "Interruptions before rename publish no destination; replay after rename succeeds only for the exact destination fingerprint; a different existing file is never replaced or removed."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB95PZFJZBP3KVGKBMY",
+      "kind": "constraint",
+      "text": [
+        "Linux owner-only filesystem semantics are mandatory; tests use mktemp disposable roots and synthetic data."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9HJVK8A0CBPFBM3HY",
+      "kind": "expected_output",
+      "text": [
+        "PrivateCorpusWriter, BuildPrivateClassificationCorpusCommand, and aggregate contract mapper"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB90MFMQZFQS8THDPS3",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not write live Ledger or CLASSIFY financial state, stdout JSONL, a tracked fixture, a path-bearing receipt, or a second corpus dialect."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9CZE10C47NGESVKYN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not follow symlinks, accept group/world permissions, overwrite different content, delete an unknown file, or commit idempotency success before durable publication."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NZ3BGRG6F6HAEFN5DSRSM",
+      "kind": "note",
+      "text": [
+        "The existing operation_idempotency terminal_result stores the aggregate path-free terminal envelope and request fingerprint; this task performs no ClassifySchema migration."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:28:12.6556804+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NQYB892M0W100CQ7EH758",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB81Y14T7B0Q0JSACXB",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB8J26F4CQW06HTHZ22",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NQYB9532412TR4AZBG3Q0",
+      "gate_type": "test-evidence",
+      "description": [
+        "Filesystem fault injection proves no partial destination and no deletion outside the recognized temporary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NQYB9EB8WC22WVQTQ4P5C",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PrivateCorpusBuilderTests",
+      "expected_result": "exit 0; at least 30 labels limits aggregate receipt replay privacy and no-mutation cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    },
+    {
+      "id": "01KZ0NQYB9YF3PRFR5KTDJKXCG",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~PrivateCorpusWriterRecoveryTests",
+      "expected_result": "exit 0; at least 24 permission symlink hard-link interruption atomicity and cleanup cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:18.1511489+00:00"
+    }
+  ]
+}

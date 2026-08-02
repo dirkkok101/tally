@@ -15,9 +15,9 @@ Build owner-only corpus ingestion, rule draft and validation capabilities, and t
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md) | Save immutable rule drafts | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY](../tasks/rulebook-rule-vocabulary.md) | Implement the closed rule vocabulary | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](../tasks/rulebook-deterministic-engine.md) | Build the deterministic classification engine | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md) | Validate candidate rule sets privately | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](../tasks/rulebook-private-corpus-reader.md) | Implement the private corpus boundary | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](../tasks/rulebook-gate-owner-rulebook.md) | Prove owner-rulebook safety before classification authority | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: Save immutable rule drafts](../tasks/rulebook-rule-draft-save.md) | Save immutable rule drafts | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY: Implement the closed rule vocabulary](../tasks/rulebook-rule-vocabulary.md) | Implement the closed rule vocabulary | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE: Build the deterministic classification engine](../tasks/rulebook-deterministic-engine.md) | Build the deterministic classification engine | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: Validate candidate rule sets privately](../tasks/rulebook-rule-validation.md) | Validate candidate rule sets privately | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER: Implement the private corpus boundary](../tasks/rulebook-private-corpus-reader.md) | Implement the private corpus boundary | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: Prove owner-rulebook safety before classification authority](../tasks/rulebook-gate-owner-rulebook.md) | Prove owner-rulebook safety before classification authority | `ready` | 0 |

@@ -1,0 +1,55 @@
+{
+  "id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1",
+  "title": "CLASSIFY operator ergonomics v1",
+  "description": [
+    "Post-0.3.3 additive implementation plan for paginated outcome/rule discovery, active rule-set summary, explicit selected-outcome preview composition, protected private corpus construction, and ephemeral unresolved-pattern reporting. Preserves the twelve released CLASSIFY schemas, Ledger authority, broadApplyAllowed=false, deterministic engine behavior, owner-local privacy, and the completed PLAN-CLASSIFY-RULEBOOK-V1 baseline. No task may mutate live data, add autonomous intelligence, or release/deploy."
+  ],
+  "status": "active",
+  "created_at": "2026-08-02T07:19:11.0264004+00:00",
+  "links": [
+    {
+      "id": "01KZ0NX5V50Q96T2FCF0RN4BFC",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+      "rel": "references",
+      "created_at": "2026-08-02T07:27:09.6702970+00:00"
+    },
+    {
+      "id": "01KZ0NX6MA5T3JCZBJ317K6R7Z",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-PAGINATED-DISCOVERY",
+      "rel": "references",
+      "created_at": "2026-08-02T07:27:10.4751479+00:00"
+    },
+    {
+      "id": "01KZ0NX7CD9HQEGS2PTDYBQED8",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-PRIVATE-CORPUS-PUBLICATION",
+      "rel": "references",
+      "created_at": "2026-08-02T07:27:11.2460707+00:00"
+    },
+    {
+      "id": "01KZ0NX4ZMZYR1HR99FZ69SS4E",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-SHIPPED-BASELINE",
+      "rel": "references",
+      "created_at": "2026-08-02T07:27:08.7892461+00:00"
+    },
+    {
+      "id": "01KZ0NX85QXB2Z5E9SDKJQB6BW",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-UNRESOLVED-REPORT-BOUNDARY",
+      "rel": "references",
+      "created_at": "2026-08-02T07:27:12.0556246+00:00"
+    },
+    {
+      "id": "01KZ0NX44CZJM1FXWKZFY5VWEF",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-RULEBOOK-V1",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:27:07.9176070+00:00"
+    }
+  ]
+}

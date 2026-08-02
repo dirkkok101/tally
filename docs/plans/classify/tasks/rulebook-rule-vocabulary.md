@@ -23,18 +23,18 @@ Every first-release rule is finite, canonical, deterministic, explainable, and i
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields | `adr` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-RULE-VOCABULARY: ClassificationRuleVocabulary | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-CONTRACT-VOCABULARY: Contract and Vocabulary | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-DETERMINISTIC-INTEGRITY: Preserve deterministic classification integrity | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-RULE-VOCABULARY: ClassificationRuleVocabulary](../../../designs/classify/data-model.md#classificationrulevocabulary) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-CONTRACT-VOCABULARY: Contract and Vocabulary](../../../designs/classify/features/contract-vocabulary/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes](../../../prd/classify/prd.md#fr-classify-deterministic-evaluation-evaluate-deterministic-classification-outcomes) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-DETERMINISTIC-INTEGRITY: Preserve deterministic classification integrity](../../../prd/classify/prd.md#nfr-classify-deterministic-integrity-preserve-deterministic-classification-integrity) | `nfr` | `satisfies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](../tasks/rulebook-contract-foundation.md) | `compile` | The vocabulary publishes descriptors through the CLASSIFY rule contracts. |
+| [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION: TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](rulebook-contract-foundation.md) | `compile` | The vocabulary publishes descriptors through the CLASSIFY rule contracts. |
 
 ## Recipe
 
@@ -65,6 +65,8 @@ Every first-release rule is finite, canonical, deterministic, explainable, and i
 ### Notes
 
 - This task builds only the exact designed vocabulary; viability is decided by the later evidence gate.
+- The global equals predicate uses operand_type=field_value; the selected FieldDescriptor.value_type determines whether its canonical payload is text, enum direction, or exact absolute minor units.
+- Duplicate conditions means duplicate canonical semantic conditions after normalization with ordinal excluded; repeated semantics at different ordinals must fail closed.
 
 ### File Contracts
 
@@ -77,14 +79,15 @@ Every first-release rule is finite, canonical, deterministic, explainable, and i
 | `src/Tally/Contracts/Classify/Rules/ClassificationRuleContracts.cs` | `modify` | published rule descriptors | `true` |  |
 | `tests/Tally.Tests/Classify/Rules/ClassificationRuleVocabularyTests.cs` | `test` | grammar tests | `true` |  |
 | `tests/Tally.Tests/Classify/Rules/NormalizerV1Tests.cs` | `test` | golden normalization tests | `true` |  |
+| `src/Tally/Contracts/Classify/ClassifyJsonContext.cs` | `modify` | source-generated vocabulary catalogue metadata | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationRuleVocabulary | `produces` | DM-CLASSIFY-RULE-VOCABULARY |  |
-| NormalizerV1.Normalize | `produces` | DM-CLASSIFY-RULE-VOCABULARY |  |
-| RuleCondition | `produces` | DM-CLASSIFY-RULE-VOCABULARY |  |
+| ClassificationRuleVocabulary | `produces` | [DM-CLASSIFY-RULE-VOCABULARY](../../../designs/classify/data-model.md#classificationrulevocabulary) |  |
+| NormalizerV1.Normalize | `produces` | [DM-CLASSIFY-RULE-VOCABULARY](../../../designs/classify/data-model.md#classificationrulevocabulary) |  |
+| RuleCondition | `produces` | [DM-CLASSIFY-RULE-VOCABULARY](../../../designs/classify/data-model.md#classificationrulevocabulary) |  |
 
 ### Verification
 
@@ -109,14 +112,14 @@ Every first-release rule is finite, canonical, deterministic, explainable, and i
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3gmq` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](../tasks/rulebook-contract-foundation.md): The vocabulary publishes descriptors through the CLASSIFY rule contracts.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION: TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](rulebook-contract-foundation.md): The vocabulary publishes descriptors through the CLASSIFY rule contracts.
 - `governed-by` -> ADR-CORE-0004: Enum Over String Constants for System-Owned Status Fields
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
-- `implements` -> FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes
-- `implements` -> FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules
-- `satisfies` -> NFR-CLASSIFY-DETERMINISTIC-INTEGRITY: Preserve deterministic classification integrity
-- `touches` -> DM-CLASSIFY-RULE-VOCABULARY: ClassificationRuleVocabulary
-- `touches` -> FA-CLASSIFY-CONTRACT-VOCABULARY: Contract and Vocabulary
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
+- `implements` -> [FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes](../../../prd/classify/prd.md#fr-classify-deterministic-evaluation-evaluate-deterministic-classification-outcomes)
+- `implements` -> [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules)
+- `satisfies` -> [NFR-CLASSIFY-DETERMINISTIC-INTEGRITY: Preserve deterministic classification integrity](../../../prd/classify/prd.md#nfr-classify-deterministic-integrity-preserve-deterministic-classification-integrity)
+- `touches` -> [DM-CLASSIFY-RULE-VOCABULARY: ClassificationRuleVocabulary](../../../designs/classify/data-model.md#classificationrulevocabulary)
+- `touches` -> [FA-CLASSIFY-CONTRACT-VOCABULARY: Contract and Vocabulary](../../../designs/classify/features/contract-vocabulary/api-surface.md)
 
 ## Navigation
 

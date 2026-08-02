@@ -22,24 +22,24 @@ Only current owner-approved evidence can atomically activate an immutable succes
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle | `data_model` | `touches` | `true` |
-| FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle) | `data_model` | `touches` | `true` |
+| [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history](../../../prd/classify/prd.md#nfr-classify-attributable-history-retain-attributable-classification-history) | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT: Verify immutable rule lifecycle | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md) | `compile` | Activation consumes current aggregate validation evidence and immutable drafts. |
-| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](../tasks/rulebook-gate-owner-rulebook.md) | `compile` | No rule may become active until the owner-rulebook pre-authority gate passes. |
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md) | `compile` | Activation and retirement revalidate category lifecycle through the public Ledger client. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md) | `compile` | Activation consumes current aggregate validation evidence and immutable drafts. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](rulebook-gate-owner-rulebook.md) | `compile` | No rule may become active until the owner-rulebook pre-authority gate passes. |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md) | `compile` | Activation and retirement revalidate category lifecycle through the public Ledger client. |
 
 ## Recipe
 
@@ -63,7 +63,10 @@ Only current owner-approved evidence can atomically activate an immutable succes
 
 ### Notes
 
-None recorded.
+- Hermes blocker resolution (2026-08-01): activation must never trust a caller-supplied authority boolean or an unpersisted shell receipt. The existing public classify.rule.validate operation optionally finalizes the owner gate on the hold-out run by naming the completed representative and independent replay validation IDs plus aggregate owner benefit evidence and explicit benefit decision. Production reloads all three immutable stored runs/reports, derives the aggregate receipt, persists it with a canonical fingerprint, and returns only receipt identity plus aggregate output.
+- Complete deterministic evidence required for receipt derivation (projection version, snapshot identity/expiry, store-generation fingerprint, outcomes canonical hash, report fingerprint, counters, canaries, eligibility) is added by an additive CLASSIFY schema migration; no private corpus path, candidate ID, description, amount, expected row, or token is persisted in the receipt.
+- ClassifyRuleActivateRequest requires owner_rulebook_gate_receipt_id. ActivateClassificationRuleCommand reloads the immutable receipt before any authority change and again under the write lock; AuthorityGranted must be true, BlockCode null, validation_id must equal the receipt representative run, and candidate/projection/category/normalization/store-generation evidence must bind exactly. Any missing, blocked, stale, mismatched, replay, hold-out, benefit, or fingerprint condition preserves the prior active pointer and grants no broad apply.
+- rule_set_version persists owner gate receipt ID and fingerprint as immutable authority provenance. Broad apply remains false unless both the request asks for it and the same trusted receipt authorizes it. Existing historical rows migrate safely; no active authority is backfilled or inferred.
 
 ### File Contracts
 
@@ -76,17 +79,29 @@ None recorded.
 | `src/Tally/Bootstrap/Features/ClassifyRuleExtensions.cs` | `create` | explicit rule registration | `true` |  |
 | `tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs` | `test` | activation tests | `true` |  |
 | `tests/Tally.Tests/Classify/Rules/RuleRetirementTests.cs` | `test` | retirement and replacement tests | `true` |  |
+| `src/Tally/Contracts/Classify/Operations/ClassifyRequests.cs` | `modify` | receipt-finalization and activation receipt-id inputs | `true` |  |
+| `src/Tally/Contracts/Classify/Operations/ClassifyResults.cs` | `modify` | return trusted persisted gate receipt identity | `true` |  |
+| `src/Tally/Contracts/Classify/Evidence/VerifiedOwnerRulebookGateReceipt.cs` | `modify` | canonical immutable authority receipt binding and fingerprint | `true` |  |
+| `src/Tally/Contracts/Classify/ClassifyJsonContext.cs` | `modify` | source-generated receipt-finalization contracts | `true` |  |
+| `src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs` | `modify` | derive and persist gate receipt from representative replay and hold-out runs | `true` |  |
+| `src/Tally/Infrastructure/Classify/Storage/Rules/ClassificationValidationStore.cs` | `modify` | durably retain complete aggregate deterministic validation evidence | `true` |  |
+| `src/Tally/Infrastructure/Classify/Storage/Rules/OwnerRulebookGateReceiptStore.cs` | `create` | immutable aggregate authority receipt persistence and lookup | `true` |  |
+| `src/Tally/Infrastructure/Classify/Storage/ClassifySchema.cs` | `modify` | additive migration for validation evidence receipt and rule-set binding | `true` |  |
+| `scripts/verify-classify-owner-rulebook.sh` | `modify` | finalize trusted receipt through public rule.validate rather than shell-only authority | `true` |  |
+| `tests/Tally.Tests/Classify/Evidence/OwnerRulebookGateTests.cs` | `test` | trusted persistence binding forgery and fail-closed integration cases | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationValidationStore | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationRuleStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| LedgerContractClient.ListClassificationCategoriesAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| ActivateClassificationRuleCommand.HandleAsync | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| RetireClassificationRuleCommand.HandleAsync | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| RuleSetStore | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
+| ClassificationValidationStore | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationRuleStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| LedgerContractClient.ListClassificationCategoriesAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| ActivateClassificationRuleCommand.HandleAsync | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| RetireClassificationRuleCommand.HandleAsync | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| RuleSetStore | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| VerifiedOwnerRulebookGateReceipt | `consumes` | TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE |  |
+| OwnerRulebookGateReceiptStore | `produces` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
 
 ### Verification
 
@@ -111,18 +126,18 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3e6o` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](../tasks/rulebook-gate-owner-rulebook.md): No rule may become active until the owner-rulebook pre-authority gate passes.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md): Activation and retirement revalidate category lifecycle through the public Ledger client.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md): Activation consumes current aggregate validation evidence and immutable drafts.
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `governed-by` -> DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules
-- `implements` -> FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence
-- `satisfies` -> NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history
-- `touches` -> DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](rulebook-gate-owner-rulebook.md): No rule may become active until the owner-rulebook pre-authority gate passes.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md): Activation and retirement revalidate category lifecycle through the public Ledger client.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md): Activation consumes current aggregate validation evidence and immutable drafts.
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules)
+- `implements` -> [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence)
+- `satisfies` -> [NFR-CLASSIFY-ATTRIBUTABLE-HISTORY: Retain attributable classification history](../../../prd/classify/prd.md#nfr-classify-attributable-history-retain-attributable-classification-history)
+- `touches` -> [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle)
 - `verifies` -> TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT: Verify immutable rule lifecycle
 
 ## Navigation

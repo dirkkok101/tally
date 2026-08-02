@@ -2,19 +2,26 @@
   "id": "01KXV9EDTJ3NDBEF2EJ7GGHEM2",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "ref_code": "UC-CLASSIFY-006",
-  "title": "Discover and invoke the CLASSIFY agent contract",
+  "title": "Discover and invoke the shipped CLASSIFY v0.3.3 agent contract",
   "preconditions": "CLASSIFY is locally available to the owner process and exposes a versioned contract descriptor.",
   "postconditions": "The host can orchestrate the workflow without scraping prose, bypassing owner intent, reading CLASSIFY storage, or receiving unrelated financial data.",
-  "main_flow": "The owner or Hermes agent first discovers the twelve schemas and compatibility metadata. It saves each deliberate owner-authored rule only through classify.rule.save, validates the inactive candidate set through classify.rule.validate against owner-only aggregate evidence, and requests classify.rule.activate only after the gate passes. It then invokes classify.evaluate, reads each retained result through classify.outcome.get, obtains a read-only classify.apply.preview for an explicit selection or transaction correction, and invokes classify.apply.run only for that current authorized preview. It records accept, reject, or correct decisions through classify.feedback.record; any feedback-derived proposal remains inactive and must re-enter rule.save, rule.validate, and rule.activate. It uses classify.status for lifecycle and replay state, classify.abandon for unreferenced drafts or runs, classify.cleanup for recognized artifacts, and classify.rule.retire for explicit lifecycle retirement.",
+  "main_flow": "At the shipped v0.3.3 baseline, the owner or Hermes agent discovers the twelve published CLASSIFY schemas and compatibility metadata. It saves each deliberate owner-authored rule only through classify.rule.save, validates the inactive candidate set through classify.rule.validate against owner-only aggregate evidence, and requests classify.rule.activate only after the gate passes. It then invokes classify.evaluate, reads a retained result through classify.outcome.get, obtains a read-only classify.apply.preview for an explicit selection or transaction correction, and invokes classify.apply.run only for that current authorized preview. It records accept, reject, or correct decisions through classify.feedback.record; any feedback-derived proposal remains inactive and must re-enter rule.save, rule.validate, and rule.activate. It uses classify.status for lifecycle and replay state, classify.abandon for unreferenced drafts or runs, classify.cleanup for recognized artifacts, and classify.rule.retire for explicit lifecycle retirement. The additive operator-ergonomics workflow and its five planned discovery/private-tool operations are specified by UC-CLASSIFY-007 through UC-CLASSIFY-010 and DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT; they do not rewrite this implemented baseline.",
   "alt_flows": [
     "Reject unsupported contract versions before reading or mutation.",
     "Return stable structured validation errors for malformed requests.",
     "Do not emit transaction descriptions, normalized tokens, rules, or financial values to diagnostic logs.",
     "Fail closed when owner identity, local file permissions, or downstream compatibility cannot be established."
   ],
-  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The AI Agent Host needs to discover CLASSIFY capabilities or invoke a classification workflow for the owner.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The AI Agent Host needs to discover CLASSIFY capabilities or invoke a classification workflow for the owner.\",\"status\":\"implemented\"}",
   "created_at": "2026-07-18T18:57:29.4267906+00:00",
   "links": [
+    {
+      "id": "01KZ0QS2QEB8HDVSQW8EQQBCR8",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+      "rel": "see-also",
+      "created_at": "2026-08-02T07:59:52.5584100+00:00"
+    },
     {
       "id": "01KXV9W0W006PSFHV2JXKDKTSD",
       "target_type": "external_dependency",
@@ -42,6 +49,34 @@
       "target": "FR-LEDGER-STRUCTURED-INVOCATION",
       "rel": "depends-on",
       "created_at": "2026-07-18T19:04:56.7577289+00:00"
+    },
+    {
+      "id": "01KZ0QS2QD0CP9B2E7M5SMBF0R",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-007",
+      "rel": "see-also",
+      "created_at": "2026-08-02T07:59:52.5576666+00:00"
+    },
+    {
+      "id": "01KZ0QSF48CY1BY2MK9JDCZ4XN",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-008",
+      "rel": "see-also",
+      "created_at": "2026-08-02T08:00:05.2577540+00:00"
+    },
+    {
+      "id": "01KZ0QSFV9PJKCNJBQAXPRV967",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-009",
+      "rel": "see-also",
+      "created_at": "2026-08-02T08:00:05.9940594+00:00"
+    },
+    {
+      "id": "01KZ0QS2QDPH13GPF2D1X6YT0R",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-010",
+      "rel": "see-also",
+      "created_at": "2026-08-02T07:59:52.5578155+00:00"
     }
   ]
 }

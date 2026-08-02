@@ -11,7 +11,7 @@
     "Return stale with invalidating state when the underlying transaction, category, rule, normalization, or snapshot changed.",
     "Do not reconstruct evidence from current state when the historical evidence is unavailable."
   ],
-  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner or AI Agent Host requests the reason for a suggestion, no-suggestion, conflict, or stale result.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner or AI Agent Host requests the reason for a suggestion, no-suggestion, conflict, or stale result.\",\"status\":\"implemented\"}",
   "created_at": "2026-07-18T18:57:28.0215653+00:00",
   "links": [
     {

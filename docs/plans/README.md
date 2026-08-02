@@ -15,8 +15,13 @@ Generated from the lex graph.
 | budget | [Activate one Budget Plan Revision atomically](budget/tasks/activation-lifecycle.md) |
 | budget | [Publish BUDGET operation contracts](budget/tasks/contract-foundation.md) |
 | budget | [Create immutable Draft Budget Plan Revisions](budget/tasks/draft-creation.md) |
+| budget | [Carry frozen Spend Category ancestry from the LEDGER snapshot into BUDGET members](budget/tasks/envelope-ancestry-composition.md) |
+| budget | [Publish the envelope partition and ancestry provenance contract fields](budget/tasks/envelope-contracts.md) |
+| budget | [Enforce ancestry, overflow, sign, and lifecycle integrity during envelope resolution](budget/tasks/envelope-integrity.md) |
+| budget | [Resolve each Budget Actual to its nearest ancestor Category Budget Entry](budget/tasks/envelope-resolution.md) |
 | budget | [Prove mutation durability and restart recovery](budget/tasks/gate-atomic-recovery.md) |
 | budget | [Converge BUDGET graph and evidence quality](budget/tasks/gate-graph-quality.md) |
+| budget | [Prove envelope provenance and reparent re-lensing through the published contract](budget/tasks/gate-int-envelope-provenance.md) |
 | budget | [Prove the Ledger budget prerequisite](budget/tasks/gate-int-ledger-contract.md) |
 | budget | [Wire and prove the complete BUDGET contract](budget/tasks/gate-int-public-contract.md) |
 | budget | [Complete the BUDGET v1 module gate](budget/tasks/gate-module.md) |
@@ -37,16 +42,38 @@ Generated from the lex graph.
 | budget | [Verify Budget Plan and Budget Plan Revision history inspection](budget/tasks/verify-uc-004.md) |
 | budget | [Verify agent contract discovery and invocation](budget/tasks/verify-uc-005.md) |
 | classify | [Plans: Transaction Classification](classify/overview.md) |
+| classify | [Public contract and bounded policy](classify/sub-plans/00-contract-policy.md) |
 | classify | [Upstream contracts and runtime foundation](classify/sub-plans/00-foundation.md) |
+| classify | [Outcome and rule discovery](classify/sub-plans/01-discovery.md) |
 | classify | [Deterministic evidence core](classify/sub-plans/01-evidence-core.md) |
+| classify | [Private corpus and unresolved review tools](classify/sub-plans/02-private-tools.md) |
 | classify | [Rules, validation, evaluation, and explanation](classify/sub-plans/02-rules-evaluation.md) |
 | classify | [Apply, feedback, status, and recovery](classify/sub-plans/03-apply-recovery.md) |
+| classify | [Compatibility, privacy, process, and module gates](classify/sub-plans/03-verification.md) |
 | classify | [Contract, security, use-case, and module gates](classify/sub-plans/04-verification.md) |
+| classify | [Public contracts and durable foundations](classify/sub-plans/rulebook-00-foundation.md) |
+| classify | [Private evidence and owner rulebook gate](classify/sub-plans/rulebook-01-evidence-core.md) |
+| classify | [Rules, deterministic evaluation, and feedback](classify/sub-plans/rulebook-02-rules-evaluation.md) |
+| classify | [Authorized apply and recovery](classify/sub-plans/rulebook-03-apply-recovery.md) |
+| classify | [Command, privacy, graph, and module gates](classify/sub-plans/rulebook-04-verification.md) |
 | classify | [Abandon state and clean recognized artifacts](classify/tasks/abandon-cleanup.md) |
 | classify | [Authorize exact apply previews](classify/tasks/apply-preview.md) |
 | classify | [Execute the replay-safe apply saga](classify/tasks/apply-run-saga.md) |
 | classify | [Publish CLASSIFY operation contracts](classify/tasks/contract-foundation.md) |
 | classify | [Build the deterministic classification engine](classify/tasks/deterministic-engine.md) |
+| classify | [Prove explicit outcome-list to preview composition](classify/tasks/ergonomics-bulk-preview-composition.md) |
+| classify | [Define additive ergonomics contract types](classify/tasks/ergonomics-contract-foundation.md) |
+| classify | [Build and atomically publish an owner-private corpus](classify/tasks/ergonomics-corpus-builder.md) |
+| classify | [Extract the exact-label projection corpus mapper](classify/tasks/ergonomics-corpus-mapper.md) |
+| classify | [Implement deterministic discovery cursor policy](classify/tasks/ergonomics-cursor-policy.md) |
+| classify | [Converge the complete CLASSIFY ergonomics module gate](classify/tasks/ergonomics-gate-module.md) |
+| classify | [List retained outcomes with fresh lifecycle evidence](classify/tasks/ergonomics-outcome-list.md) |
+| classify | [Prove privacy, filesystem, recovery, and no-mutation boundaries](classify/tasks/ergonomics-privacy-recovery-gate.md) |
+| classify | [Verify published-process throughput and CLI contracts](classify/tasks/ergonomics-process-throughput-gate.md) |
+| classify | [Discover rule versions and active rule-set authority](classify/tasks/ergonomics-rule-discovery.md) |
+| classify | [Publish five operations through the runtime registry](classify/tasks/ergonomics-runtime-convergence.md) |
+| classify | [Define deterministic unresolved grouping policy](classify/tasks/ergonomics-unresolved-policy.md) |
+| classify | [Report unresolved patterns from fresh Ledger truth](classify/tasks/ergonomics-unresolved-report.md) |
 | classify | [Acquire bounded Ledger evaluation input](classify/tasks/evaluation-input.md) |
 | classify | [Evaluate and persist classification outcomes](classify/tasks/evaluation-workflow.md) |
 | classify | [Record bounded correction feedback](classify/tasks/feedback-proposals.md) |
@@ -57,15 +84,45 @@ Generated from the lex graph.
 | classify | [Complete the CLASSIFY v1 module gate](classify/tasks/gate-module.md) |
 | classify | [Validate CLASSIFY local data security](classify/tasks/gate-security.md) |
 | classify | [Extend the shared Ledger contract client](classify/tasks/ledger-classification-client.md) |
-| classify | [Extend Ledger classification contracts](classify/tasks/ledger-classification-contract.md) |
+| classify | [Release the LEDGER-owned classification contract](classify/tasks/ledger-classification-contract.md) |
 | classify | [Explain and invalidate retained outcomes](classify/tasks/outcome-explanation.md) |
 | classify | [Implement the private corpus boundary](classify/tasks/private-corpus-reader.md) |
 | classify | [Activate and retire immutable rule sets](classify/tasks/rule-activation-lifecycle.md) |
 | classify | [Save immutable rule drafts](classify/tasks/rule-draft-save.md) |
 | classify | [Validate candidate rule sets privately](classify/tasks/rule-validation.md) |
 | classify | [Implement the closed rule vocabulary](classify/tasks/rule-vocabulary.md) |
+| classify | [Abandon state and clean recognized artifacts](classify/tasks/rulebook-abandon-cleanup.md) |
+| classify | [Authorize exact apply previews](classify/tasks/rulebook-apply-preview.md) |
+| classify | [Execute the replay-safe apply saga](classify/tasks/rulebook-apply-run-saga.md) |
+| classify | [Publish CLASSIFY operation contracts](classify/tasks/rulebook-contract-foundation.md) |
+| classify | [Build the deterministic classification engine](classify/tasks/rulebook-deterministic-engine.md) |
+| classify | [Acquire bounded Ledger evaluation input](classify/tasks/rulebook-evaluation-input.md) |
+| classify | [Evaluate and persist classification outcomes](classify/tasks/rulebook-evaluation-workflow.md) |
+| classify | [Record bounded correction feedback](classify/tasks/rulebook-feedback-proposals.md) |
+| classify | [Converge CLASSIFY graph and evidence quality](classify/tasks/rulebook-gate-graph-quality.md) |
+| classify | [Prove the Ledger classification prerequisite](classify/tasks/rulebook-gate-int-ledger-contract.md) |
+| classify | [Wire and prove the complete CLASSIFY contract](classify/tasks/rulebook-gate-int-public-contract.md) |
+| classify | [Complete the CLASSIFY v1 module gate](classify/tasks/rulebook-gate-module.md) |
+| classify | [Prove owner-rulebook safety before classification authority](classify/tasks/rulebook-gate-owner-rulebook.md) |
+| classify | [Validate CLASSIFY local data security](classify/tasks/rulebook-gate-security.md) |
+| classify | [Extend the shared Ledger contract client](classify/tasks/rulebook-ledger-classification-client.md) |
+| classify | [Release the LEDGER-owned classification contract](classify/tasks/rulebook-ledger-classification-contract.md) |
+| classify | [Explain and invalidate retained outcomes](classify/tasks/rulebook-outcome-explanation.md) |
+| classify | [Implement the private corpus boundary](classify/tasks/rulebook-private-corpus-reader.md) |
+| classify | [Activate and retire immutable rule sets](classify/tasks/rulebook-rule-activation-lifecycle.md) |
+| classify | [Save immutable rule drafts](classify/tasks/rulebook-rule-draft-save.md) |
+| classify | [Validate candidate rule sets privately](classify/tasks/rulebook-rule-validation.md) |
+| classify | [Implement the closed rule vocabulary](classify/tasks/rulebook-rule-vocabulary.md) |
+| classify | [Establish CLASSIFY durable state](classify/tasks/rulebook-state-foundation.md) |
+| classify | [Expose bounded classification status](classify/tasks/rulebook-status-workflow.md) |
+| classify | [Verify eligible deterministic evaluation](classify/tasks/rulebook-verify-uc-001.md) |
+| classify | [Verify outcome explanation and staleness](classify/tasks/rulebook-verify-uc-002.md) |
+| classify | [Verify authorized apply and recovery](classify/tasks/rulebook-verify-uc-003.md) |
+| classify | [Verify rule management and validation](classify/tasks/rulebook-verify-uc-004.md) |
+| classify | [Verify bounded correction feedback](classify/tasks/rulebook-verify-uc-005.md) |
+| classify | [Verify agent contract discovery and invocation](classify/tasks/rulebook-verify-uc-006.md) |
 | classify | [Establish CLASSIFY durable state](classify/tasks/state-foundation.md) |
-| classify | [Expose safe classification status](classify/tasks/status-workflow.md) |
+| classify | [Expose bounded classification status](classify/tasks/status-workflow.md) |
 | classify | [Verify eligible deterministic evaluation](classify/tasks/verify-uc-001.md) |
 | classify | [Verify outcome explanation and staleness](classify/tasks/verify-uc-002.md) |
 | classify | [Verify authorized apply and recovery](classify/tasks/verify-uc-003.md) |

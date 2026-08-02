@@ -15,6 +15,9 @@
   "alternatives": [
     "Rejected a generic invoke operation and action discriminators because callers would need hidden operation knowledge. Rejected three broad facade operations because they merge incompatible mutability, idempotency, and recovery contracts. Rejected separately maintained help, schema, and dispatch inventories because they can drift. Rejected HTTP endpoints because v1 is a channel-neutral local CLI and owns no service or authentication boundary."
   ],
+  "status_notes": [
+    "Historical authority for the twelve-operation 0.3.3 release. DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT supersedes only the future inventory and additive extension boundary; every released request, result, error, and exit-code contract remains authoritative and compatible."
+  ],
   "status": "accepted",
   "metadata": "{\"expected_paths\":[\"src/Tally/Cli/**\",\"src/Tally/Contracts/Classify/**\",\"src/Tally/Features/Classify/Contract/**\",\"tests/Tally.Tests/Classify/Contract/**\"]}",
   "created_at": "2026-07-19T05:10:11.1849248+00:00",

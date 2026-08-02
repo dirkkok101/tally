@@ -1,0 +1,68 @@
+{
+  "id": "01KZ0N58V6EV7MSY1S9CQFTTEQ",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-PAGINATED-DISCOVERY",
+  "title": "Use fingerprint-bound keyset cursors for outcome and rule discovery",
+  "description": [
+    "Defines deterministic bounded pagination, filters, snapshot semantics, cursor failures, and no-partial-result behavior."
+  ],
+  "decision": [
+    "Both list requests require pageSize from 1 through 500 and accept one opaque versioned base64url continuation whose canonical payload carries a SHA-256 checksum and is never mutation authority. Outcome pages require evaluationId, order by ordinal then transactionId, and bind the cursor to operation ID, evaluation ID, normalized filters, page size, evaluation/result fingerprint, rule-set fingerprint, category lifecycle fingerprint, Ledger generation, expiry, and last key. Rule pages order by createdAt then ruleVersionId and bind the first-page high-water key, filters, page size, authority/category fingerprints, expiry, and last key so later appends do not enter an existing traversal. Every supplied filter is ANDed. Cursor decoding, checksum validation, and compatibility validation complete before any page result is constructed. Invalid, expired, cross-request, incompatible, or stale cursors return typed errors with null result and exit class 7; integrity failures return the existing integrity exit class. No partial page is returned."
+  ],
+  "rationale": [
+    "Keyset pagination is deterministic and bounded without OFFSET drift. Fingerprint binding prevents a cursor from authorizing a different evaluation, filter, category lifecycle, rule set, or Ledger generation."
+  ],
+  "alternatives": [
+    "Offset pagination; rejected because concurrent immutable appends and retention changes can duplicate or omit rows. Server-side cursor state; rejected because it adds cleanup state. Caller-provided continuation fields; rejected because they become an accidental public contract and cannot bind the complete request/snapshot fingerprint."
+  ],
+  "consequences": [
+    "A shared code-owned cursor codec and closed error vocabulary are required. Outcome listing refreshes compatible Ledger/category lifecycle evidence before exposing transaction/category display data. Rule listing freezes an immutable high-water boundary. Tests cover exact limit, one over, expiry, filter mismatch, generation drift, archived category, missing authority, tampering, and deterministic replay."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Domain/Classify/Discovery/ClassifyCursorCodec.cs\"]}",
+  "created_at": "2026-08-02T07:14:06.3111614+00:00",
+  "links": [
+    {
+      "id": "01KZ0N6V99G4RZJZM702EKVMX1",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:57.9621217+00:00"
+    },
+    {
+      "id": "01KZ0N6W6QGHE8P38AEWX0K30X",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:58.9043430+00:00"
+    },
+    {
+      "id": "01KZ0N6XYASCPEY1H4WDVN5VVK",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-OPERATOR-THROUGHPUT",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:15:00.6834892+00:00"
+    },
+    {
+      "id": "01KZ0N6X247GFBRPSSWDJ4ZRS4",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PAGINATION-INTEGRITY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:14:59.7811621+00:00"
+    },
+    {
+      "id": "01KZ0NCA37Z0BRTWB1CM4EHFVS",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-OUTCOME-CURSOR-STALE-MATRIX",
+      "rel": "validated-by",
+      "created_at": "2026-08-02T07:17:56.9687633+00:00"
+    },
+    {
+      "id": "01KZ0NCAW378V2ZNXMVK0KCN19",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-RULEBOOK-DISCOVERY-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-08-02T07:17:57.7641604+00:00"
+    }
+  ]
+}

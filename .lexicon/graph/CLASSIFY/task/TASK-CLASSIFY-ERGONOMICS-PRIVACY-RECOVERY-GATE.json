@@ -1,0 +1,266 @@
+{
+  "id": "01KZ0NTEMZ773D96DTANC9MJZF",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEN8X7GGP71FRF4PBB5C4",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY-GATE",
+  "slug": "ERGONOMICS-PRIVACY-RECOVERY-GATE",
+  "title": "Prove privacy, filesystem, recovery, and no-mutation boundaries",
+  "description": [
+    "Add a named cross-operation security gate over logging, stdout/stderr separation, SQLite contents, filesystem attacks, cursor payloads, crash recovery, and dual no-mutation oracles."
+  ],
+  "objective": [
+    "Fail the increment unless every query and corpus crash/security case preserves owner-only data and returns no partial result."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-08-02T07:25:40.3843855+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S0BBC8THWDWQEJNBDS7PR",
+      "bead_id": "bd-3mdk",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:19.3406353+00:00",
+      "created_at": "2026-08-02T08:21:19.3406353+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NTEN2K2JESVY4MSD5MK08",
+      "target": "DD-CLASSIFY-ARTIFACT-RETENTION",
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN2C10DG26545EK8QRN",
+      "target": "DD-CLASSIFY-PRIVATE-CORPUS-PUBLICATION",
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN2DB21447RFGZ0NQZP",
+      "target": "DD-CLASSIFY-UNRESOLVED-REPORT-BOUNDARY",
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVQKRTDP52M14VAJS7H41",
+      "target": "TASK-CLASSIFY-ERGONOMICS-BULK-PREVIEW-COMPOSITION",
+      "dependency_type": "compile",
+      "reason": [
+        "Security gate includes explicit preview authority cases."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:26:22.3294395+00:00"
+    },
+    {
+      "id": "01KZ0NVPSH89DKY3ANSZDW6ZD1",
+      "target": "TASK-CLASSIFY-ERGONOMICS-RUNTIME-CONVERGENCE",
+      "dependency_type": "compile",
+      "reason": [
+        "Security gate exercises the published five-operation runtime."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:21.4902410+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NTEN22Z7VBBMCZCF34DQP",
+      "path": "tests/Tally.Tests/Classify/Security/ClassifyOperatorErgonomicsSecurityTests.cs",
+      "action": "create",
+      "role": "cross-operation privacy and no-mutation matrix",
+      "required": 1,
+      "notes": [
+        "Separate allowed stdout from forbidden sinks."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN2SWCV16GYPD8H5B21",
+      "path": "scripts/verify-classify-ergonomics-security.sh",
+      "action": "create",
+      "role": "non-vacuous named security gate",
+      "required": 1,
+      "notes": [
+        "Fail on zero matches or any failed test."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN2A7NZ07RQ1BCAZAK0",
+      "path": "docs/verification/classify-security.md",
+      "action": "modify",
+      "role": "document additive gate and privacy boundary",
+      "required": 1,
+      "notes": [
+        "Human-authored verification companion."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NTEN2GCNZCV5WWT51YPP6",
+      "name": "ClassifyOperatorErgonomicsSecurityEvidence",
+      "direction": "produces",
+      "contract_ref_code": "NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY",
+      "notes": [
+        "named aggregate gate"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXH4XEZD8FQ5AK49B3XH0",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:21.2468543+00:00"
+    },
+    {
+      "id": "01KZ0NXGB2J69KSK87YFWY6VPZ",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:20.4191406+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NTEN23SGPK3NWBMA9GGRJ",
+      "kind": "acceptance_check",
+      "text": [
+        "Canary scans cover stdout where private owner-visible unresolved data is permitted separately from stderr, logs, classify.db, cursor bytes, idempotency receipts, crash artifacts, generated docs, and tracked files where it is forbidden."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN26H3XM4FRVNNF5G7R",
+      "kind": "acceptance_check",
+      "text": [
+        "Symlink, hard-link, wrong owner/mode, outside-root, existing destination, oversized corpus, interruption before/after rename, cleanup replay, invalid cursor, stale Ledger, and typed expected/unexpected failures leave zero unauthorized writes or deletions."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN2MG28Z9YB90178JF2",
+      "kind": "acceptance_check",
+      "text": [
+        "Query failures leave classify.db byte/hash state and Ledger allocation/revision state unchanged; corpus build changes only the exact authorized private destination after complete success."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN27ZPCCKX4V3H0KMCE",
+      "kind": "acceptance_check",
+      "text": [
+        "No network socket, cloud/model client, background worker, reflection serialization, raw request logging, private path, description, amount, normalized token, transaction ID, or account ID enters diagnostics."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN2YB7AJA3JJB7PQH7F",
+      "kind": "constraint",
+      "text": [
+        "Gate output is aggregate-only and identifies failed case names without financial values."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN2ESM5ZXAJS94AF7CH",
+      "kind": "expected_output",
+      "text": [
+        "Named ClassifyOperatorErgonomicsSecurityTests and executable security gate"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN223PJ4FD7MKGMRDFN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not weaken an existing security test, skip linux-x64 owner checks, sanitize assertions by deleting the canary, or treat zero discovered tests as success."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN2YGRD39WX495WS05X",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not read or mutate the live TALLY_DATA_ROOT; every mutation probe uses a disposable 0700 root."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NTEN1XM454982J10WTN0V",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN22G217RR66D0A64G4",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN24S8WEG9242RG9GXF",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN22RHW5VBXCC19ESKX",
+      "target": "FR-CLASSIFY-STATE-RETENTION-CLEANUP",
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    },
+    {
+      "id": "01KZ0NTEN28K4Z2AZTKFTFJFZB",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NTEN3V13CTBS063J05AHW",
+      "gate_type": "test-evidence",
+      "description": [
+        "The script fails when a named test family is absent and prints aggregate counts only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NTEN2ZN9EQ4R8TH5ZC9BV",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-ergonomics-security.sh",
+      "expected_result": "exit 0; every named cursor filesystem crash logging persistence and no-mutation family discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 900,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:40.3843855+00:00"
+    }
+  ]
+}

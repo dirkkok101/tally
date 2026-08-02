@@ -1,0 +1,249 @@
+{
+  "id": "01KZ0NTFBZSFJMPD107PFEN9Y0",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEN8X7GGP71FRF4PBB5C4",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-PROCESS-THROUGHPUT-GATE",
+  "slug": "ERGONOMICS-PROCESS-THROUGHPUT-GATE",
+  "title": "Verify published-process throughput and CLI contracts",
+  "description": [
+    "Add published executable tests for all five operations, cursor continuation, one-envelope behavior, deterministic replay, no child-per-row orchestration, and public error exits."
+  ],
+  "objective": [
+    "Prove the installed-style Native-AOT path returns 146 selectable outcomes within the process, time, memory, and cursor bounds."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 2,
+  "created_at": "2026-08-02T07:25:41.1211064+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S0DARKNQ0VHY6N3VT08QB",
+      "bead_id": "bd-2byd",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:21.3684233+00:00",
+      "created_at": "2026-08-02T08:21:21.3684233+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NTFC3AQY3W9AHJSHBM6VH",
+      "target": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC3WFDZC4Q330BBH750",
+      "target": "DD-CLASSIFY-PAGINATED-DISCOVERY",
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVSA4KMP2SRNDQS43R76P",
+      "target": "TASK-CLASSIFY-ERGONOMICS-BULK-PREVIEW-COMPOSITION",
+      "dependency_type": "compile",
+      "reason": [
+        "Process proof includes one explicit selected-outcomes preview."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:26:24.0692977+00:00"
+    },
+    {
+      "id": "01KZ0NVRCSQHSANG64KEVVQTN6",
+      "target": "TASK-CLASSIFY-ERGONOMICS-RUNTIME-CONVERGENCE",
+      "dependency_type": "compile",
+      "reason": [
+        "Process tests require the converged Native-AOT registry."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:23.1308600+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NTFC3X52V2X1C4AF1MXXF",
+      "path": "tests/Tally.Tests/Classify/Process/ClassifyOperatorErgonomicsProcessTests.cs",
+      "action": "create",
+      "role": "published executable contract and throughput tests",
+      "required": 1,
+      "notes": [
+        "One process per page."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC34WKQTYW53DGGHMKC",
+      "path": "scripts/verify-classify-ergonomics-process.sh",
+      "action": "create",
+      "role": "Native-AOT publish and process gate",
+      "required": 1,
+      "notes": [
+        "Fail on zero tests and bound violation."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NTFC3KXCN8AQTTRSFBJQF",
+      "name": "Published tally executable",
+      "direction": "produces",
+      "contract_ref_code": "NFR-CLASSIFY-OPERATOR-THROUGHPUT",
+      "notes": [
+        "146-row process proof"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXHZQ56FER4D10QXMWVCG",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-OPERATOR-THROUGHPUT",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:22.1045448+00:00"
+    },
+    {
+      "id": "01KZ0NXJV362Z66SHSAGJB1WKW",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:22.9807306+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NTFC3RBE9R9ENJE4DT15N",
+      "kind": "acceptance_check",
+      "text": [
+        "A published linux-x64 Native-AOT executable returns all 146 outcome rows at pageSize 500 in one initial CLI invocation, launches zero child process per row, completes within 5 seconds, and remains below 256 MiB peak resident memory on the release host."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC3D545EMZDCKJ1KR4F",
+      "kind": "acceptance_check",
+      "text": [
+        "Larger bounded fixtures require exactly ceiling(filteredCount/pageSize) invocations; page sizes 1 and 500 have no duplicates/omissions and replay produces identical fingerprints."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC3NFD6RQRFE2WY45MP",
+      "kind": "acceptance_check",
+      "text": [
+        "Each additive CLI path accepts stdin/file JSON according to its descriptor, writes one structured stdout envelope, maps every typed cursor/lifecycle/privacy/resource/integrity failure to the published exit code, and writes no private diagnostic."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC330WW5XKTH0A3BAR9",
+      "kind": "acceptance_check",
+      "text": [
+        "Outcome IDs compose into one unchanged selected_outcomes preview request; no test or helper launches outcome.get once per row."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC3PXN2Y6RZF3JJV2VE",
+      "kind": "constraint",
+      "text": [
+        "Fixtures are synthetic and bounded; timing output contains durations/counts only."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC304HX19MV3SJ3PHWA",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyOperatorErgonomicsProcessTests and repeatable Native-AOT process gate"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC314BW1YR8P0RTDXFK",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not measure in-process handlers as the throughput proof, hide publish/startup time, permit a five-minute timeout, or skip named-test discovery."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC39MGGW63MZJPYRY4R",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not install, tag, release, deploy, or invoke live-data mutation."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NTFC2RE63AY2755B2Q4GY",
+      "target": "FR-CLASSIFY-BULK-PREVIEW-COMPOSITION",
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC30GFWNH8B3WB49KC1",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC3B9A6CZMCVVK3EH69",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC3R0A7N3G4M5NF2C6Y",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    },
+    {
+      "id": "01KZ0NTFC3MC985VPG2JRT3WPK",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NTFC42AWRM3ENV9YG51M1",
+      "gate_type": "test-evidence",
+      "description": [
+        "Gate records invocation count wall time peak RSS row accounting and zero child-per-row count."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NTFC3TKVNMFACSGPH81TG",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-ergonomics-process.sh",
+      "expected_result": "exit 0; Native-AOT publish succeeds and named 146-row pagination CLI envelope exit replay memory and timing cases pass",
+      "required": 1,
+      "timeout_seconds": 1200,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.1211064+00:00"
+    }
+  ]
+}

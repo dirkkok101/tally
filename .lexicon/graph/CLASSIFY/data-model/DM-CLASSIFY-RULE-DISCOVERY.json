@@ -1,0 +1,22 @@
+{
+  "id": "01KZ0N5BQBPVCFEJ4EFNJ9D0DR",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-RULE-DISCOVERY",
+  "name": "ClassificationRuleDiscovery",
+  "description": [
+    "Immutable rule-version catalogue pages and the current active rule-set authority summary."
+  ],
+  "schema_def": [
+    "RuleListRequest: contractVersion, optional logicalRuleId/lifecycle/categoryId/activeMembership filters, pageSize 1..500, optional opaque continuation. RulePage: overallCount, filteredCount, returnedCount, highWaterCreatedAt/highWaterRuleVersionId fingerprints inside cursor, ordered items, optional continuation. RuleItem: logicalRuleId, ruleVersionId, priorRuleVersionId, categoryId/displayName/lifecycle, normalizationVersion, effectiveLifecycle, activeMembership, broadApplyAllowed, provenance enum, scopeHash, created/validated/activated/retired timestamps, canonical closed-contract conditions. ActiveRuleSetResult: ruleSetVersionId, broadApplyAllowed, activationId, validationId, trustedGateReceiptId/fingerprint, normalizationVersion, activationEpoch, lifecycle status/timestamps, ordered ruleVersionIds, category ID/display/lifecycle tuples. No corpus metadata or owner reason prose."
+  ],
+  "created_at": "2026-08-02T07:14:09.2602044+00:00",
+  "links": [
+    {
+      "id": "01KZ0N74M1S0V63MWAD51E4KD9",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:15:07.5216314+00:00"
+    }
+  ]
+}

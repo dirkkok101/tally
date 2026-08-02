@@ -22,24 +22,24 @@ Prove that an owner-authored deterministic rulebook is safe, deterministic, usef
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-VIABILITY-DISPOSITION: Stop CLASSIFY v1 after the private viability spike | `design_decision` | `governed-by` | `true` |
-| EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus | `external_dependency` | `references` | `true` |
-| FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path](../../../designs/classify/decisions/owner-rulebook-replacement.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-VIABILITY-DISPOSITION: Stop CLASSIFY v1 after the private viability spike](../../../designs/classify/decisions/viability-disposition.md) | `design_decision` | `governed-by` | `true` |
+| [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus) | `external_dependency` | `references` | `true` |
+| [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE: Validate the owner-authored rulebook before authority | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md) | `compile` | The gate must exercise the real rule validation lifecycle. |
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md) | `compile` | Evidence must come through the public Ledger projection client. |
-| [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](../tasks/rulebook-private-corpus-reader.md) | `compile` | The owner-only corpus boundary must be enforced. |
-| [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](../tasks/rulebook-deterministic-engine.md) | `compile` | The candidate rulebook must exercise the production deterministic engine. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md) | `compile` | The gate must exercise the real rule validation lifecycle. |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md) | `compile` | Evidence must come through the public Ledger projection client. |
+| [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER: TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](rulebook-private-corpus-reader.md) | `compile` | The owner-only corpus boundary must be enforced. |
+| [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE: TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](rulebook-deterministic-engine.md) | `compile` | The candidate rulebook must exercise the production deterministic engine. |
 
 ## Recipe
 
@@ -67,26 +67,36 @@ Prove that an owner-authored deterministic rulebook is safe, deterministic, usef
 ### Notes
 
 - The failed automatic-discovery experiment remains historical evidence. Missing owner inputs yield a stable blocked receipt with zero authority or mutation and no synthesized values or disclosed path.
+- The pre-authority gate adds no public operation and no evaluator. scripts/verify-classify-owner-rulebook.sh invokes the existing public classify.rule.validate operation with explicit owner-supplied candidate version IDs, representative corpus, temporal hold-out, and aggregate benefit counts/minutes.
+- ValidateClassificationRuleCommand must acquire one complete frozen public Ledger classification_v1 evaluation projection, require each private row identity and lifecycle fingerprint to match that projection before evaluation, and bind the projection version, snapshot/store-generation identity, category lifecycle fingerprint, candidate fingerprint, expected-outcome fingerprint, normalization version, report fingerprint, outcomes canonical hash, and all aggregate counters in its public result. Missing, duplicate, mismatched, or stale rows fail closed with no authority.
+- The conformance gate performs a representative validation, an independent same-input replay using a distinct idempotency key, and a separate temporal hold-out validation. It compares deterministic hashes/fingerprints/counts for replay and requires both representative and hold-out safety gates to pass. It derives, never hard-codes, every VerifiedOwnerRulebookGateReceipt field.
+- Private paths, candidate IDs, row values, descriptions, amounts, expected outcomes, and raw diagnostics must never appear in process arguments, stdout/stderr, durable receipts, tracked files, or logs. Paths and candidate IDs enter only through owner-only structured stdin or environment and are redacted from diagnostics. Missing inputs produce a stable aggregate blocked receipt.
+- Benefit evidence is aggregate owner decision/time before/after input. Safety never grants authority by itself when benefit is insufficient: emit benefit-decision-required and leave authority false. Do not invent the archived automatic-discovery 50 percent threshold.
+- Ordering correction authorized by Hermes as Tally product representative (2026-08-01): this bead owns a provisional validation-only public runtime bridge. OperationRegistry publishes the existing twelve descriptor templates for deterministic discovery but routes only classify.rule.validate to a real handler; all other CLASSIFY operations stay fail-closed stubs. LedgerServices gains only a nullable ClassifyValidation bundle, Program creates it only after TALLY_DATA_ROOT, Ledger runtime, LedgerContractClient, and owner-only CLASSIFY state exist, and schema/help discovery must open none of them. ClassifyValidationExtensions owns explicit construction of ValidateClassificationRuleCommand plus a source-generated request/result adapter. No generic dispatch, reflection, second registry, unrelated handler, envelope redesign, or other CLASSIFY runtime wiring is permitted. TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT must later consume and extend this bridge rather than erase or duplicate it.
 
 ### File Contracts
 
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
-| `.gitignore` | `modify` | exclude owner-only CLASSIFY evidence locations | `true` |  |
-| `scripts/verify-classify-owner-rulebook.sh` | `create` | aggregate-only public-contract conformance gate | `true` |  |
-| `tests/Tally.Tests/Classify/Evidence/OwnerRulebookGateTests.cs` | `test` | determinism, accounting, canary, and privacy tests | `true` |  |
-| `docs/verification/classify-owner-rulebook.md` | `create` | safe operator procedure and aggregate receipt contract | `true` |  |
+| `src/Tally/Contracts/Classify/Evidence/VerifiedOwnerRulebookGateReceipt.cs` | `create` | production aggregate-only owner-rulebook gate receipt contract | `true` |  |
+| `src/Tally/Contracts/Classify/Operations/ClassifyResults.cs` | `modify` | publish complete aggregate validation fingerprints, counters, and deterministic outcome hash | `true` |  |
+| `src/Tally/Contracts/Classify/ClassifyJsonContext.cs` | `modify` | Native-AOT registrations for owner-rulebook receipt contract | `true` |  |
+| `src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs` | `modify` | bind private rows to one frozen public Ledger classification_v1 projection and return complete aggregate evidence | `true` |  |
+| `src/Tally/Bootstrap/Features/ClassifyValidationExtensions.cs` | `create` | validation-only runtime composition and operation adapter | `true` |  |
+| `src/Tally/Bootstrap/LedgerServices.cs` | `modify` | nullable validation-only CLASSIFY runtime slot | `true` |  |
+| `src/Tally/Cli/OperationRegistry.cs` | `modify` | publish twelve descriptor templates and route only classify.rule.validate | `true` |  |
+| `src/Tally/Program.cs` | `modify` | initialize validation bridge only after Ledger client and owner state exist | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| OwnerRulebookGateInputManifest | `consumes` | EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS |  |
-| OwnerBenefitEvidenceReceipt | `consumes` | EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS |  |
-| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| PrivateCorpusReader.ReadAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationEngine.Evaluate | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| ValidateClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
+| OwnerRulebookGateInputManifest | `consumes` | [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus) |  |
+| OwnerBenefitEvidenceReceipt | `consumes` | [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus) |  |
+| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| PrivateCorpusReader.ReadAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationEngine.Evaluate | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ValidateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
 | VerifiedOwnerRulebookGateReceipt | `produces` | TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE |  |
 
 ### Verification
@@ -113,18 +123,18 @@ Prove that an owner-authored deterministic rulebook is safe, deterministic, usef
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-56yx` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](../tasks/rulebook-deterministic-engine.md): The candidate rulebook must exercise the production deterministic engine.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md): Evidence must come through the public Ledger projection client.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](../tasks/rulebook-private-corpus-reader.md): The owner-only corpus boundary must be enforced.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md): The gate must exercise the real rule validation lifecycle.
-- `governed-by` -> DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `governed-by` -> DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
-- `governed-by` -> DD-CLASSIFY-VIABILITY-DISPOSITION: Stop CLASSIFY v1 after the private viability spike
-- `implements` -> FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence
-- `references` -> EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus
-- `satisfies` -> NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE: TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](rulebook-deterministic-engine.md): The candidate rulebook must exercise the production deterministic engine.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md): Evidence must come through the public Ledger projection client.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER: TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](rulebook-private-corpus-reader.md): The owner-only corpus boundary must be enforced.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md): The gate must exercise the real rule validation lifecycle.
+- `governed-by` -> [DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path](../../../designs/classify/decisions/owner-rulebook-replacement.md)
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
+- `governed-by` -> [DD-CLASSIFY-VIABILITY-DISPOSITION: Stop CLASSIFY v1 after the private viability spike](../../../designs/classify/decisions/viability-disposition.md)
+- `implements` -> [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence)
+- `references` -> [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus)
+- `satisfies` -> [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data)
 - `verifies` -> TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE: Validate the owner-authored rulebook before authority
 
 ## Navigation

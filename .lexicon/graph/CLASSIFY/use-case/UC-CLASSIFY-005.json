@@ -12,7 +12,7 @@
     "Reject a proposed replacement that broadens into conflicts or an archived category.",
     "Preserve prior rule and evaluation history when retiring unsafe behavior."
   ],
-  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner corrects a category assignment in LEDGER or marks a prior CLASSIFY result unsafe.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner corrects a category assignment in LEDGER or marks a prior CLASSIFY result unsafe.\",\"status\":\"implemented\"}",
   "created_at": "2026-07-18T18:57:29.0386767+00:00",
   "links": [
     {

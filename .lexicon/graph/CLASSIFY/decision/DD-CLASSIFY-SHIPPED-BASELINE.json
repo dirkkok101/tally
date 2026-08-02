@@ -1,0 +1,54 @@
+{
+  "id": "01KZ0N57DKA8VDVK7RV7CF3BSV",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-SHIPPED-BASELINE",
+  "title": "Treat CLASSIFY 0.3.3 as the production-usable baseline",
+  "description": [
+    "Reconciles source-present, contract-published, installed, tested, and graph-complete states before the operator-ergonomics increment."
+  ],
+  "decision": [
+    "Current main 777c166 and release 0.3.3 contain the implemented CLASSIFY engine and twelve public operations. The installed Native-AOT executable publishes those operations in a 100-operation inventory, the final module gate records 5609 passing tests, and the owner-local 14-rule evaluation-only rule set has a deterministic 617-row receipt with 146 suggestions, 471 no-suggestions, zero conflicts/stale/canaries, 23.66 percent coverage, and broadApplyAllowed=false. No category allocation was applied. PLAN-CLASSIFY-RULEBOOK-V1 is completed. The remaining problem is bounded operator throughput and discovery, not classifier correctness or autonomous merchant intelligence."
+  ],
+  "rationale": [
+    "The prior module narrative described a greenfield implementation and unpublished Ledger projection, which conflicts with current source, released schemas, installed executable evidence, and completed beads."
+  ],
+  "alternatives": [
+    "Continue treating CLASSIFY as unbuilt; rejected because it would duplicate shipped code. Treat operator friction as an engine failure; rejected because deterministic evaluation and safety gates passed."
+  ],
+  "consequences": [
+    "New work is an additive post-release increment. Historical automatic-discovery failure and owner-rulebook decisions remain intact. Planning and review must test public installed contracts separately from source presence."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"docs/verification/classify-v1.md\"]}",
+  "created_at": "2026-08-02T07:14:04.8525051+00:00",
+  "links": [
+    {
+      "id": "01KZ0N5X2KNXHQBEV0338Y1RWB",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT",
+      "rel": "references",
+      "created_at": "2026-08-02T07:14:27.0279552+00:00"
+    },
+    {
+      "id": "01KZ0N5XT21ANDTE8V88RFMBY6",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-VIABILITY-DISPOSITION",
+      "rel": "references",
+      "created_at": "2026-08-02T07:14:27.7794825+00:00"
+    },
+    {
+      "id": "01KZ0N5W7HER4TZ9D9PNVQVJ20",
+      "target_type": "plan",
+      "target": "PLAN-CLASSIFY-RULEBOOK-V1",
+      "rel": "references",
+      "created_at": "2026-08-02T07:14:26.1621026+00:00"
+    },
+    {
+      "id": "01KZ0NCDD1K5QWGWVZP33CQNBC",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-ERGONOMICS-PUBLISHED-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-08-02T07:18:00.3538404+00:00"
+    }
+  ]
+}

@@ -23,21 +23,21 @@ The owner can append a validated-shape rule draft while invalid fields or catego
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
 | ADR-CORE-0010: CommandResult Pattern for Commands | `adr` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts | `data_model` | `touches` | `true` |
-| DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-RULES-VALIDATION: Rules and Validation | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts](../../../designs/classify/data-model.md#classifyoperationcontracts) | `data_model` | `touches` | `true` |
+| [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-RULES-VALIDATION: Rules and Validation](../../../designs/classify/features/rules-validation/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules) | `requirement` | `implements` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY](../tasks/rulebook-rule-vocabulary.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY. |
-| [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](../tasks/rulebook-state-foundation.md) | `compile` | Drafts use the immutable rule and idempotency tables. |
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md) | `compile` | Rule save must validate the target against the current public Ledger category catalogue before persisting an inactive draft. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY: TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY](rulebook-rule-vocabulary.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY. |
+| [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION: TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](rulebook-state-foundation.md) | `compile` | Drafts use the immutable rule and idempotency tables. |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md) | `compile` | Rule save must validate the target against the current public Ledger category catalogue before persisting an inactive draft. |
 
 ## Recipe
 
@@ -84,11 +84,11 @@ The owner can append a validated-shape rule draft while invalid fields or catego
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationRuleVocabulary | `consumes` | DM-CLASSIFY-RULE-VOCABULARY |  |
-| ClassifyStateStore | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| LedgerContractClient.ListClassificationCategoriesAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| SaveClassificationRuleCommand.HandleAsync | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| ClassificationRuleStore | `produces` | DM-CLASSIFY-RULE-LIFECYCLE |  |
+| ClassificationRuleVocabulary | `consumes` | [DM-CLASSIFY-RULE-VOCABULARY](../../../designs/classify/data-model.md#classificationrulevocabulary) |  |
+| ClassifyStateStore | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| LedgerContractClient.ListClassificationCategoriesAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| SaveClassificationRuleCommand.HandleAsync | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| ClassificationRuleStore | `produces` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
 
 ### Verification
 
@@ -113,17 +113,17 @@ The owner can append a validated-shape rule draft while invalid fields or catego
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1qb6` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md): Rule save must validate the target against the current public Ledger category catalogue before persisting an inactive draft.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY](../tasks/rulebook-rule-vocabulary.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](../tasks/rulebook-state-foundation.md): Drafts use the immutable rule and idempotency tables.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md): Rule save must validate the target against the current public Ledger category catalogue before persisting an inactive draft.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY: TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY](rulebook-rule-vocabulary.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-RULE-VOCABULARY.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION: TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](rulebook-state-foundation.md): Drafts use the immutable rule and idempotency tables.
 - `governed-by` -> ADR-CORE-0010: CommandResult Pattern for Commands
-- `governed-by` -> DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
-- `governed-by` -> DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history
-- `implements` -> FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules
-- `touches` -> DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts
-- `touches` -> DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle
-- `touches` -> FA-CLASSIFY-RULES-VALIDATION: Rules and Validation
+- `governed-by` -> [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
+- `governed-by` -> [DD-CLASSIFY-STATE-STORE: Separate raw-SQLite classification state with immutable history](../../../designs/classify/decisions/state-store.md)
+- `implements` -> [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules)
+- `touches` -> [DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts](../../../designs/classify/data-model.md#classifyoperationcontracts)
+- `touches` -> [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle)
+- `touches` -> [FA-CLASSIFY-RULES-VALIDATION: Rules and Validation](../../../designs/classify/features/rules-validation/api-surface.md)
 
 ## Navigation
 

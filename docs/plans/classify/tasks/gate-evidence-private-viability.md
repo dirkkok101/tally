@@ -22,13 +22,13 @@ Representative owner evidence proves recurrence, material decision reduction, ze
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
-| EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus | `external_dependency` | `references` | `true` |
-| OQ-CLASSIFY-1: What transaction volume, repeat rate, current category coverage, and manual classification time does a representative post-INGEST 90-day LEDGER sample show? | `open_question` | `blocked-by` | `true` |
-| OQ-CLASSIFY-2: Which canonical LEDGER fields may a deterministic rule inspect, and which description normalization transformations remain stable across the three accounts without changing financial meaning? | `open_question` | `blocked-by` | `true` |
-| OQ-CLASSIFY-3: Which first-release rule shapes are necessary, how are overlapping matches ordered, and when must multiple matches become a Rule Conflict instead of a winner? | `open_question` | `blocked-by` | `true` |
-| OQ-CLASSIFY-7: What private evaluation fixture and hold-out procedure can measure coverage, conflicts, false applications, and time saved without committing transaction descriptions or spending facts to Git or logs? | `open_question` | `blocked-by` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
+| [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus) | `external_dependency` | `references` | `true` |
+| [OQ-CLASSIFY-1: What transaction volume, repeat rate, current category coverage, and manual classification time does a representative post-INGEST 90-day LEDGER sample show?](../../../prd/classify/prd.md) | `open_question` | `blocked-by` | `true` |
+| [OQ-CLASSIFY-2: Which canonical LEDGER fields may a deterministic rule inspect, and which description normalization transformations remain stable across the three accounts without changing financial meaning?](../../../prd/classify/prd.md) | `open_question` | `blocked-by` | `true` |
+| [OQ-CLASSIFY-3: Which first-release rule shapes are necessary, how are overlapping matches ordered, and when must multiple matches become a Rule Conflict instead of a winner?](../../../prd/classify/prd.md) | `open_question` | `blocked-by` | `true` |
+| [OQ-CLASSIFY-7: What private evaluation fixture and hold-out procedure can measure coverage, conflicts, false applications, and time saved without committing transaction descriptions or spending facts to Git or logs?](../../../prd/classify/prd.md) | `open_question` | `blocked-by` | `true` |
 | TASK-INGEST-GATE-MODULE: Complete the INGEST v1 module gate | `task` | `blocked-by` | `true` |
 | TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX: Prove classification determinism and row accounting | `test_case` | `verifies` | `true` |
 
@@ -36,9 +36,9 @@ Representative owner evidence proves recurrence, material decision reduction, ze
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md) | `compile` | The gate consumes the real public Ledger projection client. |
-| [TASK-CLASSIFY-PRIVATE-CORPUS-READER](../tasks/private-corpus-reader.md) | `compile` | The gate must use the production owner-only reader and deterministic engine. |
-| [TASK-CLASSIFY-DETERMINISTIC-ENGINE](../tasks/deterministic-engine.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE. |
+| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](ledger-classification-client.md) | `compile` | The gate consumes the real public Ledger projection client. |
+| [TASK-CLASSIFY-PRIVATE-CORPUS-READER: TASK-CLASSIFY-PRIVATE-CORPUS-READER](private-corpus-reader.md) | `compile` | The gate must use the production owner-only reader and deterministic engine. |
+| [TASK-CLASSIFY-DETERMINISTIC-ENGINE: TASK-CLASSIFY-DETERMINISTIC-ENGINE](deterministic-engine.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE. |
 
 ## Recipe
 
@@ -83,10 +83,10 @@ Representative owner evidence proves recurrence, material decision reduction, ze
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationEngine.Evaluate | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| PrivateCorpusReader.ReadAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| VerifiedClassifyPrivateEvidenceGate | `produces` | DM-CLASSIFY-VALIDATION-RUN |  |
+| ClassificationEngine.Evaluate | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| PrivateCorpusReader.ReadAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| VerifiedClassifyPrivateEvidenceGate | `produces` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
 
 ### Verification
 
@@ -108,17 +108,17 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `blocked-by` -> OQ-CLASSIFY-1: What transaction volume, repeat rate, current category coverage, and manual classification time does a representative post-INGEST 90-day LEDGER sample show?
-- `blocked-by` -> OQ-CLASSIFY-2: Which canonical LEDGER fields may a deterministic rule inspect, and which description normalization transformations remain stable across the three accounts without changing financial meaning?
-- `blocked-by` -> OQ-CLASSIFY-3: Which first-release rule shapes are necessary, how are overlapping matches ordered, and when must multiple matches become a Rule Conflict instead of a winner?
-- `blocked-by` -> OQ-CLASSIFY-7: What private evaluation fixture and hold-out procedure can measure coverage, conflicts, false applications, and time saved without committing transaction descriptions or spending facts to Git or logs?
 - `blocked-by` -> TASK-INGEST-GATE-MODULE: Complete the INGEST v1 module gate
-- `depends-on:compile` -> [TASK-CLASSIFY-DETERMINISTIC-ENGINE](../tasks/deterministic-engine.md): Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE.
-- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md): The gate consumes the real public Ledger projection client.
-- `depends-on:compile` -> [TASK-CLASSIFY-PRIVATE-CORPUS-READER](../tasks/private-corpus-reader.md): The gate must use the production owner-only reader and deterministic engine.
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
-- `references` -> EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus
+- `blocked-by` -> [OQ-CLASSIFY-1: What transaction volume, repeat rate, current category coverage, and manual classification time does a representative post-INGEST 90-day LEDGER sample show?](../../../prd/classify/prd.md)
+- `blocked-by` -> [OQ-CLASSIFY-2: Which canonical LEDGER fields may a deterministic rule inspect, and which description normalization transformations remain stable across the three accounts without changing financial meaning?](../../../prd/classify/prd.md)
+- `blocked-by` -> [OQ-CLASSIFY-3: Which first-release rule shapes are necessary, how are overlapping matches ordered, and when must multiple matches become a Rule Conflict instead of a winner?](../../../prd/classify/prd.md)
+- `blocked-by` -> [OQ-CLASSIFY-7: What private evaluation fixture and hold-out procedure can measure coverage, conflicts, false applications, and time saved without committing transaction descriptions or spending facts to Git or logs?](../../../prd/classify/prd.md)
+- `depends-on:compile` -> [TASK-CLASSIFY-DETERMINISTIC-ENGINE: TASK-CLASSIFY-DETERMINISTIC-ENGINE](deterministic-engine.md): Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE.
+- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](ledger-classification-client.md): The gate consumes the real public Ledger projection client.
+- `depends-on:compile` -> [TASK-CLASSIFY-PRIVATE-CORPUS-READER: TASK-CLASSIFY-PRIVATE-CORPUS-READER](private-corpus-reader.md): The gate must use the production owner-only reader and deterministic engine.
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
+- `references` -> [EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS: Private Classification Evaluation Corpus](../../../prd/classify/prd.md#ext-classify-private-evaluation-corpus-private-classification-evaluation-corpus)
 - `verifies` -> TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX: Prove classification determinism and row accounting
 
 ## Navigation

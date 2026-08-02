@@ -8,10 +8,11 @@
   "surface": "service",
   "scenario": "performance",
   "automation": "automated",
-  "status": "planned",
+  "status": "implemented",
   "preconditions": "Benchmark fixtures exist at, below, and one over 10000 eligible transactions, 500 active rules, 10000 corpus rows, and every published resource limit.",
   "steps": "Run published-binary evaluation and validation; measure wall time and peak RSS; exercise exact and one-over limits; inspect rule and Ledger state.",
   "expected": "NFR-CLASSIFY-BOUNDED-EVALUATION meets the 5-second and 256-MiB targets and every over-limit request fails before activation or mutation.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Evaluation/EvaluationLimitTests.cs",
   "owner": "CLASSIFY implementation",
   "created_at": "2026-07-19T04:21:53.9186448+00:00",
   "links": [

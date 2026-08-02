@@ -1,0 +1,42 @@
+{
+  "id": "01KZ0MTB6H67SG8ZRPXDBDTHGW",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-UNRESOLVED-PATTERN-REPORT-CONTRACT",
+  "slug": "UNRESOLVED-PATTERN-REPORT-CONTRACT",
+  "title": "Verify deterministic private unresolved-pattern reporting",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "An isolated completed evaluation contains retained no_suggestion outcomes whose fresh compatible projection exercises normalization equivalence, account and direction splits, count ties, amount sums, and below-minimum groups.",
+  "steps": "Invoke unresolved.report at exact and one-over bounds; replay unchanged semantics with a fresh snapshot ID; inject every retained/projection/rule-set/category/generation/normalization drift and join-accounting failure; inspect durable files, databases, logs, and rule history.",
+  "expected": "Groups and totals obey exact accounting and deterministic order; semantic replay hashes match; only the explicit success result contains normalized descriptions and aggregate amounts; all failures return no result; no raw report store, rule proposal, activation, preview, apply, or Ledger mutation exists.",
+  "cleanup": "Remove only the isolated data root.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Reporting/UnresolvedPatternReportTests.cs",
+  "owner": "CLASSIFY",
+  "created_at": "2026-08-02T07:08:08.2743275+00:00",
+  "links": [
+    {
+      "id": "01KZ0MW1Y76ZK4KCKBQZZHEBM1",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:04.3282102+00:00"
+    },
+    {
+      "id": "01KZ0MW4RQ73KCA8W4THF503RT",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:07.2242463+00:00"
+    },
+    {
+      "id": "01KZ0MWA1DTA8AXKHD1WFPBJBA",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-010",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:12.6223056+00:00"
+    }
+  ]
+}

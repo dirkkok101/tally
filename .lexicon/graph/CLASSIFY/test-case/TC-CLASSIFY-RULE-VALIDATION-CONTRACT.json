@@ -8,10 +8,11 @@
   "surface": "service",
   "scenario": "security",
   "automation": "automated",
-  "status": "planned",
+  "status": "implemented",
   "preconditions": "An owner-only temporal corpus contains passing rows, incorrect-application canaries, drift, conflicts, stale fingerprints, and complete expected outcomes.",
   "steps": "Validate passing and failing candidates; remove or stale each fingerprint; make the corpus unavailable; inspect aggregate report and tracked or diagnostic outputs.",
   "expected": "FR-CLASSIFY-RULE-VALIDATION holds: all rows are accounted, unsafe candidates cannot activate or gain broad authority, the prior active set remains usable, and raw private evidence is not exported.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Validation/ClassificationRuleValidationTests.cs",
   "owner": "CLASSIFY implementation",
   "created_at": "2026-07-19T04:21:09.5752197+00:00",
   "links": [

@@ -1,0 +1,18 @@
+{
+  "id": "01KZ0MP1WJE9T598TYHGZ1FG5G",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY",
+  "title": "Protect and recover operator ergonomics artifacts",
+  "description": [
+    "New query results, cursors, private corpus writes, reports, logs, and failures must preserve the existing Linux owner-only and no-private-diagnostics boundary."
+  ],
+  "category": "security",
+  "target": "Zero source descriptions, normalized descriptions, amounts, labels, corpus paths, output paths, raw rows, serialized requests, or secrets appear in logs, stderr, telemetry, graph, tracked artifacts, process arguments, or general discovery results. Permitted private-payload surfaces are limited to owner-local structured request input, the explicit owner-local unresolved.report success result, and the authorized 0600 corpus output file. For 100 percent of injected corpus-write interruption points, no partial destination is visible and only a recognized owner-owned same-directory temporary is recoverable or removable.",
+  "load_condition": "Success, every typed failure, cancellation, process kill before and after flush/rename, symlink swap attempts, wrong UID, permissive mode, existing destination, malformed private input, and cleanup/retry.",
+  "measurement": "Disclosure scans over stdout/stderr/logs/database/temp/tracked paths, Linux mode and effective-UID assertions, symlink race tests, injected atomic-write crash matrix, idempotent retry tests, and private-reader conformance.",
+  "rationale": [
+    "The increment intentionally handles private payloads at three narrow owner-local boundaries: structured request ingress, the unresolved-pattern result, and the authorized corpus output. Every other surface must remain metadata-only and crash-safe."
+  ],
+  "priority": 0,
+  "created_at": "2026-08-02T07:05:47.6673325+00:00"
+}

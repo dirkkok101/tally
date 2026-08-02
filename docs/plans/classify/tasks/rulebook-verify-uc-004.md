@@ -22,27 +22,27 @@ UC-CLASSIFY-004 proves immutable owner-approved rule lifecycle with fail-closed 
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
-| FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
+| [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT: Verify immutable rule lifecycle | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-RULE-VALIDATION-CONTRACT: Verify private candidate validation | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-004: Manage and validate deterministic rules | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-004: Manage and validate deterministic rules](../../../prd/classify/prd.md#uc-classify-004-manage-and-validate-deterministic-rules) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](../tasks/rulebook-gate-owner-rulebook.md) | `compile` | The UC requires proven representative private evidence. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md) | `compile` | The UC verifies the full immutable rule lifecycle. |
-| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md) | `compile` | The UC verifies retained status and safe abandonment. |
-| [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](../tasks/rulebook-abandon-cleanup.md) | `compile` | UC-004 verifies safe rule-management abandonment through the public operation. |
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md) | `compile` | UC-004 invokes rule lifecycle operations through the published process boundary. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md) | `compile` | UC-004 begins with deliberate inactive rule saving. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md) | `compile` | UC-004 exercises normal validation before explicit activation. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](rulebook-gate-owner-rulebook.md) | `compile` | The UC requires proven representative private evidence. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md) | `compile` | The UC verifies the full immutable rule lifecycle. |
+| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md) | `compile` | The UC verifies retained status and safe abandonment. |
+| [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP: TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](rulebook-abandon-cleanup.md) | `compile` | UC-004 verifies safe rule-management abandonment through the public operation. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md) | `compile` | UC-004 invokes rule lifecycle operations through the published process boundary. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md) | `compile` | UC-004 begins with deliberate inactive rule saving. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md) | `compile` | UC-004 exercises normal validation before explicit activation. |
 
 ## Recipe
 
@@ -81,15 +81,15 @@ UC-CLASSIFY-004 proves immutable owner-approved rule lifecycle with fail-closed 
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| SaveClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| ValidateClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ActivateClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| RetireClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| GetClassificationStatusQuery.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| AbandonClassificationStateCommand.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
+| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| SaveClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| ValidateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ActivateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| RetireClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| GetClassificationStatusQuery.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| AbandonClassificationStateCommand.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
 | VerifiedOwnerRulebookGateReceipt | `consumes` | TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE |  |
-| VerifiedClassifyUc004 | `produces` | UC-CLASSIFY-004 |  |
+| VerifiedClassifyUc004 | `produces` | [UC-CLASSIFY-004](../../../prd/classify/prd.md#uc-classify-004-manage-and-validate-deterministic-rules) |  |
 
 ### Verification
 
@@ -114,20 +114,20 @@ UC-CLASSIFY-004 proves immutable owner-approved rule lifecycle with fail-closed 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2rf7` (verified)
-- `covers` -> UC-CLASSIFY-004: Manage and validate deterministic rules
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](../tasks/rulebook-abandon-cleanup.md): UC-004 verifies safe rule-management abandonment through the public operation.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md): UC-004 invokes rule lifecycle operations through the published process boundary.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](../tasks/rulebook-gate-owner-rulebook.md): The UC requires proven representative private evidence.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md): The UC verifies the full immutable rule lifecycle.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md): UC-004 begins with deliberate inactive rule saving.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md): UC-004 exercises normal validation before explicit activation.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md): The UC verifies retained status and safe abandonment.
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
-- `implements` -> FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules
-- `implements` -> FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence
-- `implements` -> FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts
-- `implements` -> FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history
+- `covers` -> [UC-CLASSIFY-004: Manage and validate deterministic rules](../../../prd/classify/prd.md#uc-classify-004-manage-and-validate-deterministic-rules)
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP: TASK-CLASSIFY-RULEBOOK-ABANDON-CLEANUP](rulebook-abandon-cleanup.md): UC-004 verifies safe rule-management abandonment through the public operation.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md): UC-004 invokes rule lifecycle operations through the published process boundary.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK: TASK-CLASSIFY-RULEBOOK-GATE-OWNER-RULEBOOK](rulebook-gate-owner-rulebook.md): The UC requires proven representative private evidence.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md): The UC verifies the full immutable rule lifecycle.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md): UC-004 begins with deliberate inactive rule saving.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md): UC-004 exercises normal validation before explicit activation.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md): The UC verifies retained status and safe abandonment.
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
+- `implements` -> [FR-CLASSIFY-RULE-LIFECYCLE: Manage versioned deterministic rules](../../../prd/classify/prd.md#fr-classify-rule-lifecycle-manage-versioned-deterministic-rules)
+- `implements` -> [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence)
+- `implements` -> [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts)
+- `implements` -> [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history)
 - `verifies` -> TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT: Verify immutable rule lifecycle
 - `verifies` -> TC-CLASSIFY-RULE-VALIDATION-CONTRACT: Verify private candidate validation
 

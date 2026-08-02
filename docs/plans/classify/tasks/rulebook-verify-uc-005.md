@@ -22,23 +22,23 @@ UC-CLASSIFY-005 proves corrections remain authoritative in Ledger while CLASSIFY
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| FR-CLASSIFY-CORRECTION-FEEDBACK: Turn owner corrections into bounded feedback | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [FR-CLASSIFY-CORRECTION-FEEDBACK: Turn owner corrections into bounded feedback](../../../prd/classify/prd.md#fr-classify-correction-feedback-turn-owner-corrections-into-bounded-feedback) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT: Verify bounded correction feedback | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-005: Use a correction as bounded feedback | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-005: Use a correction as bounded feedback](../../../prd/classify/prd.md#uc-classify-005-use-a-correction-as-bounded-feedback) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md) | `compile` | The UC verifies the complete feedback and proposal slice. |
-| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md) | `compile` | The UC verifies retained historical status. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md) | `compile` | UC-005 proves any feedback-derived proposal re-enters normal validation. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md) | `compile` | UC-005 proves feedback cannot activate a proposal outside the explicit lifecycle. |
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md) | `compile` | UC-005 invokes feedback and proposal lifecycle through the published process boundary. |
+| [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](rulebook-feedback-proposals.md) | `compile` | The UC verifies the complete feedback and proposal slice. |
+| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md) | `compile` | The UC verifies retained historical status. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md) | `compile` | UC-005 proves any feedback-derived proposal re-enters normal validation. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md) | `compile` | UC-005 proves feedback cannot activate a proposal outside the explicit lifecycle. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md) | `compile` | UC-005 invokes feedback and proposal lifecycle through the published process boundary. |
 
 ## Recipe
 
@@ -77,12 +77,12 @@ UC-CLASSIFY-005 proves corrections remain authoritative in Ledger while CLASSIFY
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| RecordClassificationFeedbackCommand.HandleAsync | `consumes` | DM-CLASSIFY-FEEDBACK-PROPOSAL |  |
-| ValidateClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ActivateClassificationRuleCommand.HandleAsync | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| GetClassificationStatusQuery.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| VerifiedClassifyUc005 | `produces` | UC-CLASSIFY-005 |  |
+| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| RecordClassificationFeedbackCommand.HandleAsync | `consumes` | [DM-CLASSIFY-FEEDBACK-PROPOSAL](../../../designs/classify/data-model.md#classificationfeedbackandproposal) |  |
+| ValidateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ActivateClassificationRuleCommand.HandleAsync | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| GetClassificationStatusQuery.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| VerifiedClassifyUc005 | `produces` | [UC-CLASSIFY-005](../../../prd/classify/prd.md#uc-classify-005-use-a-correction-as-bounded-feedback) |  |
 
 ### Verification
 
@@ -107,17 +107,17 @@ UC-CLASSIFY-005 proves corrections remain authoritative in Ledger while CLASSIFY
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1xok` (verified)
-- `covers` -> UC-CLASSIFY-005: Use a correction as bounded feedback
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](../tasks/rulebook-feedback-proposals.md): The UC verifies the complete feedback and proposal slice.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md): UC-005 invokes feedback and proposal lifecycle through the published process boundary.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](../tasks/rulebook-rule-activation-lifecycle.md): UC-005 proves feedback cannot activate a proposal outside the explicit lifecycle.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](../tasks/rulebook-rule-validation.md): UC-005 proves any feedback-derived proposal re-enters normal validation.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md): The UC verifies retained historical status.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `implements` -> FR-CLASSIFY-CORRECTION-FEEDBACK: Turn owner corrections into bounded feedback
-- `implements` -> FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts
-- `implements` -> FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history
+- `covers` -> [UC-CLASSIFY-005: Use a correction as bounded feedback](../../../prd/classify/prd.md#uc-classify-005-use-a-correction-as-bounded-feedback)
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS: TASK-CLASSIFY-RULEBOOK-FEEDBACK-PROPOSALS](rulebook-feedback-proposals.md): The UC verifies the complete feedback and proposal slice.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md): UC-005 invokes feedback and proposal lifecycle through the published process boundary.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULEBOOK-RULE-ACTIVATION-LIFECYCLE](rulebook-rule-activation-lifecycle.md): UC-005 proves feedback cannot activate a proposal outside the explicit lifecycle.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION: TASK-CLASSIFY-RULEBOOK-RULE-VALIDATION](rulebook-rule-validation.md): UC-005 proves any feedback-derived proposal re-enters normal validation.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md): The UC verifies retained historical status.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `implements` -> [FR-CLASSIFY-CORRECTION-FEEDBACK: Turn owner corrections into bounded feedback](../../../prd/classify/prd.md#fr-classify-correction-feedback-turn-owner-corrections-into-bounded-feedback)
+- `implements` -> [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts)
+- `implements` -> [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history)
 - `verifies` -> TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT: Verify bounded correction feedback
 
 ## Navigation

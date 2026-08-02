@@ -22,10 +22,10 @@ The Native-AOT Tally executable discovers and invokes exactly twelve CLASSIFY op
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry | `design_decision` | `governed-by` | `true` |
-| DIAG-CLASSIFY-COMPONENTS: CLASSIFY component architecture | `design_diagram` | `touches` | `false` |
-| DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts | `data_model` | `touches` | `true` |
+| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [DIAG-CLASSIFY-COMPONENTS: CLASSIFY component architecture](../../../designs/classify/diagrams/components.md) | `design_diagram` | `touches` | `false` |
+| [DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts](../../../designs/classify/data-model.md#classifyoperationcontracts) | `data_model` | `touches` | `true` |
 | PAT-CORE-API-SERVICE-REGISTRATION: Service Registration Pattern — NXGN Actions API | `pattern` | `governed-by` | `true` |
 | TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT: Verify CLASSIFY contract discovery | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX: Verify the published CLASSIFY contract matrix | `test_case` | `verifies` | `true` |
@@ -35,12 +35,12 @@ The Native-AOT Tally executable discovers and invokes exactly twelve CLASSIFY op
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-CONTRACT-FOUNDATION](../tasks/contract-foundation.md) | `compile` | Final wiring consumes the twelve descriptors and source-generated contracts. |
-| [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](../tasks/rule-activation-lifecycle.md) | `compile` | Final wiring requires save, validate, activate, and retire handlers. |
-| [TASK-CLASSIFY-OUTCOME-EXPLANATION](../tasks/outcome-explanation.md) | `compile` | Final wiring requires evaluate and outcome handlers. |
-| [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md) | `compile` | Final wiring requires preview and run handlers. |
-| [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md) | `compile` | Final wiring requires status, abandon, and cleanup handlers. |
-| [TASK-CLASSIFY-EVALUATION-WORKFLOW](../tasks/evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW. |
+| [TASK-CLASSIFY-CONTRACT-FOUNDATION: TASK-CLASSIFY-CONTRACT-FOUNDATION](contract-foundation.md) | `compile` | Final wiring consumes the twelve descriptors and source-generated contracts. |
+| [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](rule-activation-lifecycle.md) | `compile` | Final wiring requires save, validate, activate, and retire handlers. |
+| [TASK-CLASSIFY-OUTCOME-EXPLANATION: TASK-CLASSIFY-OUTCOME-EXPLANATION](outcome-explanation.md) | `compile` | Final wiring requires evaluate and outcome handlers. |
+| [TASK-CLASSIFY-APPLY-RUN-SAGA: TASK-CLASSIFY-APPLY-RUN-SAGA](apply-run-saga.md) | `compile` | Final wiring requires preview and run handlers. |
+| [TASK-CLASSIFY-STATUS-WORKFLOW: TASK-CLASSIFY-STATUS-WORKFLOW](status-workflow.md) | `compile` | Final wiring requires status, abandon, and cleanup handlers. |
+| [TASK-CLASSIFY-EVALUATION-WORKFLOW: TASK-CLASSIFY-EVALUATION-WORKFLOW](evaluation-workflow.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW. |
 
 ## Recipe
 
@@ -87,11 +87,11 @@ The Native-AOT Tally executable discovers and invokes exactly twelve CLASSIFY op
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassifyOperationModule | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| EvaluateClassificationCommand.HandleAsync | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| RunClassificationApplyCommand.HandleAsync | `consumes` | DM-CLASSIFY-APPLY-RUN |  |
-| GetClassificationStatusQuery.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| CompleteClassifyPublicContract | `produces` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
+| ClassifyOperationModule | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| EvaluateClassificationCommand.HandleAsync | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| RunClassificationApplyCommand.HandleAsync | `consumes` | [DM-CLASSIFY-APPLY-RUN](../../../designs/classify/data-model.md#classificationapplypreviewandrun) |  |
+| GetClassificationStatusQuery.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| CompleteClassifyPublicContract | `produces` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
 
 ### Verification
 
@@ -113,17 +113,17 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-APPLY-RUN-SAGA](../tasks/apply-run-saga.md): Final wiring requires preview and run handlers.
-- `depends-on:compile` -> [TASK-CLASSIFY-CONTRACT-FOUNDATION](../tasks/contract-foundation.md): Final wiring consumes the twelve descriptors and source-generated contracts.
-- `depends-on:compile` -> [TASK-CLASSIFY-EVALUATION-WORKFLOW](../tasks/evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW.
-- `depends-on:compile` -> [TASK-CLASSIFY-OUTCOME-EXPLANATION](../tasks/outcome-explanation.md): Final wiring requires evaluate and outcome handlers.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](../tasks/rule-activation-lifecycle.md): Final wiring requires save, validate, activate, and retire handlers.
-- `depends-on:compile` -> [TASK-CLASSIFY-STATUS-WORKFLOW](../tasks/status-workflow.md): Final wiring requires status, abandon, and cleanup handlers.
-- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
-- `governed-by` -> DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry
+- `depends-on:compile` -> [TASK-CLASSIFY-APPLY-RUN-SAGA: TASK-CLASSIFY-APPLY-RUN-SAGA](apply-run-saga.md): Final wiring requires preview and run handlers.
+- `depends-on:compile` -> [TASK-CLASSIFY-CONTRACT-FOUNDATION: TASK-CLASSIFY-CONTRACT-FOUNDATION](contract-foundation.md): Final wiring consumes the twelve descriptors and source-generated contracts.
+- `depends-on:compile` -> [TASK-CLASSIFY-EVALUATION-WORKFLOW: TASK-CLASSIFY-EVALUATION-WORKFLOW](evaluation-workflow.md): Consumes an interface produced by TASK-CLASSIFY-EVALUATION-WORKFLOW.
+- `depends-on:compile` -> [TASK-CLASSIFY-OUTCOME-EXPLANATION: TASK-CLASSIFY-OUTCOME-EXPLANATION](outcome-explanation.md): Final wiring requires evaluate and outcome handlers.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE: TASK-CLASSIFY-RULE-ACTIVATION-LIFECYCLE](rule-activation-lifecycle.md): Final wiring requires save, validate, activate, and retire handlers.
+- `depends-on:compile` -> [TASK-CLASSIFY-STATUS-WORKFLOW: TASK-CLASSIFY-STATUS-WORKFLOW](status-workflow.md): Final wiring requires status, abandon, and cleanup handlers.
 - `governed-by` -> PAT-CORE-API-SERVICE-REGISTRATION: Service Registration Pattern — NXGN Actions API
-- `touches` -> DIAG-CLASSIFY-COMPONENTS: CLASSIFY component architecture
-- `touches` -> DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts
+- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
+- `governed-by` -> [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md)
+- `touches` -> [DIAG-CLASSIFY-COMPONENTS: CLASSIFY component architecture](../../../designs/classify/diagrams/components.md)
+- `touches` -> [DM-CLASSIFY-OPERATION-CONTRACTS: ClassifyOperationContracts](../../../designs/classify/data-model.md#classifyoperationcontracts)
 - `verifies` -> TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT: Verify CLASSIFY contract discovery
 - `verifies` -> TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX: Verify the published CLASSIFY contract matrix
 - `verifies` -> TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT: Verify structured CLASSIFY invocation

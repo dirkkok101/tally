@@ -1,0 +1,54 @@
+{
+  "id": "01KZ0N5A6S4DXXDXDQW391S4Q8",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DD-CLASSIFY-UNRESOLVED-REPORT-BOUNDARY",
+  "title": "Generate unresolved-pattern reports without durable descriptions",
+  "description": [
+    "Defines owner-local grouping, fresh Ledger join, privacy, drift detection, and non-authority semantics."
+  ],
+  "decision": [
+    "classify.unresolved.report is a read-only bounded report over retained no_suggestion outcomes from one completed evaluation joined by transaction ID to a fresh compatible Ledger classification_v1 projection. It groups by normalizationVersion, normalizedDescription, accountId, and amountDirection; aggregates count and signed/absolute minor-unit totals with checked arithmetic; orders by count descending then normalizedDescription, accountId, and direction using ordinal comparison; and returns at most topN from 1 through 500. Each group exposes an owner-visible normalized description, direction/account scope, aggregate amounts, contributing count, evaluation/projection/category/rule-set fingerprints, and a group fingerprint. It creates no table, cache, artifact, rule, proposal, feedback, or activation and logs no description, token, amount, path, or transaction ID. Missing/expired evaluation, stale Ledger generation, incompatible projection, retention gaps, or row-accounting mismatch fail with typed errors and null result."
+  ],
+  "rationale": [
+    "Owner review needs repeated unresolved patterns, but persisting another raw-description index would expand retention and disclosure risk. The public Ledger projection supplies the current owner-visible value at query time."
+  ],
+  "alternatives": [
+    "Store normalized descriptions with outcomes; rejected as a new durable sensitive index. Group only by hash; rejected because the owner cannot review a candidate. Create draft rules automatically; rejected because a report carries no rule authority."
+  ],
+  "consequences": [
+    "The report is ephemeral owner-local output and is not a corpus or authority receipt. Re-running against the same evaluation and compatible projection yields identical ordering and fingerprints. Drift requires a new invocation; no continuation survives an incompatible generation."
+  ],
+  "status": "accepted",
+  "metadata": "{\"expected_paths\":[\"src/Tally/Features/Classify/Unresolved/Report/GetUnresolvedPatternReportQuery.cs\"]}",
+  "created_at": "2026-08-02T07:14:07.7063326+00:00",
+  "links": [
+    {
+      "id": "01KZ0N73015X7875E988Y5RRA5",
+      "target_type": "design_decision",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:15:05.8587734+00:00"
+    },
+    {
+      "id": "01KZ0N7199EZCMD07TFG9T0Z6H",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:15:04.1062222+00:00"
+    },
+    {
+      "id": "01KZ0N725VXWPC59BSDMS4WCM7",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:15:05.0203232+00:00"
+    },
+    {
+      "id": "01KZ0NCCGB1MZX32356W19B1EY",
+      "target_type": "test_case",
+      "target": "TC-CLASSIFY-UNRESOLVED-PATTERN-REPORT-CONTRACT",
+      "rel": "validated-by",
+      "created_at": "2026-08-02T07:17:59.4358895+00:00"
+    }
+  ]
+}

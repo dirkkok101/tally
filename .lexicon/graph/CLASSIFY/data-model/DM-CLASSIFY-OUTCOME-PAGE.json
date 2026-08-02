@@ -1,0 +1,22 @@
+{
+  "id": "01KZ0N5B0KKK856NMFD0DM2V2P",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "DM-CLASSIFY-OUTCOME-PAGE",
+  "name": "ClassificationOutcomePage",
+  "description": [
+    "Bounded public page over retained evaluation outcomes, enriched only with current public Ledger/category metadata required for selection and explanation."
+  ],
+  "schema_def": [
+    "Request: contractVersion, evaluationId, optional outcomeKind/suggestedCategoryId/contributingRuleVersionId/staleState/transactionId filters, pageSize 1..500, optional opaque continuation. Result: evaluationId, evaluationFingerprint, resultFingerprint, ruleSetFingerprint, categoryLifecycleFingerprint, ledgerGeneration, overallCount, filteredCount, returnedCount, ordered items, optional continuation. Item: outcomeId, transactionId, ordinal, kind, stableReasonCode or boundedReasonText, optional suggestedCategoryId/displayName, ordered contributingRuleVersionIds, ordered matchedFieldKeys, optional bounded conflictSummary, staleDimensions, permittedNextOperation. Cursor: version, operationId, request/filter fingerprint, snapshot fingerprints, expiry, lastOrdinal, lastTransactionId. No description, amount, normalized value, corpus path, serialized request, or authority claim."
+  ],
+  "created_at": "2026-08-02T07:14:08.5321151+00:00",
+  "links": [
+    {
+      "id": "01KZ0N73T5PYYR89R0TDAPWVWH",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:15:06.6949106+00:00"
+    }
+  ]
+}

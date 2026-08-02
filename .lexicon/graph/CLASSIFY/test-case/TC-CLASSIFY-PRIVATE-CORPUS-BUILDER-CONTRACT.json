@@ -1,0 +1,42 @@
+{
+  "id": "01KZ0MTAG5XSGJA1P960GQ8NBD",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-PRIVATE-CORPUS-BUILDER-CONTRACT",
+  "slug": "PRIVATE-CORPUS-BUILDER-CONTRACT",
+  "title": "Verify private corpus builder binding and atomic recovery",
+  "level": "e2e",
+  "surface": "persistence",
+  "scenario": "security",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "An isolated Linux owner-only data root provides a public evaluation-purpose classification_v1 projection and explicit labels; injectable file-write boundaries are enabled.",
+  "steps": "Build canonical subsets in different label orders; replay identical and conflicting idempotency keys; exercise empty, duplicate, malformed, missing-member, inactive-category, oversized, symlink, wrong-owner, permissive, existing-destination, cancellation, write, flush, rename, and post-rename interruption cases; read success with PrivateCorpusReader.",
+  "expected": "Only explicit labels become dense canonical rows; success bytes and fingerprints are deterministic and reader-compatible; the destination is owner-owned 0600; every failure has no partial final file or unrelated deletion; retry recovers a matching post-rename commit; output and diagnostics remain aggregate-only.",
+  "cleanup": "Remove the exact isolated root and any test-created owner-only temporary.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Validation/PrivateCorpusBuilderTests.cs",
+  "owner": "CLASSIFY",
+  "created_at": "2026-08-02T07:08:07.5587561+00:00",
+  "links": [
+    {
+      "id": "01KZ0MW18GBVSZ1NH7NEKZWN4D",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:03.6332069+00:00"
+    },
+    {
+      "id": "01KZ0MW41WZFSZRR4N1PSZF7NF",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:06.4932119+00:00"
+    },
+    {
+      "id": "01KZ0MW9CNGV9GWAQDZA6F35H5",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-009",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:11.9580245+00:00"
+    }
+  ]
+}

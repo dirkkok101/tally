@@ -22,21 +22,21 @@ One complete projection and immutable rule set produce reproducible ordered outc
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome | `data_model` | `touches` | `true` |
-| DM-CLASSIFY-RULE-VOCABULARY: ClassificationRuleVocabulary | `data_model` | `touches` | `true` |
-| FA-CLASSIFY-EVALUATION-EXPLANATION: Evaluation and Explanation | `feature_area` | `touches` | `true` |
-| FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-DETERMINISTIC-INTEGRITY: Preserve deterministic classification integrity | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome](../../../designs/classify/data-model.md#classificationevaluationandoutcome) | `data_model` | `touches` | `true` |
+| [DM-CLASSIFY-RULE-VOCABULARY: ClassificationRuleVocabulary](../../../designs/classify/data-model.md#classificationrulevocabulary) | `data_model` | `touches` | `true` |
+| [FA-CLASSIFY-EVALUATION-EXPLANATION: Evaluation and Explanation](../../../designs/classify/features/evaluation-explanation/api-surface.md) | `feature_area` | `touches` | `true` |
+| [FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes](../../../prd/classify/prd.md#fr-classify-deterministic-evaluation-evaluate-deterministic-classification-outcomes) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-DETERMINISTIC-INTEGRITY: Preserve deterministic classification integrity](../../../prd/classify/prd.md#nfr-classify-deterministic-integrity-preserve-deterministic-classification-integrity) | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX: Prove classification determinism and row accounting | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULE-VOCABULARY](../tasks/rule-vocabulary.md) | `compile` | The engine consumes the exact vocabulary, normalizer, and condition types. |
+| [TASK-CLASSIFY-RULE-VOCABULARY: TASK-CLASSIFY-RULE-VOCABULARY](rule-vocabulary.md) | `compile` | The engine consumes the exact vocabulary, normalizer, and condition types. |
 
 ## Recipe
 
@@ -86,10 +86,10 @@ One complete projection and immutable rule set produce reproducible ordered outc
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationRuleVocabulary | `consumes` | DM-CLASSIFY-RULE-VOCABULARY |  |
-| NormalizerV1.Normalize | `consumes` | DM-CLASSIFY-RULE-VOCABULARY |  |
-| ClassificationEngine.Evaluate | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| EvaluationFingerprint.Create | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
+| ClassificationRuleVocabulary | `consumes` | [DM-CLASSIFY-RULE-VOCABULARY](../../../designs/classify/data-model.md#classificationrulevocabulary) |  |
+| NormalizerV1.Normalize | `consumes` | [DM-CLASSIFY-RULE-VOCABULARY](../../../designs/classify/data-model.md#classificationrulevocabulary) |  |
+| ClassificationEngine.Evaluate | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| EvaluationFingerprint.Create | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
 
 ### Verification
 
@@ -111,15 +111,15 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-VOCABULARY](../tasks/rule-vocabulary.md): The engine consumes the exact vocabulary, normalizer, and condition types.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `governed-by` -> DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions
-- `implements` -> FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes
-- `implements` -> FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes
-- `satisfies` -> NFR-CLASSIFY-DETERMINISTIC-INTEGRITY: Preserve deterministic classification integrity
-- `touches` -> DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome
-- `touches` -> DM-CLASSIFY-RULE-VOCABULARY: ClassificationRuleVocabulary
-- `touches` -> FA-CLASSIFY-EVALUATION-EXPLANATION: Evaluation and Explanation
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-VOCABULARY: TASK-CLASSIFY-RULE-VOCABULARY](rule-vocabulary.md): The engine consumes the exact vocabulary, normalizer, and condition types.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-VOCABULARY: Closed typed rule grammar with code-owned normalization versions](../../../designs/classify/decisions/rule-vocabulary.md)
+- `implements` -> [FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes](../../../prd/classify/prd.md#fr-classify-deterministic-evaluation-evaluate-deterministic-classification-outcomes)
+- `implements` -> [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes)
+- `satisfies` -> [NFR-CLASSIFY-DETERMINISTIC-INTEGRITY: Preserve deterministic classification integrity](../../../prd/classify/prd.md#nfr-classify-deterministic-integrity-preserve-deterministic-classification-integrity)
+- `touches` -> [DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome](../../../designs/classify/data-model.md#classificationevaluationandoutcome)
+- `touches` -> [DM-CLASSIFY-RULE-VOCABULARY: ClassificationRuleVocabulary](../../../designs/classify/data-model.md#classificationrulevocabulary)
+- `touches` -> [FA-CLASSIFY-EVALUATION-EXPLANATION: Evaluation and Explanation](../../../designs/classify/features/evaluation-explanation/api-surface.md)
 - `verifies` -> TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX: Prove classification determinism and row accounting
 
 ## Navigation

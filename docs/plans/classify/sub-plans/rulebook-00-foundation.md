@@ -15,8 +15,8 @@ Establish the public LEDGER projection and mutation preconditions, CLASSIFY oper
 
 | Ref | Title | State | Priority |
 |---|---|---|---:|
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CONTRACT](../tasks/rulebook-ledger-classification-contract.md) | Release the LEDGER-owned classification contract | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](../tasks/rulebook-gate-int-ledger-contract.md) | Prove the Ledger classification prerequisite | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md) | Extend the shared Ledger contract client | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION](../tasks/rulebook-contract-foundation.md) | Publish CLASSIFY operation contracts | `ready` | 0 |
-| [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION](../tasks/rulebook-state-foundation.md) | Establish CLASSIFY durable state | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CONTRACT: Release the LEDGER-owned classification contract](../tasks/rulebook-ledger-classification-contract.md) | Release the LEDGER-owned classification contract | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT: Prove the Ledger classification prerequisite](../tasks/rulebook-gate-int-ledger-contract.md) | Prove the Ledger classification prerequisite | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: Extend the shared Ledger contract client](../tasks/rulebook-ledger-classification-client.md) | Extend the shared Ledger contract client | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-CONTRACT-FOUNDATION: Publish CLASSIFY operation contracts](../tasks/rulebook-contract-foundation.md) | Publish CLASSIFY operation contracts | `ready` | 0 |
+| [TASK-CLASSIFY-RULEBOOK-STATE-FOUNDATION: Establish CLASSIFY durable state](../tasks/rulebook-state-foundation.md) | Establish CLASSIFY durable state | `ready` | 0 |

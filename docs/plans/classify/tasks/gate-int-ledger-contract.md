@@ -22,9 +22,9 @@ Published Ledger descriptors, projection behavior, mutation preconditions, and p
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts | `data_model` | `touches` | `true` |
-| EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract | `external_dependency` | `references` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) | `data_model` | `touches` | `true` |
+| [EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract](../../../prd/classify/prd.md#ext-classify-ledger-public-contract-ledger-public-contract) | `external_dependency` | `references` | `true` |
 | TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract | `task` | `blocked-by` | `true` |
 | TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT: Verify the eligible classification projection | `test_case` | `verifies` | `true` |
@@ -33,7 +33,7 @@ Published Ledger descriptors, projection behavior, mutation preconditions, and p
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT](../tasks/ledger-classification-contract.md) | `compile` | The gate executes the projection and mutation contracts produced by this task. |
+| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT](ledger-classification-contract.md) | `compile` | The gate executes the projection and mutation contracts produced by this task. |
 
 ## Recipe
 
@@ -77,9 +77,9 @@ Published Ledger descriptors, projection behavior, mutation preconditions, and p
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationProjectionRequest | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| LedgerCategoryMutationPreconditions | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| VerifiedLedgerClassificationContract | `produces` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
+| ClassificationProjectionRequest | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| LedgerCategoryMutationPreconditions | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| VerifiedLedgerClassificationContract | `produces` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
 
 ### Verification
 
@@ -102,10 +102,10 @@ No bead references recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `blocked-by` -> TASK-LEDGER-GATE-INT-PUBLIC-CONTRACT: Wire and prove the complete public CLI contract
-- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT](../tasks/ledger-classification-contract.md): The gate executes the projection and mutation contracts produced by this task.
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `references` -> EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract
-- `touches` -> DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts
+- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CONTRACT](ledger-classification-contract.md): The gate executes the projection and mutation contracts produced by this task.
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `references` -> [EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT: LEDGER Public Contract](../../../prd/classify/prd.md#ext-classify-ledger-public-contract-ledger-public-contract)
+- `touches` -> [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT: LedgerClassificationProjectionContracts](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts)
 - `verifies` -> TC-CLASSIFY-APPLY-EXECUTION-CONTRACT: Verify replay-safe classification apply
 - `verifies` -> TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT: Verify the eligible classification projection
 

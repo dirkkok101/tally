@@ -413,64 +413,64 @@
       "created_at": "2026-07-31T08:35:28.5399812+00:00"
     },
     {
-      "id": "01KYYRT36W7XJ04M42AVXHT0K4",
+      "id": "01KZ0N20N3AV6ABMK2YCDK4SY9",
       "kind": "note",
       "text": [
         "Startup recovery runs the same fixed ownership and recognized-name policy before new CLASSIFY mutation."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+      "created_at": "2026-08-02T07:12:19.6182194+00:00"
     },
     {
-      "id": "01KYYRT36X5A2E484MY2270W7T",
+      "id": "01KZ0N20N4WP2NWGVV6JXRYVGV",
       "kind": "note",
       "text": [
         "Hermes authorization (2026-08-01): abandoned rule-version subjects are non-activatable. ActivateClassificationRuleCommand loads rule tombstones before public Ledger reads and rechecks every candidate rule_version_id under the same writer lock immediately before authority mutation; any tombstone returns stable lifecycle failure and preserves the active pointer. An optional/default ClassificationRecoveryStore dependency may preserve existing composition constructors."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+      "created_at": "2026-08-02T07:12:19.6182194+00:00"
     },
     {
-      "id": "01KYYRT36XS89V3QM4NCTKBJEP",
+      "id": "01KZ0N20N4500P5EG5YJ2YS5CK",
       "kind": "note",
       "text": [
         "No recognized file is unlinked before the authoritative idempotency/reference decision commits. ClassifyArtifactProtection uses an owner-only contained same-filesystem quarantine with an opaque operation ID and 0600 manifest: validate every target first; rename all recognized regular unlocked files into quarantine; on any staging or database failure restore all names before returning failure; after durable tombstone/cleanup event plus terminal idempotency commit, delete the committed quarantine. A crash before commit leaves an uncommitted quarantine that startup restores; a crash after commit leaves a committed quarantine that startup deletes. Symlinks, unknown names, lock conflicts, containment failure, or incomplete manifest fail closed without partial movement."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+      "created_at": "2026-08-02T07:12:19.6182194+00:00"
     },
     {
-      "id": "01KYYRT36XY9SVFEEXHCTKJ4NQ",
+      "id": "01KZ0N20N44ZKST77WQTMTQFZY",
       "kind": "note",
       "text": [
         "ClassifyStateExtensions performs startup recovery after layout/schema initialization and before returning services for any new CLASSIFY mutation. It resolves quarantine status only from durable tombstone/cleanup-event/idempotency evidence and the protected manifest; it also removes recognized unlocked orphan temporaries under the same fixed policy. It never follows links, accepts caller paths, or scans outside the CLASSIFY root."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+      "created_at": "2026-08-02T07:12:19.6182194+00:00"
     },
     {
-      "id": "01KYYRT36XGVHDDG206EASBP1P",
+      "id": "01KZ0N20N46GNYSWPYS01W2G9W",
       "kind": "note",
       "text": [
         "ClassifyCleanupResult and cleanup_event expose/persist cleanup_id, policy_version, removed_artifact_count, retained_artifact_count, recognized temporary count, expired preview count, and abandoned payload count. removed_artifact_count equals the checked sum of per-kind removal counts; retained count is the recognized protected artifact inventory left after staging/finalization. Public output contains no file name, path, subject ID, description, amount, token, or payload."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+      "created_at": "2026-08-02T07:12:19.6182194+00:00"
     },
     {
-      "id": "01KYYRT36XGCXQW014EPN9TDG5",
+      "id": "01KZ0N20N45SBWXVX870TA00JB",
       "kind": "note",
       "text": [
-        "Use an additive schema migration and guarded quarantine lifecycle/manifest metadata as needed; do not reinterpret or backfill historical cleanup authority. Cleanup/abandon replay returns the exact terminal receipt and must not stage or delete again. Do not move complete convergence into this bead or modify unrelated operations."
+        "Use an additive schema migration only when the durable cleanup receipt or quarantine recovery model requires a new column or table; otherwise retain schema version 3 without reinterpretation or historical authority backfill. Cleanup/abandon replay returns the exact terminal receipt and must not stage or delete again. Do not move complete convergence into this bead or modify unrelated operations."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-08-01T13:39:25.5312174+00:00"
+      "created_at": "2026-08-02T07:12:19.6182194+00:00"
     }
   ],
   "references": [

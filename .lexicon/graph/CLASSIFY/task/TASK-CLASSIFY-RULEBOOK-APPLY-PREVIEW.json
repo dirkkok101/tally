@@ -330,7 +330,7 @@
       "id": "01KYZ4DYBS527JAJF7P0BADYNW",
       "kind": "note",
       "text": [
-        "Hermes review amendment (2026-08-01): the accepted FR requires the published apply.preview result—not only private retained rows—to disclose evaluation fingerprint, target/category authority, contributing rule versions, selected transaction identities, exact exclusions and no-suggestion/conflict counts, and bounded preflight evidence. This task owns the narrow ClassifyApplyPreviewResult/mapper/command correction and focused contract tests; no unrelated public surface or payload fields are authorized."
+        "Hermes review amendment (2026-08-01): the accepted FR requires the published apply.preview result—not only private retained rows—to disclose Evaluation Fingerprint, target/category authority, contributing rule versions, selected transaction identities, exact exclusions and no-suggestion/conflict counts, and bounded preflight evidence. This task owns the narrow ClassifyApplyPreviewResult/mapper/command correction and focused contract tests; no unrelated public surface or payload fields are authorized."
       ],
       "required": 1,
       "sort_order": 1,

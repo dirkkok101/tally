@@ -1,0 +1,35 @@
+{
+  "id": "01KZ0MT92M0MX1KW1KHN1QB3AS",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-RULEBOOK-DISCOVERY-CONTRACT",
+  "slug": "RULEBOOK-DISCOVERY-CONTRACT",
+  "title": "Verify rule catalogue and active rule-set discovery",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "An isolated store contains multiple logical rules, immutable versions, lifecycle events, one active set, trusted validation and gate receipt metadata, active and archived categories, and a concurrent append fixture.",
+  "steps": "Invoke rule.list with every filter and cursor boundary; append a later rule after page one; invoke rule-set.active.get for active and empty stores; inspect source-generated schemas and public errors.",
+  "expected": "The high-water cursor yields deterministic non-duplicated pages; lifecycle and active membership derive from append-only authority; the active summary returns ruleSetVersionId, broadApplyAllowed, activationId, validationId, trusted gate receipt ID and fingerprint, normalization version, ordered rule-version IDs, activation epoch, lifecycle timestamps/status, and category ID/display name/lifecycle enum; empty authority is typed not-found; no private validation or description payload appears.",
+  "cleanup": "Remove only the isolated data root.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Rules/RuleDiscoveryTests.cs",
+  "owner": "CLASSIFY",
+  "created_at": "2026-08-02T07:08:06.1014841+00:00",
+  "links": [
+    {
+      "id": "01KZ0MVZR7C1R4190H1AHDN6PJ",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:02.0887179+00:00"
+    },
+    {
+      "id": "01KZ0MW8N1TMYVWE3V6Y9N2XYV",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-008",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:11.2020726+00:00"
+    }
+  ]
+}

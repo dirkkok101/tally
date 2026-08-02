@@ -1,0 +1,32 @@
+{
+  "id": "01KZ0MGCKGGFJ523ZSP8MSX2NT",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-008",
+  "title": "Inspect rules and the active rule set",
+  "preconditions": "The trusted owner actor context and public CLASSIFY schema inventory are available; rule storage is readable; any continuation is bound to the first-page rule high-water mark and filters.",
+  "postconditions": "The caller can reconcile rule identities, immutable versions, active membership, validation and activation authority, broadApplyAllowed, trusted gate receipt fingerprints, normalization, categories, and lifecycle timestamps without private corpus data or owner free-text disclosure.",
+  "main_flow": "The caller invokes classify.rule-set.active.get for the current activation summary, then pages classify.rule.list with optional logical rule, lifecycle, category, or active-membership filters and uses returned safe metadata to choose rule.save, rule.validate, rule.activate, rule.retire, or status operations.",
+  "alt_flows": [
+    "Return a typed not-found result when no active rule set exists; never invent an empty authority.",
+    "Reject invalid or drifted cursors and impossible lifecycle or membership state without a partial page.",
+    "Never expose corpus paths, raw validation rows, source descriptions, secrets, authority claims, or predicate operands beyond the already-public rule predicate contract."
+  ],
+  "metadata": "{\"depth_tier\":2,\"primary_actor\":\"P1\",\"trigger\":\"The owner or Hermes needs to understand which immutable rule versions exist and which set currently governs evaluation or apply authority.\",\"status\":\"draft\"}",
+  "created_at": "2026-08-02T07:02:42.0334415+00:00",
+  "links": [
+    {
+      "id": "01KZ0MQX07SECQATF3S1770WFS",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:48.2010730+00:00"
+    },
+    {
+      "id": "01KZ0MQW93NEN59EEZHV3QVVMJ",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:47.4603057+00:00"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "id": "01KZ0MGDA3S27QT47NKPXCVD0V",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-009",
+  "title": "Build a private validation corpus from explicit owner labels",
+  "preconditions": "Every label supplies a transaction ID plus an expected outcome kind and any required expected category ID; an explicit owner-local output path is supplied; a fresh complete Ledger classification_v1 evaluation projection is available.",
+  "postconditions": "The destination is a 0600 owner-owned regular file inside a 0700 owner-owned non-symlink directory; every row comes from one explicit label and one fresh projection member; the file is accepted by the existing private-corpus reader; stdout and logs contain no descriptions, amounts, rows, labels, or path.",
+  "main_flow": "The caller submits labels on stdin to classify.corpus.build; CLASSIFY validates bounds and label consistency, drains one fresh Ledger projection, binds every label to exactly one projection row, writes canonical JSONL to a same-directory owner-only temporary file, flushes and atomically renames it to a new regular destination, and returns aggregate metadata and fingerprints only.",
+  "alt_flows": [
+    "Reject missing, duplicate, invented, inconsistent, oversized, or projection-absent labels with no destination file.",
+    "Reject symlink, non-regular, existing destination, non-owner, or permissive parent/destination boundaries before writing private rows.",
+    "On cancellation, write failure, flush failure, or crash before rename, leave no partial destination and recover or safely clean only the recognized same-directory temporary artifact."
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner has an explicit bounded set of transaction labels and needs a correctly bound private JSONL corpus for classify.rule.validate.\",\"status\":\"draft\"}",
+  "created_at": "2026-08-02T07:02:42.7561898+00:00",
+  "links": [
+    {
+      "id": "01KZ0MQYC8BYR11M21P7QFA4TR",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:49.6098882+00:00"
+    },
+    {
+      "id": "01KZ0MQXPQYCZS1TYV1DCSGJW6",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:48.9201588+00:00"
+    },
+    {
+      "id": "01KZ0MQSEDR2WPSB20XAVJ8AN3",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:44.5587041+00:00"
+    },
+    {
+      "id": "01KZ0MR0NG281XE0STAZM0VTF5",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:51.9528186+00:00"
+    }
+  ]
+}

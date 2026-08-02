@@ -1,0 +1,242 @@
+{
+  "id": "01KZ0NN1W81JDC5J0AF99BQ3DF",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEK51XQ03CXV99BPGYSJ7",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-CURSOR-POLICY",
+  "slug": "ERGONOMICS-CURSOR-POLICY",
+  "title": "Implement deterministic discovery cursor policy",
+  "description": [
+    "Create the shared versioned base64url cursor codec and filter fingerprint policy for outcome and rule pages."
+  ],
+  "objective": [
+    "Encode and validate bounded snapshot-bound keyset continuations before any discovery query emits rows."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-08-02T07:22:43.4650404+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S0AQWDGZTGZ79DF5GTVAP",
+      "bead_id": "bd-29ch",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:18.7164268+00:00",
+      "created_at": "2026-08-02T08:21:18.7164268+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NN1WANZ6J58KH39B5CDGN",
+      "target": "DD-CLASSIFY-PAGINATED-DISCOVERY",
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVB3M1MM9M0MNKHKHHEJ5",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Shared request enums and cursor payload source-generation must exist first."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:09.5252247+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NN1WAXA4X82T2WZE1ZA1J",
+      "path": "src/Tally/Domain/Classify/Discovery/ClassifyCursorCodec.cs",
+      "action": "create",
+      "role": "canonical cursor codec",
+      "required": 1,
+      "notes": [
+        "Versioned checksum-bound non-authority token."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WA4K1CR4HMNHDYQMSC",
+      "path": "src/Tally/Domain/Classify/Discovery/ClassifyDiscoveryFilterFingerprint.cs",
+      "action": "create",
+      "role": "closed filter canonicalization",
+      "required": 1,
+      "notes": [
+        "Ordinal ordering and explicit nulls."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WAESNDXE4JX3BVA3E7",
+      "path": "tests/Tally.Tests/Classify/Discovery/ClassifyCursorCodecTests.cs",
+      "action": "create",
+      "role": "property boundary and tamper tests",
+      "required": 1,
+      "notes": [
+        "Exact limit and one-over cases."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NN1WAPMR01TASANPPAW5T",
+      "name": "OutcomeDiscoveryCursor",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OUTCOME-PAGE",
+      "notes": [
+        "opaque continuation"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WAPJZRC8GQWFRNHEW3",
+      "name": "RuleDiscoveryCursor",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-DISCOVERY",
+      "notes": [
+        "opaque continuation"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXAFFTQ7MEEM3Y6QEWTX1",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-OPERATOR-THROUGHPUT",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:14.4164384+00:00"
+    },
+    {
+      "id": "01KZ0NX9PS1Z3JZ4H40GHGB624",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PAGINATION-INTEGRITY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:13.6257068+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NN1WAFFHX9FPBGVH30CN3",
+      "kind": "acceptance_check",
+      "text": [
+        "The canonical cursor payload binds operation ID, page size, normalized AND-filters, expiry, snapshot/high-water fingerprints, and the exact keyset continuation tuple, then appends a SHA-256 checksum before base64url encoding."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WAQSFBX91ASP9DN391",
+      "kind": "acceptance_check",
+      "text": [
+        "Decode rejects malformed base64url, unknown version/field, checksum mismatch, expiry, operation/filter/page-size mismatch, generation drift, and impossible keys before returning a resume position."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WARF3X0FBK7R9BSDBE",
+      "kind": "acceptance_check",
+      "text": [
+        "Property tests prove identical inputs produce identical bytes and valid page traversals have no duplicate or omitted key at sizes 1 and 500."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WA78HYB0F4QQHB7DRC",
+      "kind": "acceptance_check",
+      "text": [
+        "Cursors contain no description, amount, normalized token, path, corpus data, rule prose, secret, or mutation authority."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WAG1S1JTV9V2Q23JN9",
+      "kind": "constraint",
+      "text": [
+        "Cursor size is capped at 4096 UTF-8 bytes encoded and pageSize is 1 through 500."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WAZJVXGQD8SPVBK9E3",
+      "kind": "expected_output",
+      "text": [
+        "ClassifyCursorCodec and ClassifyDiscoveryFilterFingerprint"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WABJGXP9NVBA4E9HFN",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not use OFFSET pagination, durable server cursor state, encryption claims, caller-provided authority, or reflection JSON."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WAFVFMWGM4DWFH2SC9",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not return a decoded position after any failed validation or convert cursor failure into an empty page."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NN1WAJRFBRYJEG631AN6V",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    },
+    {
+      "id": "01KZ0NN1WA5REPPFCME9C84EY2",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NN1WAVJD2DTPQD9PH4MBE",
+      "gate_type": "test-evidence",
+      "description": [
+        "Property vectors prove stable canonical bytes and complete keyset traversal."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NN1WAPRH0NA5VWDAZA322",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyCursorCodecTests",
+      "expected_result": "exit 0; at least 30 deterministic round-trip tamper expiry mismatch boundary and disclosure cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:43.4650404+00:00"
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+{
+  "id": "01KZ0NEN8X7GGP71FRF4PBB5C4",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "ref_code": "SP-CLASSIFY-03-VERIFICATION",
+  "title": "Compatibility, privacy, process, and module gates",
+  "description": [
+    "Focused, installed-process, Native-AOT, graph, privacy, recovery, and full-module verification."
+  ],
+  "sort_order": 3,
+  "created_at": "2026-08-02T07:19:13.9506423+00:00"
+}

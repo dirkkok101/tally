@@ -7,7 +7,7 @@
     "Rules, feedback, transaction descriptions, normalized tokens, validation evidence, and derived artifacts remain within the sole-owner local trust boundary."
   ],
   "category": "security",
-  "target": "Zero private payload disclosures in process arguments, logs, stderr, crash diagnostics, telemetry, or tracked artifacts; 100% of persisted CLASSIFY directories and files use 0700 and 0600 respectively where supported; zero retained raw corpus copies or orphan temporary artifacts after success, failure, crash recovery, abandonment, and cleanup.",
+  "target": "Zero private payload disclosures in process arguments, logs, stderr, crash diagnostics, telemetry, or tracked artifacts; 100% of persisted CLASSIFY directories and files use 0700 and 0600 respectively where supported; zero retained CLASSIFY-managed duplicate raw corpus copies or orphan temporary artifacts after success, failure, crash recovery, abandonment, and cleanup. The explicitly requested owner-private corpus destination is the authorized output, not a managed duplicate, and remains subject to the private-corpus lifecycle boundary.",
   "load_condition": "Normal and failed evaluation, validation, rule lifecycle, apply, feedback, status, abandon, cleanup, and process-startup recovery.",
   "measurement": "Filesystem permission inspection, tracked-file scans, payload and secret canaries, diagnostics capture, crash injection, and temporary-artifact inventory.",
   "rationale": [

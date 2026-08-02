@@ -22,23 +22,23 @@ Candidate rules receive aggregate private evidence that blocks unsafe activation
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle | `data_model` | `touches` | `true` |
-| DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun | `data_model` | `touches` | `true` |
-| FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work | `nfr` | `satisfies` | `true` |
-| NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle) | `data_model` | `touches` | `true` |
+| [DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun](../../../designs/classify/data-model.md#classificationvalidationrun) | `data_model` | `touches` | `true` |
+| [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work](../../../prd/classify/prd.md#nfr-classify-bounded-evaluation-bound-local-classification-work) | `nfr` | `satisfies` | `true` |
+| [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data) | `nfr` | `satisfies` | `true` |
 | TC-CLASSIFY-RULE-VALIDATION-CONTRACT: Verify private candidate validation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULE-DRAFT-SAVE](../tasks/rule-draft-save.md) | `compile` | Validation binds exact immutable candidate rule versions. |
-| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md) | `compile` | Validation binds the current public projection and category lifecycle contract. |
-| [TASK-CLASSIFY-DETERMINISTIC-ENGINE](../tasks/deterministic-engine.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE. |
-| [TASK-CLASSIFY-PRIVATE-CORPUS-READER](../tasks/private-corpus-reader.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER. |
+| [TASK-CLASSIFY-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULE-DRAFT-SAVE](rule-draft-save.md) | `compile` | Validation binds exact immutable candidate rule versions. |
+| [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](ledger-classification-client.md) | `compile` | Validation binds the current public projection and category lifecycle contract. |
+| [TASK-CLASSIFY-DETERMINISTIC-ENGINE: TASK-CLASSIFY-DETERMINISTIC-ENGINE](deterministic-engine.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE. |
+| [TASK-CLASSIFY-PRIVATE-CORPUS-READER: TASK-CLASSIFY-PRIVATE-CORPUS-READER](private-corpus-reader.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER. |
 
 ## Recipe
 
@@ -86,11 +86,11 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| PrivateCorpusReader.ReadAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationEngine.Evaluate | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| ClassificationRuleStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| ValidateClassificationRuleCommand.HandleAsync | `produces` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationValidationStore | `produces` | DM-CLASSIFY-VALIDATION-RUN |  |
+| PrivateCorpusReader.ReadAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationEngine.Evaluate | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassificationRuleStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| ValidateClassificationRuleCommand.HandleAsync | `produces` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationValidationStore | `produces` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
 
 ### Verification
 
@@ -112,17 +112,17 @@ No bead references recorded.
 
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
-- `depends-on:compile` -> [TASK-CLASSIFY-DETERMINISTIC-ENGINE](../tasks/deterministic-engine.md): Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE.
-- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](../tasks/ledger-classification-client.md): Validation binds the current public projection and category lifecycle contract.
-- `depends-on:compile` -> [TASK-CLASSIFY-PRIVATE-CORPUS-READER](../tasks/private-corpus-reader.md): Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULE-DRAFT-SAVE](../tasks/rule-draft-save.md): Validation binds exact immutable candidate rule versions.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `implements` -> FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence
-- `satisfies` -> NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work
-- `satisfies` -> NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data
-- `touches` -> DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle
-- `touches` -> DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun
+- `depends-on:compile` -> [TASK-CLASSIFY-DETERMINISTIC-ENGINE: TASK-CLASSIFY-DETERMINISTIC-ENGINE](deterministic-engine.md): Consumes an interface produced by TASK-CLASSIFY-DETERMINISTIC-ENGINE.
+- `depends-on:compile` -> [TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-LEDGER-CLASSIFICATION-CLIENT](ledger-classification-client.md): Validation binds the current public projection and category lifecycle contract.
+- `depends-on:compile` -> [TASK-CLASSIFY-PRIVATE-CORPUS-READER: TASK-CLASSIFY-PRIVATE-CORPUS-READER](private-corpus-reader.md): Consumes an interface produced by TASK-CLASSIFY-PRIVATE-CORPUS-READER.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULE-DRAFT-SAVE](rule-draft-save.md): Validation binds exact immutable candidate rule versions.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `implements` -> [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence)
+- `satisfies` -> [NFR-CLASSIFY-BOUNDED-EVALUATION: Bound local classification work](../../../prd/classify/prd.md#nfr-classify-bounded-evaluation-bound-local-classification-work)
+- `satisfies` -> [NFR-CLASSIFY-LOCAL-DATA-PROTECTION: Protect local classification data](../../../prd/classify/prd.md#nfr-classify-local-data-protection-protect-local-classification-data)
+- `touches` -> [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle)
+- `touches` -> [DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun](../../../designs/classify/data-model.md#classificationvalidationrun)
 - `verifies` -> TC-CLASSIFY-RULE-VALIDATION-CONTRACT: Verify private candidate validation
 
 ## Navigation

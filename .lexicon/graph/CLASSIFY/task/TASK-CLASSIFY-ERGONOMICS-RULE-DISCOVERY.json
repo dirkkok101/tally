@@ -1,0 +1,295 @@
+{
+  "id": "01KZ0NMJ8FJN91KNCT3GGSEKRV",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEKV551E0RPE79PRP20KP",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-RULE-DISCOVERY",
+  "slug": "ERGONOMICS-RULE-DISCOVERY",
+  "title": "Discover rule versions and active rule-set authority",
+  "description": [
+    "Implement classify.rule.list and classify.rule-set.active.get over append-only rule/validation/activation state plus current category metadata."
+  ],
+  "objective": [
+    "Expose the immutable rule catalogue and exact active authority from an empty-state-safe public query surface."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 1,
+  "created_at": "2026-08-02T07:22:27.4727358+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S0C0FRK6971QEDTG9E8HK",
+      "bead_id": "bd-2vbg",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:20.0157702+00:00",
+      "created_at": "2026-08-02T08:21:20.0157702+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NMJ8J7EKTCZW4HX7XEKWE",
+      "target": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8JE1RS8PT6KN4JN2AH",
+      "target": "DD-CLASSIFY-PAGINATED-DISCOVERY",
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8JBJJ1JPF5V3FCP29Y",
+      "target": "DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE",
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVDJRJPBKPJ0NRV7M6WRM",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Rule handlers consume the additive request/result/error records."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:12.0570637+00:00"
+    },
+    {
+      "id": "01KZ0NVEBTH6KFH9BNNTHB83BK",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CURSOR-POLICY",
+      "dependency_type": "compile",
+      "reason": [
+        "Rule paging uses the validated shared high-water cursor."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:26:12.8590356+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NMJ8K70JA906DMYZWDATV",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Rules/ClassificationRuleDiscoveryStore.cs",
+      "action": "create",
+      "role": "bounded rule and active-set reads",
+      "required": 1,
+      "notes": [
+        "Freeze high-water and derive lifecycle."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8K9NA79C9QSK6WB5C9",
+      "path": "src/Tally/Features/Classify/Rules/Discovery/ListClassificationRulesQuery.cs",
+      "action": "create",
+      "role": "rule list vertical slice",
+      "required": 1,
+      "notes": [
+        "No private corpus access."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KY7Y37EETHQWWGVQ8",
+      "path": "src/Tally/Features/Classify/Rules/Discovery/GetActiveClassificationRuleSetQuery.cs",
+      "action": "create",
+      "role": "active authority summary query",
+      "required": 1,
+      "notes": [
+        "Typed not-found for no authority."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KMDHZNCBN14DQVJVD",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.RuleDiscovery.cs",
+      "action": "create",
+      "role": "pure rule discovery mapping",
+      "required": 1,
+      "notes": [
+        "Closed predicate contract only."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KBJD8DA6T1BJS774G",
+      "path": "tests/Tally.Tests/Classify/Rules/RuleDiscoveryTests.cs",
+      "action": "create",
+      "role": "paging lifecycle active summary privacy tests",
+      "required": 1,
+      "notes": [
+        "Concurrent append high-water fixture."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NZ99B18RN1BH63WH349S7",
+      "name": "ClassificationRuleDiscoveryStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "notes": [
+        "bounded append-only reader"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:28:18.7310237+00:00"
+    },
+    {
+      "id": "01KZ0NZ99DJEZ6GGY8B400ZEE6",
+      "name": "ListClassificationRulesQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-DISCOVERY",
+      "notes": [
+        "bounded page"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:28:18.7310237+00:00"
+    },
+    {
+      "id": "01KZ0NZ99DJC1QDMAE1WP7HTN3",
+      "name": "GetActiveClassificationRuleSetQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-RULE-DISCOVERY",
+      "notes": [
+        "current authority summary"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:28:18.7310237+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXCZHDNWCNGF5RWZR85EA",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PAGINATION-INTEGRITY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:16.9782340+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NMJ8JEFRXFYPT27C2WYA2",
+      "kind": "acceptance_check",
+      "text": [
+        "rule.list ANDs logical-rule, lifecycle, category, and active-membership filters; orders by createdAt then ruleVersionId; and freezes the first-page high-water key so concurrent appends do not enter the traversal."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KKZ15K4E4CQEYGG0P",
+      "kind": "acceptance_check",
+      "text": [
+        "Every rule item contains the exact DM-CLASSIFY-RULE-DISCOVERY fields and only canonical predicates from the released closed rule grammar."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KRZXMQGFSNPRQNW91",
+      "kind": "acceptance_check",
+      "text": [
+        "rule-set.active.get returns the current RuleSetVersion, broadApplyAllowed, activation/validation/gate receipt identities and fingerprints, normalization/epoch/lifecycle timestamps, ordered rule-version IDs, and current category ID/display/lifecycle tuples."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KF7M17XPRK4C0WHJ9",
+      "kind": "acceptance_check",
+      "text": [
+        "No active set returns typed not-found; invalid cursor or impossible lifecycle/membership returns a typed error with null result and zero writes."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KWWHGYT13F7Y0TMWQ",
+      "kind": "constraint",
+      "text": [
+        "All lifecycle and membership values derive from append-only durable authority and current Ledger category lifecycle."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KNRBWWD7TZXAN0JEX",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationRuleDiscoveryStore, ListClassificationRulesQuery, GetActiveClassificationRuleSetQuery, and rule-discovery mapper"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KDGQ617T7NVF5MQFG",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not change classify.status, expose owner reason prose or corpus metadata, accept caller authority, or synthesize an empty active set."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8KEZNNYKECYQTHGWCH",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not use OFFSET, mutable priority, rule inference, description search, or unbounded history."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NMJ8JPPGGGZYXBPK6Z46H",
+      "target": "FR-CLASSIFY-RULE-LIFECYCLE",
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8JEN5CTFSBFH7WMYPC",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    },
+    {
+      "id": "01KZ0NMJ8J441PG4W9YVZGNXT2",
+      "target": "FR-CLASSIFY-STATUS-HISTORY",
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NMJ8KH1K1J8NY89CM6FBP",
+      "gate_type": "test-evidence",
+      "description": [
+        "Every active membership and broadApplyAllowed value traces to immutable RuleSetVersion and gate receipt state."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NMJ8K2EV4RBY87XK5AV3J",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~RuleDiscoveryTests",
+      "expected_result": "exit 0; at least 36 filter cursor high-water lifecycle active empty integrity privacy and no-mutation cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:27.4727358+00:00"
+    }
+  ]
+}

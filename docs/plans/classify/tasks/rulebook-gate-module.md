@@ -22,17 +22,17 @@ CLASSIFY v1 is reproducibly buildable, tested, Native-AOT compatible, locally se
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path | `design_decision` | `governed-by` | `true` |
-| FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history | `requirement` | `implements` | `true` |
-| NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries | `nfr` | `satisfies` | `true` |
-| NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier | `nfr` | `satisfies` | `true` |
+| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path](../../../designs/classify/decisions/owner-rulebook-replacement.md) | `design_decision` | `governed-by` | `true` |
+| [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history) | `requirement` | `implements` | `true` |
+| [NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/classify/prd.md#nfr-classify-public-contract-compatibility-preserve-public-contract-compatibility-boundaries) | `nfr` | `satisfies` | `true` |
+| [NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier](../../../prd/classify/prd.md#nfr-classify-self-contained-local-operation-operate-as-a-self-contained-local-classifier) | `nfr` | `satisfies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY](../tasks/rulebook-gate-graph-quality.md) | `compile` | Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY: TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY](rulebook-gate-graph-quality.md) | `compile` | Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates. |
 
 ## Recipe
 
@@ -61,7 +61,8 @@ CLASSIFY v1 is reproducibly buildable, tested, Native-AOT compatible, locally se
 
 ### Notes
 
-None recorded.
+- 2026-08-01 final-suite correction bridge: the first complete module run exposed bounded cross-seam coherence defects in TallyProcess fallback/correlation handling and stale test fixtures in engine, storage, and security suites. These exact files are now reserved to bd-3l4k so the final convergence bead can reproduce focused failures, correct root causes without weakening assertions, then run the one authorized second complete module gate.
+- 2026-08-02 final-suite bounded correction bridge: the authorized complete module run passed build/format/AOT, contract, security, graph, dependencies, and 5569 tests but exposed 40 bounded failures. Reservations now cover only the exact failing fixtures and implicated production seams for masked account fixtures, immutable bound-corpus setup, deterministic snapshot identity, activation projection isolation, stale-precondition process mapping, private-ledger token false positives, cancellation propagation, and immutable evidence setup. Reproduce and classify each bucket narrowly; preserve all assertions and accepted public/security/no-mutation contracts. After focused corrections are green, a further complete module rerun requires the supervisor to authorize it from the diagnosed evidence.
 
 ### File Contracts
 
@@ -70,13 +71,64 @@ None recorded.
 | `Tally.slnx` | `read` | full solution | `true` |  |
 | `src/Tally/Tally.csproj` | `read` | Native-AOT executable | `true` |  |
 | `tests/Tally.Tests/Tally.Tests.csproj` | `read` | complete test project | `true` |  |
-| `tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs` | `test` | module architecture and suite-discovery guards | `true` |  |
+| `tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs` | `test` | module architecture and suite-discove... | `true` |  |
 | `scripts/verify-classify-module.sh` | `create` | module convergence runner | `true` |  |
 | `docs/verification/classify-v1.md` | `document` | safe completion report | `true` |  |
 | `.lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-AI-AGENT-HOST.json` | `modify` | lex-cli validation status | `true` |  |
 | `.lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-HOST-OS-SECURITY.json` | `modify` | lex-cli validation status | `true` |  |
 | `.lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT.json` | `modify` | lex-cli validation status | `true` |  |
 | `.lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS.json` | `modify` | lex-cli validation status | `true` |  |
+| `src/Tally/Cli/TallyProcess.cs` | `modify` | bounded fallback and correlation-priv... | `true` |  |
+| `tests/Tally.Tests/Process/RegistryDomainErrorProcessTests.cs` | `read` | registry-wide fallback coherence evid... | `true` |  |
+| `tests/Tally.Tests/Classify/Evaluation/ClassificationEngineTests.cs` | `test` | correct isolated single-rule fixture... | `true` |  |
+| `tests/Tally.Tests/Classify/Storage/ClassifyHistoryInvariantTests.cs` | `test` | align explicit seed inserts with curr... | `true` |  |
+| `tests/Tally.Tests/Classify/Security/ClassifySecurityGateTests.cs` | `test` | correct token-boundary false positive... | `true` |  |
+| `tests/Tally.Tests/Classify/Validation/ClassificationRuleValidationTests.cs` | `test` | align bound-corpus validation fixture... | `true` |  |
+| `tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs` | `test` | wire activate fixtures through valid... | `true` |  |
+| `src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs` | `modify` | remove server-minted snapshot identit... | `true` |  |
+| `tests/Tally.Tests/Classify/Acceptance/ClassifyUc001EvaluationTests.cs` | `test` | correct process-wide WorkingSet false... | `true` |  |
+| `tests/Tally.Tests/Ledger/PaymentIdentityOperationTests.cs` | `test` | update stale whole-registry inventory... | `true` |  |
+| `tests/Tally.Tests/Ledger/SpendPoolOperationTests.cs` | `test` | update stale whole-registry inventory... | `true` |  |
+| `tests/Tally.Tests/EndToEnd/UC006ExternalOrchestratorContractWorkflowTests.cs` | `test` | update stale published whole-registry... | `true` |  |
+| `tests/Tally.Tests/Process/PublishedLedgerContractTests.cs` | `test` | update stale published whole-registry... | `true` |  |
+| `tests/Tally.Tests/Process/PublishedBinaryCoreTests.cs` | `test` | update stale published whole-registry... | `true` |  |
+| `tests/Tally.Tests/Features/Ledger/Categories/CategoryOperationTests.cs` | `test` | update stale whole-registry inventory... | `true` |  |
+| `tests/Tally.Tests/Features/Ledger/Transactions/TransactionRecordingTests.cs` | `test` | update stale whole-registry inventory... | `true` |  |
+| `tests/Tally.Tests/Cli/CliContractTests.cs` | `test` | update stale whole-registry inventory... | `true` |  |
+| `tests/Tally.Tests/Cli/PublicContractInventoryTests.cs` | `test` | update stale whole-registry inventory... | `true` |  |
+| `src/Tally/Features/Classify/Evaluation/Evaluate/EvaluateClassificationCommand.cs` | `modify` | operation-scoped evaluation memory an... | `true` |  |
+| `scripts/verify-classify-contract.sh` | `modify` | correct published contract extraction... | `true` |  |
+| `tests/Tally.Tests/Cli/Snapshots/ledger-operations-v1.json` | `modify` | current ledger and system schema fing... | `true` |  |
+| `tests/Tally.Tests/Classify/Evaluation/ClassificationEvaluationInputLoaderTests.cs` | `test` | unchanged-snapshot byte-equivalence e... | `true` |  |
+| `tests/Tally.Tests/Classify/Evaluation/EvaluationPersistenceTests.cs` | `test` | projection fingerprint persistence ev... | `true` |  |
+| `tests/Tally.Tests/Classify/Apply/ApplyPreviewTests.cs` | `test` | preview fixture and cancellation evid... | `true` |  |
+| `src/Tally/Features/Classify/Apply/Preview/PreviewClassificationApplyCommand.cs` | `modify` | bounded preview cancellation or valid... | `true` |  |
+| `tests/Tally.Tests/Classify/Evidence/OwnerRulebookGateTests.cs` | `test` | owner-gate deterministic aggregate ev... | `true` |  |
+| `tests/Tally.Tests/Classify/Evaluation/OutcomeInvalidationTests.cs` | `test` | generation invalidation evidence | `true` |  |
+| `tests/Tally.Tests/Classify/Acceptance/ClassifyUc002OutcomeTests.cs` | `test` | UC002 retained outcome and no-mutatio... | `true` |  |
+| `tests/Tally.Tests/Classify/Apply/ClassificationApplySagaTests.cs` | `test` | bound-corpus apply fixtures and cance... | `true` |  |
+| `src/Tally/Features/Classify/Apply/Run/RunClassificationApplyCommand.cs` | `modify` | bounded apply cancellation correction | `true` |  |
+| `tests/Tally.Tests/Classify/LedgerContract/LedgerClassifyPrerequisiteTests.cs` | `test` | public-ledger boundary source-scan ev... | `true` |  |
+| `src/Tally/Features/Classify/Contract/ClassifyContractMapper.Evaluation.cs` | `modify` | remove or isolate private-ledger name... | `true` |  |
+| `src/Tally/Infrastructure/Classify/Storage/ClassifyStorePaths.cs` | `modify` | remove ambiguous private-ledger path... | `true` |  |
+| `tests/Tally.Tests/Classify/Evaluation/OutcomeExplanationTests.cs` | `test` | immutable evidence-unavailable fixture | `true` |  |
+| `tests/Tally.Tests/Classify/Feedback/ClassificationFeedbackTests.cs` | `test` | masked-account and provenance fixtures | `true` |  |
+| `tests/Tally.Tests/Classify/Validation/ValidationPrivacyTests.cs` | `test` | bound-corpus privacy fixtures | `true` |  |
+| `tests/Tally.Tests/Classify/Validation/ValidationLimitTests.cs` | `test` | bound-corpus limits and cancellation... | `true` |  |
+| `tests/Tally.Tests/Features/Ledger/Transactions/CategoryAllocationTests.cs` | `test` | category-allocation stale-preconditio... | `true` |  |
+| `tests/Tally.Tests/Classify/Evaluation/EvaluateClassificationCommandTests.cs` | `test` | activation projection isolation and d... | `true` |  |
+| `tests/Tally.Tests/Classify/ApplyRecovery/ClassificationApplyCrashRecoveryTests.cs` | `test` | frozen-key crash recovery fixture | `true` |  |
+| `tests/Tally.Tests/Classify/Rules/RuleRetirementTests.cs` | `test` | valid masked-account replacement fixt... | `true` |  |
+| `tests/Tally.Tests/Classify/LedgerContract/ClassifyLedgerContractClientTests.cs` | `test` | projection preflight masked-account f... | `true` |  |
+| `tests/Tally.Tests/Classify/Acceptance/ClassifyUc006AgentContractTests.cs` | `test` | published error-envelope fixture | `true` |  |
+| `tests/Tally.Tests/EndToEnd/UC018SpendPoolWorkflowTests.cs` | `test` | stale-precondition process exit evidence | `true` |  |
+| `tests/Tally.Tests/EndToEnd/UC010RefundWorkflowTests.cs` | `test` | refund correction stale-precondition... | `true` |  |
+| `tests/Tally.Tests/EndToEnd/UC003CategoryAllocationWorkflowTests.cs` | `test` | category correction stale-preconditio... | `true` |  |
+| `tests/Tally.Tests/Classify/Evaluation/ClassificationEvaluationInputCancellationTests.cs` | `test` | masked-account cancellation fixture v... | `true` |  |
+| `.lexicon/graph/CLASSIFY/task/TASK-CLASSIFY-RULEBOOK-GATE-MODULE.json` | `modify` | module-gate context budget metadata | `true` |  |
+| `tests/Tally.Tests/Classify/Acceptance/ClassifyUc003ApplyTests.cs` | `test` | UC003 valid masked-account fixture | `true` | Preserve evaluate-no-ledger-mutation and apply authority assertions. |
+| `tests/Tally.Tests/Classify/Acceptance/ClassifyUc004RulesTests.cs` | `test` | UC004 valid masked-account fixture | `true` | Preserve rule lifecycle authority, immutable evidence, and no-mutation assertions. |
+| `tests/Tally.Tests/Classify/Acceptance/ClassifyUc005FeedbackTests.cs` | `test` | UC005 valid masked-account fixture | `true` | Preserve feedback provenance, proposal lifecycle, and no-mutation assertions. |
 
 ### Interface Contracts
 
@@ -108,12 +160,12 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-3l4k` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY](../tasks/rulebook-gate-graph-quality.md): Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates.
-- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
-- `governed-by` -> DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path
-- `implements` -> FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history
-- `satisfies` -> NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries
-- `satisfies` -> NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY: TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY](rulebook-gate-graph-quality.md): Final convergence consumes current ClassifyGraphQualityEvidence after all behavioral gates.
+- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
+- `governed-by` -> [DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT: Build the owner-authored deterministic rulebook path](../../../designs/classify/decisions/owner-rulebook-replacement.md)
+- `implements` -> [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history)
+- `satisfies` -> [NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY: Preserve public contract compatibility boundaries](../../../prd/classify/prd.md#nfr-classify-public-contract-compatibility-preserve-public-contract-compatibility-boundaries)
+- `satisfies` -> [NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION: Operate as a self-contained local classifier](../../../prd/classify/prd.md#nfr-classify-self-contained-local-operation-operate-as-a-self-contained-local-classifier)
 
 ## Navigation
 

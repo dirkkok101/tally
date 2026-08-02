@@ -1,0 +1,322 @@
+{
+  "id": "01KZ0NMHGYND62EFXTPV9H3N6X",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEKV551E0RPE79PRP20KP",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-OUTCOME-LIST",
+  "slug": "ERGONOMICS-OUTCOME-LIST",
+  "title": "List retained outcomes with fresh lifecycle evidence",
+  "description": [
+    "Implement classify.outcome.list storage, fresh Ledger/category compatibility checks, deterministic mapping, filters, row accounting, and typed stale/cursor failures."
+  ],
+  "objective": [
+    "Return a complete bounded selectable outcome page for one retained evaluation without per-outcome process starts."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-08-02T07:22:26.7192363+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S08RZ9PD167KSWWKBE829",
+      "bead_id": "bd-vg33",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:16.7033497+00:00",
+      "created_at": "2026-08-02T08:21:16.7033497+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NMHH0W1F7EQ2JB7H458S4",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH0RHCSJBV27ER6J5F9",
+      "target": "DD-CLASSIFY-PAGINATED-DISCOVERY",
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVBXRSD6HZF6QZNP70YKD",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION",
+      "dependency_type": "compile",
+      "reason": [
+        "Outcome handler consumes the additive request/result/error records."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:10.3613706+00:00"
+    },
+    {
+      "id": "01KZ0NVCQX4B7RVFKKPSFQM195",
+      "target": "TASK-CLASSIFY-ERGONOMICS-CURSOR-POLICY",
+      "dependency_type": "compile",
+      "reason": [
+        "Outcome paging uses the validated shared keyset cursor."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:26:11.1987730+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NMHH1SSCS3QH1MT5EQN0W",
+      "path": "src/Tally/Infrastructure/Classify/Storage/Evaluation/ClassificationOutcomeDiscoveryStore.cs",
+      "action": "create",
+      "role": "bounded keyset outcome reads",
+      "required": 1,
+      "notes": [
+        "Raw SQLite reads only."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH1BBRZ8AG5867RQE1V",
+      "path": "src/Tally/Features/Classify/Evaluation/Outcome/ListClassificationOutcomesQuery.cs",
+      "action": "create",
+      "role": "outcome list vertical slice",
+      "required": 1,
+      "notes": [
+        "Validate all evidence before mapping."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH1VJC2FA2BVPC9VHS0",
+      "path": "src/Tally/Features/Classify/Contract/ClassifyContractMapper.OutcomeList.cs",
+      "action": "create",
+      "role": "pure bounded mapping",
+      "required": 1,
+      "notes": [
+        "Deterministic array ordering."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH1FBT9XSFGBMHDPAEQ",
+      "path": "tests/Tally.Tests/Classify/Evaluation/OutcomeListTests.cs",
+      "action": "create",
+      "role": "filters paging fields and accounting tests",
+      "required": 1,
+      "notes": [
+        "Synthetic isolated roots only."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH1HFNSSZ406WK28TDH",
+      "path": "tests/Tally.Tests/Classify/Evaluation/OutcomeCursorStalenessTests.cs",
+      "action": "create",
+      "role": "cursor and stale failure matrix",
+      "required": 1,
+      "notes": [
+        "Dual no-mutation oracle."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NZ7KZP3AVCRB9ZSJQQ7HN",
+      "name": "ClassificationOutcomeDiscoveryStore",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "notes": [
+        "bounded retained-state reader"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:28:17.0223738+00:00"
+    },
+    {
+      "id": "01KZ0NZ7M0DFB1M21VCWQ6XP4N",
+      "name": "ListClassificationOutcomesQuery.HandleAsync",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OUTCOME-PAGE",
+      "notes": [
+        "complete page or typed error"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:28:17.0223738+00:00"
+    },
+    {
+      "id": "01KZ0NZ7M0K1D178E5B1TD8Q4G",
+      "name": "ClassifyOutcomeListResult.OutcomeIds",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OUTCOME-PAGE",
+      "notes": [
+        "explicit selection IDs"
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:28:17.0223738+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXB9BK0EQ0XP1DZTZ36VK",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-OPERATOR-THROUGHPUT",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:15.2439987+00:00"
+    },
+    {
+      "id": "01KZ0NXC3A4BDGERTFZ0R76132",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PAGINATION-INTEGRITY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:16.0751680+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NMHH0X3CZWGTYX6V0QXDB",
+      "kind": "acceptance_check",
+      "text": [
+        "evaluationId is required; all supplied outcome-kind, category, rule-version, stale-state, and transaction filters are ANDed; rows order by ordinal then transaction ID and pageSize is 1 through 500."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH0421TK7ESAPKRP4QX",
+      "kind": "acceptance_check",
+      "text": [
+        "Every item includes the DM-CLASSIFY-OUTCOME-PAGE selection/explanation fields and current category display/lifecycle evidence while excluding descriptions, amounts, normalized values, corpus paths, and authority claims."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH0HQ14Z487WMQWKXA2",
+      "kind": "acceptance_check",
+      "text": [
+        "The query validates retained evaluation completeness/expiry, active rule-set membership, category lifecycle, Ledger generation/projection compatibility, cursor bindings, and total partition accounting before constructing the page."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH1AH8JKMAFHN0KSE9Y",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing, abandoned, expired, incomplete, archived-category, stale-generation, incompatible-projection, invalid-cursor, and integrity cases return the specified typed error, null result, and zero CLASSIFY/Ledger writes."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH11CB043Y15SW069B9",
+      "kind": "acceptance_check",
+      "text": [
+        "A 146-row fixture with pageSize 500 returns all 146 IDs in one result and zero calls to outcome.get."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH185EFZ7DSD8RBA7NX",
+      "kind": "constraint",
+      "text": [
+        "Ledger access is read-only through LedgerContractClient; live Tally data is never used by tests."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH1ZYA8NMQYH2M7KXV4",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationOutcomeDiscoveryStore, ListClassificationOutcomesQuery, and outcome-list mapper"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH18PPM551KNYV44S0Q",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not persist a second outcome index, source description, amount, normalized token, or report artifact."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH1K34SN1KX6246HQ9E",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not infer Ledger transfer/refund/void/allocation eligibility or return a partial page after a stale row."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NMHH0E5Z55CBC0RAGM9PM",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH0BR1CHEYVZ0K9WEV7",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH0WZE31FHDKRY40BDY",
+      "target": "FR-CLASSIFY-OUTCOME-EXPLANATION",
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH0CFFN8GJCD0ZNRDY4",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NMHH1XNAKREH7WDREJCY4",
+      "gate_type": "test-evidence",
+      "description": [
+        "Serialized results and captured diagnostics contain no description amount token path or private payload canary."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NMHH1FZ183YGHS95TNK1F",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~OutcomeListTests",
+      "expected_result": "exit 0; at least 25 filter paging field accounting privacy and no-mutation cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    },
+    {
+      "id": "01KZ0NMHH1BK6ATNW24AC5JHSQ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~OutcomeCursorStalenessTests",
+      "expected_result": "exit 0; at least 20 lifecycle stale cursor and no-partial-result cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:26.7192363+00:00"
+    }
+  ]
+}

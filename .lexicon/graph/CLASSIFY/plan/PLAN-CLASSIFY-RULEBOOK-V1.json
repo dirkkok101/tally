@@ -22,7 +22,7 @@
     "",
     "Platform constraints: target .NET 10 Native-AOT and linux-x64; use file-scoped namespaces, nullable reference types, primary constructors, explicit DI, CancellationToken propagation, source-generated JSON, raw Microsoft.Data.Sqlite, structured metadata-only logging, and zero warnings. No HTTP/FastEndpoints, EF Core/DbContext, PostgreSQL, Aspire service, Angular, reflection scanning, mediator, event bus, generic repository, provider abstraction, dynamic plugin, seed data, or network dependency is in scope."
   ],
-  "status": "active",
+  "status": "completed",
   "created_at": "2026-07-31T08:30:43.0666468+00:00",
   "links": [
     {

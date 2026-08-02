@@ -1,0 +1,346 @@
+{
+  "id": "01KZ0NTG3MBH0JP2BTQC6PAP12",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEN8X7GGP71FRF4PBB5C4",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-GATE-MODULE",
+  "slug": "ERGONOMICS-GATE-MODULE",
+  "title": "Converge the complete CLASSIFY ergonomics module gate",
+  "description": [
+    "Update the existing CLASSIFY completion scripts, graph guards, and human verification companions for the additive plan; run all gates without release or live mutation."
+  ],
+  "objective": [
+    "Close the increment only when focused, full, graph, privacy, installed-process, Native-AOT, documentation, and compatibility evidence agree."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 3,
+  "created_at": "2026-08-02T07:25:41.8784095+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S0EP34QCR1EZJQVS4K4H7",
+      "bead_id": "bd-2u6r",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:22.7554228+00:00",
+      "created_at": "2026-08-02T08:21:22.7554228+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NTG3SYF1YXYVABPDEHZB5",
+      "target": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3SD03K2GV17GV3GJ1S",
+      "target": "DD-CLASSIFY-SHIPPED-BASELINE",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    }
+  ],
+  "dependencies": [
+    {
+      "id": "01KZ0NVT6B162GK1ZR4P4SJ1YF",
+      "target": "TASK-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY-GATE",
+      "dependency_type": "compile",
+      "reason": [
+        "Module closure consumes named security and recovery evidence."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:26:24.9716961+00:00"
+    },
+    {
+      "id": "01KZ0NVV31P53BW0J0BWR4290S",
+      "target": "TASK-CLASSIFY-ERGONOMICS-PROCESS-THROUGHPUT-GATE",
+      "dependency_type": "compile",
+      "reason": [
+        "Module closure consumes installed-style process evidence."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:26:25.8911191+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NTG3TMRQNHKV98Z53XPXF",
+      "path": "scripts/verify-classify-module.sh",
+      "action": "modify",
+      "role": "complete additive module convergence gate",
+      "required": 1,
+      "notes": [
+        "Invoke new named gates and exact counts."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TD6J23GKVBW5FFRBG",
+      "path": "scripts/verify-classify-graph.sh",
+      "action": "modify",
+      "role": "current plan task bead and graph evidence checks",
+      "required": 1,
+      "notes": [
+        "No stale greenfield assumptions."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TS2FZBAE6EYE668RD",
+      "path": "tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs",
+      "action": "modify",
+      "role": "105/17 and gate inventory guards",
+      "required": 1,
+      "notes": [
+        "Non-vacuous exact expectations."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TBGDCD7H0R8ECQNZJ",
+      "path": "tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs",
+      "action": "modify",
+      "role": "new plan refs path and privacy guards",
+      "required": 1,
+      "notes": [
+        "Trace every required task and bead."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3T735D69VMVE8FP0S6",
+      "path": "docs/verification/classify-v1.md",
+      "action": "modify",
+      "role": "aggregate ship-gate evidence",
+      "required": 1,
+      "notes": [
+        "Human-authored verification output."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TPHYPF4YK45T3PRYH",
+      "path": "docs/verification/classify-graph.md",
+      "action": "modify",
+      "role": "coverage audit review and bead evidence",
+      "required": 1,
+      "notes": [
+        "Human-authored verification output."
+      ],
+      "sort_order": 5,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NTG3TYWPHRRPA97QK9CG7",
+      "name": "verify-classify-module.sh",
+      "direction": "produces",
+      "contract_ref_code": "TC-CLASSIFY-ERGONOMICS-PUBLISHED-CONTRACT",
+      "notes": [
+        "complete aggregate gate"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NXME52Z87MAGDFHY3Q2R6",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-APPLY-RECOVERY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:24.6144347+00:00"
+    },
+    {
+      "id": "01KZ0NXNB2C32XNY5R2MWR8GVN",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-ATTRIBUTABLE-HISTORY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:25.5400780+00:00"
+    },
+    {
+      "id": "01KZ0NXP7H40R30FWMG9KK02C5",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-BOUNDED-EVALUATION",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:26.4501172+00:00"
+    },
+    {
+      "id": "01KZ0NXKMC36Z41A05RYVHV25B",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:23.7892784+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NTG3SVJXQD63607ZKMNGG",
+      "kind": "acceptance_check",
+      "text": [
+        "scripts/verify-classify-module.sh invokes non-vacuous graph, contract, security, operator-ergonomics security, operator-process, focused, full dotnet test, and linux-x64 Native-AOT gates and prints exact discovered/passed/failed totals."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3S4YVFBCEJV4E9TVMG",
+      "kind": "acceptance_check",
+      "text": [
+        "Graph guards require PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1, every task/bead reference, the five governing decisions/data models/FRs/NFRs/test cases, 105/17 inventory, and no stale unbuilt or unpublished classification_v1 claim."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TA07C7V3N3YH6DF8Y",
+      "kind": "acceptance_check",
+      "text": [
+        "Full tests pass with zero failure and Native-AOT schema discovery proves all five operations while every 0.3.3 fingerprint remains identical."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TGN685X8T3JXF07AQ",
+      "kind": "acceptance_check",
+      "text": [
+        "Verification companions document operation sequence, CLI examples, migration-none decision, rollout/rollback, privacy, recovery, typed failures, process bounds, and the distinction between production-usable engine and operator ergonomics."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TK22FRQCNFHR7TA0X",
+      "kind": "acceptance_check",
+      "text": [
+        "The gate scans tracked graph/docs/beads/log output for private paths, rows, descriptions, normalized tokens, amounts, IDs, account identifiers, secrets, and fixture canaries without opening live data."
+      ],
+      "required": 1,
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TJFMC6AYY30NS74EB",
+      "kind": "constraint",
+      "text": [
+        "Implementation finishes with a clean worktree; release/version/tag/install remain a separate explicitly authorized workflow."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TT52GFATND5Y7FNS5",
+      "kind": "expected_output",
+      "text": [
+        "Updated complete module gate, graph guards, and aggregate verification evidence"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3T5PZ7J5VZ6F464S90",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not mark the plan complete, close its beads, tag, release, install, deploy, or mutate live data when any named family is missing or any gate fails."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3TNK8TZAH45MH30NBW",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not rewrite historical automatic-discovery evidence, weaken broadApplyAllowed/conflict rules, or hand-edit Lex-generated Markdown."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NZ4690QCTHQ1XKQARQMC3",
+      "target": "FR-CLASSIFY-APPLY-EXECUTION",
+      "created_at": "2026-08-02T07:28:13.5124307+00:00"
+    },
+    {
+      "id": "01KZ0NTG3SWPHMT1Y4ZCAWB6HR",
+      "target": "FR-CLASSIFY-BULK-PREVIEW-COMPOSITION",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3S3N1BPYFE2J9HKMCM",
+      "target": "FR-CLASSIFY-CONTRACT-DISCOVERY",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NZ46BDHGGESHHT79S9AFV",
+      "target": "FR-CLASSIFY-CORRECTION-FEEDBACK",
+      "created_at": "2026-08-02T07:28:13.5124307+00:00"
+    },
+    {
+      "id": "01KZ0NZ46BPPJ4MH4QT0W8E64N",
+      "target": "FR-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "created_at": "2026-08-02T07:28:13.5124307+00:00"
+    },
+    {
+      "id": "01KZ0NTG3SD56HB6XAZM2PHAQD",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3S3NHAP3DMKT2GNB3S",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3S8Y0XDTMMRVNV762G",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3S2VRTQNDJDHBDTRBV",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    },
+    {
+      "id": "01KZ0NTG3S5FPDF8T6S1VGBB9Y",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NTG3VT7108QFSAR1626SH",
+      "gate_type": "ci",
+      "description": [
+        "Complete module gate output contains exact counts hashes and no private values."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NTG3VN88MG5QAN0ZG84NX",
+      "phase": "after",
+      "command": "bash scripts/verify-classify-module.sh",
+      "expected_result": "exit 0; every required named test family is discovered and all focused full graph security process and Native-AOT gates report 0 failures",
+      "required": 1,
+      "timeout_seconds": 2400,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:25:41.8784095+00:00"
+    }
+  ]
+}

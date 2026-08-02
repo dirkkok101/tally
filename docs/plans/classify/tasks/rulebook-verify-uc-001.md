@@ -22,22 +22,22 @@ UC-CLASSIFY-001 proves complete eligible projection acquisition, deterministic o
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes](../../../prd/classify/prd.md#fr-classify-deterministic-evaluation-evaluate-deterministic-classification-outcomes) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT: Verify deterministic classification outcomes | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT: Verify the eligible classification projection | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-EVALUATION-LIMITS: Verify classification performance and hard limits | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-001: Evaluate eligible transactions | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-001: Evaluate eligible transactions](../../../prd/classify/prd.md#uc-classify-001-evaluate-eligible-transactions) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md) | `compile` | The UC verifies the complete evaluation slice. |
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](../tasks/rulebook-gate-int-ledger-contract.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT. |
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md) | `compile` | The UC executes through the complete published CLASSIFY contract. |
+| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md) | `compile` | The UC verifies the complete evaluation slice. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](rulebook-gate-int-ledger-contract.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md) | `compile` | The UC executes through the complete published CLASSIFY contract. |
 
 ## Recipe
 
@@ -75,9 +75,9 @@ UC-CLASSIFY-001 proves complete eligible projection acquisition, deterministic o
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| VerifiedLedgerClassificationContract | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| VerifiedClassifyUc001 | `produces` | UC-CLASSIFY-001 |  |
+| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| VerifiedLedgerClassificationContract | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| VerifiedClassifyUc001 | `produces` | [UC-CLASSIFY-001](../../../prd/classify/prd.md#uc-classify-001-evaluate-eligible-transactions) |  |
 
 ### Verification
 
@@ -102,14 +102,14 @@ UC-CLASSIFY-001 proves complete eligible projection acquisition, deterministic o
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2uqi` (verified)
-- `covers` -> UC-CLASSIFY-001: Evaluate eligible transactions
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md): The UC verifies the complete evaluation slice.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](../tasks/rulebook-gate-int-ledger-contract.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md): The UC executes through the complete published CLASSIFY contract.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `implements` -> FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes
-- `implements` -> FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection
+- `covers` -> [UC-CLASSIFY-001: Evaluate eligible transactions](../../../prd/classify/prd.md#uc-classify-001-evaluate-eligible-transactions)
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md): The UC verifies the complete evaluation slice.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT](rulebook-gate-int-ledger-contract.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-GATE-INT-LEDGER-CONTRACT.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md): The UC executes through the complete published CLASSIFY contract.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `implements` -> [FR-CLASSIFY-DETERMINISTIC-EVALUATION: Evaluate deterministic classification outcomes](../../../prd/classify/prd.md#fr-classify-deterministic-evaluation-evaluate-deterministic-classification-outcomes)
+- `implements` -> [FR-CLASSIFY-ELIGIBLE-PROJECTION: Obtain the eligible classification projection](../../../prd/classify/prd.md#fr-classify-eligible-projection-obtain-the-eligible-classification-projection)
 - `verifies` -> TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT: Verify deterministic classification outcomes
 - `verifies` -> TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT: Verify the eligible classification projection
 - `verifies` -> TC-CLASSIFY-EVALUATION-LIMITS: Verify classification performance and hard limits

@@ -1,0 +1,251 @@
+{
+  "id": "01KZ0NQXMHQYXCTCJ0TEFAEC67",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEMGGZBNB2YHDY0H3A09Y",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-CORPUS-MAPPER",
+  "slug": "ERGONOMICS-CORPUS-MAPPER",
+  "title": "Extract the exact-label projection corpus mapper",
+  "description": [
+    "Extract the in-command validation binding logic into a shared concrete mapper, preserve rule validation results, and reject every missing, duplicate, stale, or invented label."
+  ],
+  "objective": [
+    "Give validation and corpus construction one deterministic mapping from explicit labels plus classification_v1 rows to the existing private JSONL dialect."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-08-02T07:24:17.4262856+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S085ESGDV5VYG8FY7T4ME",
+      "bead_id": "bd-3k1z",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:16.0789282+00:00",
+      "created_at": "2026-08-02T08:21:16.0789282+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NQXMKKSENFVHGYYR9QWJG",
+      "target": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK6NK0P79TCQXSP6ZW",
+      "target": "DD-CLASSIFY-PRIVATE-CORPUS-PUBLICATION",
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMKRY1BF9ENP8649YS6",
+      "target": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NQXMKW8S47431NJE8GXHP",
+      "path": "src/Tally/Infrastructure/Classify/Corpus/ClassificationProjectionCorpusMapper.cs",
+      "action": "create",
+      "role": "exact-label public-projection mapper",
+      "required": 1,
+      "notes": [
+        "One label to one eligible row."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK3FJJYRMGM280CM4Q",
+      "path": "src/Tally/Features/Classify/Rules/Validate/ValidateClassificationRuleCommand.cs",
+      "action": "modify",
+      "role": "reuse shared mapper",
+      "required": 1,
+      "notes": [
+        "Preserve released validation contract."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK2MJM535PPC4WPWWS",
+      "path": "tests/Tally.Tests/Classify/Validation/ClassificationProjectionCorpusMapperTests.cs",
+      "action": "create",
+      "role": "mapping and rejection matrix",
+      "required": 1,
+      "notes": [
+        "Synthetic rows only."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK2KAKP22ZF44BVDB3",
+      "path": "tests/Tally.Tests/Classify/Validation/ClassificationRuleValidationTests.cs",
+      "action": "modify",
+      "role": "validation regression proof",
+      "required": 1,
+      "notes": [
+        "Aggregate receipts unchanged."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NQXMM65W829M6ADHA1R12",
+      "name": "ClassificationProjectionCorpusMapper",
+      "direction": "consumes",
+      "contract_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "notes": [
+        "fresh eligible projection"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMMP8P0H406TWYQCWGY",
+      "name": "ClassificationProjectionCorpusMapper",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "notes": [
+        "existing private corpus rows"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NQXMKH1YN84WPR53HAWZ1",
+      "kind": "acceptance_check",
+      "text": [
+        "Each unique owner label resolves to exactly one fresh eligible classification_v1 row and yields one existing PrivateCorpusRow with projection, category, allocation, normalization, transfer/refund, and lifecycle fingerprints copied from public Ledger truth."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMKH3V530GBZGNERA9J",
+      "kind": "acceptance_check",
+      "text": [
+        "Expected no_suggestion requires no category; expected suggestion requires one active expected category; every other outcome/category tuple is rejected."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMKGH7M5HANS1G839T0",
+      "kind": "acceptance_check",
+      "text": [
+        "Missing, duplicate, ineligible, stale, expired, incompatible, archived-category, and over-limit inputs return typed failures before any corpus row is published."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMKY0ZH6AYRAN5DPZD4",
+      "kind": "acceptance_check",
+      "text": [
+        "ValidateClassificationRuleCommand uses the mapper and retains byte-identical aggregate validation receipts and deterministic hashes for existing fixtures."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK7B059HYWDJB5WMN3",
+      "kind": "constraint",
+      "text": [
+        "The mapper is concrete and pure; no new interface or corpus schema version is introduced."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK7RD3S4TKPGASRPES",
+      "kind": "expected_output",
+      "text": [
+        "ClassificationProjectionCorpusMapper shared by validation and corpus construction"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK892F1Z4KHJBKMF7M",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not derive an expected label from an allocation, description, rule result, account, amount, or prior feedback."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK68S2E8630MATE160",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not persist rows, descriptions, amounts, transaction IDs, normalized tokens, or private paths."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NQXMKWZW25H903FXYGQ7S",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK13TV13Z4M7NXXT6P",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMK3E35WBXC1Z34XHP9",
+      "target": "FR-CLASSIFY-RULE-VALIDATION",
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NQXMM3NWACZBVV1G3ZWHS",
+      "gate_type": "test-evidence",
+      "description": [
+        "Golden validation receipts are byte-identical before and after mapper extraction."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NQXMM8ASWQ37V6C1Y6YCA",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassificationProjectionCorpusMapperTests",
+      "expected_result": "exit 0; at least 30 exact binding tuple lifecycle limit and no-invention cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 360,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    },
+    {
+      "id": "01KZ0NQXMMQZVTPE1PKD9X6BYZ",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassificationRuleValidationTests",
+      "expected_result": "exit 0; existing validation suite passes with unchanged aggregate fingerprints",
+      "required": 1,
+      "timeout_seconds": 420,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+    }
+  ]
+}

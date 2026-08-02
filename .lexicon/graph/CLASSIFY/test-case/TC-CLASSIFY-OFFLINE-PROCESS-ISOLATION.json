@@ -8,10 +8,11 @@
   "surface": "service",
   "scenario": "happy",
   "automation": "automated",
-  "status": "planned",
+  "status": "implemented",
   "preconditions": "Network access is denied and no Tally process is running before each workflow.",
   "steps": "Invoke every CLASSIFY acceptance workflow directly and through the compatible AI Agent Host; detect prompts, network attempts, and remaining processes.",
   "expected": "NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION reaches complete offline non-interactive coverage with no required or leftover daemon, watcher, scheduler, or background worker.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc006AgentContractTests.cs",
   "owner": "CLASSIFY implementation",
   "created_at": "2026-07-19T04:21:55.1382568+00:00",
   "links": [

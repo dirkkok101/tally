@@ -1,0 +1,35 @@
+{
+  "id": "01KZ0MTBXZ4T1EW3DVGTJA5MSH",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-OPERATOR-THROUGHPUT-PROCESS",
+  "slug": "OPERATOR-THROUGHPUT-PROCESS",
+  "title": "Verify installed-process operator throughput bounds",
+  "level": "e2e",
+  "surface": "service",
+  "scenario": "performance",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "A linux-x64 Native-AOT publish and isolated 146-row plus 10000-row evaluations are available with process-count and peak-memory measurement.",
+  "steps": "Use only the published CLI to retrieve the 146-row result with pageSize 500 and to walk maximum-size filtered results at page sizes 1 and 500; record process launches, continuations, wall time, memory, row accounting, and child processes.",
+  "expected": "The 146-row case uses one classify.outcome.list process; general walks use exactly ceiling(filteredCount/pageSize) processes; each call is within 5 seconds and 256 MiB; no per-row CLI or Ledger subprocess occurs; one-over limits fail with no partial result or mutation.",
+  "cleanup": "Remove the temporary publish and isolated data root.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Process/ClassifyOperatorThroughputTests.cs",
+  "owner": "CLASSIFY",
+  "created_at": "2026-08-02T07:08:09.0246885+00:00",
+  "links": [
+    {
+      "id": "01KZ0MW2MK47ECEA0RZYHS0FEB",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-OPERATOR-THROUGHPUT",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:05.0439322+00:00"
+    },
+    {
+      "id": "01KZ0MWAR94SFM1DP72255CSD3",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-007",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:13.3547523+00:00"
+    }
+  ]
+}

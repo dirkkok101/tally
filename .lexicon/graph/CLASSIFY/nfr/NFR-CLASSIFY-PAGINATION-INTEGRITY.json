@@ -1,0 +1,18 @@
+{
+  "id": "01KZ0MP13F727V3K5SM6RXCEB4",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "NFR-CLASSIFY-PAGINATION-INTEGRITY",
+  "title": "Preserve deterministic snapshot-bound discovery pages",
+  "description": [
+    "Every paginated CLASSIFY query must be a no-partial-result projection over immutable or high-water-bound state with opaque request-bound continuations."
+  ],
+  "category": "data_integrity",
+  "target": "For 100 percent of outcome.list and rule.list calls, identical semantic inputs return byte-stable ordered item content and fingerprints; every row appears exactly once across a complete cursor walk; malformed, expired, replayed-under-different-request, cross-evaluation, cross-filter, cross-page-size, generation-drifted, or high-water-mismatched cursors return typed errors and zero result rows.",
+  "load_condition": "Empty, single-page, multi-page, concurrent rule append, evaluation expiry, category lifecycle drift, rule-set drift, Ledger generation drift, cursor tamper, cursor replay, cancellation, and one-over-bound cases.",
+  "measurement": "Property and published-process tests over cursor encode/decode, canonical hashes, deterministic order, complete page walks, concurrent append high-water behavior, failure envelopes, and store no-mutation snapshots.",
+  "rationale": [
+    "Opaque continuations are authority-bearing read context; accepting them outside the frozen request would silently omit, duplicate, or misrepresent rows."
+  ],
+  "priority": 0,
+  "created_at": "2026-08-02T07:05:46.8648350+00:00"
+}

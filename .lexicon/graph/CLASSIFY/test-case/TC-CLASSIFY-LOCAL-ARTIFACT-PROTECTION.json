@@ -8,10 +8,11 @@
   "surface": "persistence",
   "scenario": "security",
   "automation": "automated",
-  "status": "planned",
+  "status": "implemented",
   "preconditions": "Private payload canaries are placed in descriptions, tokens, rules, corpus rows, financial values, requests, and failures on every workflow.",
   "steps": "Run success, failure, interruption, abandon, cleanup, and startup recovery; inspect arguments, tracked files, permissions, stdout errors, stderr, logs, telemetry, crash output, and temporary storage.",
-  "expected": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION reaches zero disclosures, owner-only permissions, no raw corpus copies, and no orphan temporary artifacts.",
+  "expected": "NFR-CLASSIFY-LOCAL-DATA-PROTECTION reaches zero disclosures, owner-only permissions, no CLASSIFY-managed duplicate raw corpus copies, and no orphan temporary artifacts. An explicitly requested owner-private corpus destination may remain only as the authorized 0600 output accepted by the private-corpus reader.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Security/ClassifyArtifactProtectionTests.cs",
   "owner": "CLASSIFY implementation",
   "created_at": "2026-07-19T04:21:13.7956127+00:00",
   "links": [

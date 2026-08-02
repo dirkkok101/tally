@@ -1,0 +1,66 @@
+{
+  "id": "01KZ0MN4SGK1XM7V1R5BY4DDPY",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "type": "functional",
+  "ref_code": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+  "title": "Report repeated unresolved classification patterns",
+  "description": [
+    "Publish classify.unresolved.report as a bounded read-only owner-local report over retained no_suggestion outcomes joined to one fresh compatible Ledger classification_v1 projection. Implements G7 and UC-CLASSIFY-010."
+  ],
+  "rationale": [
+    "The owner needs deterministic review candidates for rulebook refinement without creating a second raw-description store or automatic discovery path."
+  ],
+  "priority": 1,
+  "complexity": "M",
+  "story_as": "Personal Finance Owner",
+  "story_want": [
+    "see repeated unresolved description patterns in a bounded report"
+  ],
+  "story_so_that": [
+    "I can choose which narrow owner-authored rules or explicit corrections are worth considering"
+  ],
+  "acceptance_criteria": [
+    "Given a retained completed evaluation, topN from 1 through 500, and minimumCount from 2 through 500, when unresolved.report is invoked, then it joins every retained no_suggestion outcome to exactly one member of a fresh complete compatible classification_v1 evaluation projection before producing any result.",
+    "Given compatible joined rows, when groups are built, then CLASSIFY uses the evaluation normalization version and groups by normalized description, account ID, and amount direction; each group returns deterministic rank, count, account and direction scope, checked aggregate signed amount, representative owner-visible normalized description, and a drift-detecting group fingerprint.",
+    "Given a successful report, when its accounting is checked, then noSuggestionOutcomeCount equals joinedRowCount and equals candidateRowCount plus belowMinimumRowCount; totals include distinct, candidate, returned, omitted, and bounded request counts; candidates order by count descending then normalized description, account ID, direction, and fingerprint using ordinal comparison.",
+    "Given identical semantic evaluation, projection, rule-set, normalization, filters, and bounds, when unresolved.report is replayed, then group and report fingerprints plus ordered candidate content are identical even if a fresh Ledger snapshot ID and expiry differ.",
+    "Given an expired, missing, incomplete, or abandoned evaluation; stale Ledger generation; changed active rule set; changed normalization; archived category lifecycle; missing or duplicate projection member; incompatible projection; checked amount overflow; or row, group, runtime, or memory limit breach, when unresolved.report is invoked, then it returns a typed no-result error and no partial report.",
+    "Given unresolved.report succeeds, when CLASSIFY durable state, temporary files, logs, and rule history are inspected, then no raw description, normalized description, amount, report row, private path, or new durable report exists and zero rule drafts, proposals, activations, previews, applies, or Ledger mutations occurred.",
+    "Given the owner chooses a candidate, when future rule work begins, then the candidate confers no authority: rule.save creates only a draft and the released validation plus explicit activation lifecycle remains mandatory."
+  ],
+  "security_criteria": [
+    "Normalized descriptions and aggregate signed amounts are emitted only in the explicit owner-local success result; they are excluded from logs, cursors, durable CLASSIFY state, telemetry, generated documentation, and tracked fixtures."
+  ],
+  "status": "active",
+  "created_at": "2026-08-02T07:05:17.8732387+00:00",
+  "links": [
+    {
+      "id": "01KZ0MWPMT5HW9QPPV5XT1NWM7",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-ELIGIBLE-PROJECTION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:25.5313079+00:00"
+    },
+    {
+      "id": "01KZ0MWNYB8KFZMQRRD6E8136D",
+      "target_type": "requirement",
+      "target": "FR-CLASSIFY-OUTCOME-INVALIDATION",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:09:24.8119839+00:00"
+    },
+    {
+      "id": "01KZ0MN4SJPEJ4VCQ53D08JY81",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-010",
+      "rel": "implements",
+      "created_at": "2026-08-02T07:05:17.8740206+00:00"
+    }
+  ],
+  "personas": [
+    {
+      "id": "01KZ0MN4SKGW5A7BWR2HSHEFJC",
+      "target": "P1",
+      "created_at": "2026-08-02T07:05:17.8732387+00:00"
+    }
+  ]
+}

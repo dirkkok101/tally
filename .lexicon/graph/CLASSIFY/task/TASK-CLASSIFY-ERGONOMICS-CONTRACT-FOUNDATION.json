@@ -1,0 +1,297 @@
+{
+  "id": "01KZ0NMGHMJ7F5M6ZRXVPMPJBC",
+  "plan_id": "01KZ0NEJDHYFS3D2XSBKAPBQV8",
+  "sub_plan_id": "01KZ0NEK51XQ03CXV99BPGYSJ7",
+  "ref_code": "TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION",
+  "slug": "ERGONOMICS-CONTRACT-FOUNDATION",
+  "title": "Define additive ergonomics contract types",
+  "description": [
+    "Add contract-only types for outcome.list, rule.list, rule-set.active.get, corpus.build, and unresolved.report. Preserve byte-equivalent 0.3.3 schemas and reserve the 105/17 inventory assertion for runtime convergence."
+  ],
+  "objective": [
+    "Make all five request, result, enum, limit, and typed-error shapes compile under source-generated JSON without publishing handlers or altering any released schema."
+  ],
+  "planning_state": "ready",
+  "priority": 0,
+  "sort_order": 0,
+  "created_at": "2026-08-02T07:22:25.7167506+00:00",
+  "bead_refs": [
+    {
+      "id": "01KZ0S07GYFZ8MH43YHQ9RAY6J",
+      "bead_id": "bd-1gly",
+      "verification_status": "verified",
+      "verified_at": "2026-08-02T08:21:15.4221088+00:00",
+      "created_at": "2026-08-02T08:21:15.4221088+00:00"
+    }
+  ],
+  "decisions": [
+    {
+      "id": "01KZ0NMGHPC5N4R8PJQZT1G4KG",
+      "target": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPSSJRYBW1ZA5GM878",
+      "target": "DD-CLASSIFY-SHIPPED-BASELINE",
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    }
+  ],
+  "files": [
+    {
+      "id": "01KZ0NMGHPNPG5DNFD8B18B43E",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyRequests.cs",
+      "action": "modify",
+      "role": "five additive request records",
+      "required": 1,
+      "notes": [
+        "Keep all released records unchanged."
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPX5YTT6766A0WCS26",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyResults.cs",
+      "action": "modify",
+      "role": "five additive result records",
+      "required": 1,
+      "notes": [
+        "Bound arrays and omit private fields."
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHP1AXSAXA3JV4HFJKA",
+      "path": "src/Tally/Contracts/Classify/Operations/ClassifyErrors.cs",
+      "action": "modify",
+      "role": "closed cursor lifecycle privacy and resource errors",
+      "required": 1,
+      "notes": [
+        "Map through existing exit classes."
+      ],
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPS91HJSXGAYBRKEFC",
+      "path": "src/Tally/Contracts/Classify/ClassifyJsonContext.cs",
+      "action": "modify",
+      "role": "source-generated metadata",
+      "required": 1,
+      "notes": [
+        "No reflection fallback."
+      ],
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPDGNE5X38B767ZJN2",
+      "path": "tests/Tally.Tests/Classify/Contract/ClassifyOperatorErgonomicsContractTests.cs",
+      "action": "create",
+      "role": "schema and compatibility tests",
+      "required": 1,
+      "notes": [
+        "Freeze released and additive shapes."
+      ],
+      "sort_order": 4,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    }
+  ],
+  "interfaces": [
+    {
+      "id": "01KZ0NMGHPM068XV9N7VCAD88C",
+      "name": "ClassifyRequests",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "notes": [
+        "five additive inputs"
+      ],
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHP3D5ZGF03NW83073J",
+      "name": "ClassifyResults",
+      "direction": "produces",
+      "contract_ref_code": "DM-CLASSIFY-OUTCOME-PAGE",
+      "notes": [
+        "bounded additive outputs"
+      ],
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    }
+  ],
+  "links": [
+    {
+      "id": "01KZ0NX8XW9B2BMY5HQFJWVJV5",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "satisfies",
+      "created_at": "2026-08-02T07:27:12.8291846+00:00"
+    }
+  ],
+  "recipe_items": [
+    {
+      "id": "01KZ0NMGHPFFHX80V81J5WX7EM",
+      "kind": "acceptance_check",
+      "text": [
+        "Each new request rejects unknown fields, enforces contractVersion 1.0, uses closed source-generated enums, and exposes the exact bounds and fields in DM-CLASSIFY-OUTCOME-PAGE, DM-CLASSIFY-RULE-DISCOVERY, DM-CLASSIFY-PRIVATE-CORPUS-BUILD, and DM-CLASSIFY-UNRESOLVED-REPORT."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHP43ERCG7SSXF69B41",
+      "kind": "acceptance_check",
+      "text": [
+        "ClassifyJsonContext contains explicit metadata for every new nested request/result/error/cursor payload and Native-AOT compilation requires no reflection serialization."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHP0YQH3SSGDA732CCD",
+      "kind": "acceptance_check",
+      "text": [
+        "A frozen-schema test proves every request, result, error, mutability, idempotency, and exit-code fingerprint for the twelve 0.3.3 operations is unchanged."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHP4S78GCSMZ5B1PM64",
+      "kind": "acceptance_check",
+      "text": [
+        "Corpus build result and every error exclude outputPath, label rows, descriptions, normalized tokens, amounts, and serialized requests."
+      ],
+      "required": 1,
+      "sort_order": 3,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPG2JV4BED9M8ZERQ6",
+      "kind": "constraint",
+      "text": [
+        "Contract version remains 1.0 and the operation inventory remains unchanged until the convergence task."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPMC20JTWNFYW19XN3",
+      "kind": "expected_output",
+      "text": [
+        "Five additive request/result families and closed filter/lifecycle/error enums"
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPZSZKWRM04ZNG5MSG",
+      "kind": "expected_output",
+      "text": [
+        "Frozen 0.3.3 compatibility fixtures and source-generation tests"
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPEDGSZKMGKJX1B67S",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not add descriptors or runtime handlers in this task; an incomplete public operation must not enter schema inventory."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPVZX1B9CG0EHGVW7H",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not change classify.status, classify.apply.preview, classify.apply.run, selected_outcomes, the 200-outcome bound, or existing exit-code mappings."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPGB7CABW437GZ36FG",
+      "kind": "failure_criterion",
+      "text": [
+        "Do not add polymorphic, reflection, regex, fuzzy, model, cloud, or caller-authority fields."
+      ],
+      "required": 1,
+      "sort_order": 2,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHP91CKCB5SNY5Q4F3E",
+      "kind": "note",
+      "text": [
+        "Public list metadata includes total, filtered, returned, deterministic fingerprints, and continuation; no query returns a partial page."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    }
+  ],
+  "requirements": [
+    {
+      "id": "01KZ0NMGHPG764ER9TCKZKZESC",
+      "target": "FR-CLASSIFY-OUTCOME-DISCOVERY",
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPMS3PSQPQRMGDWJQZ",
+      "target": "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHP33TE94MSH5JVTJAY",
+      "target": "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHPJH49ATF0V93S77SF",
+      "target": "FR-CLASSIFY-STRUCTURED-INVOCATION",
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    },
+    {
+      "id": "01KZ0NMGHP8K4Z3PFTB4P5EMQK",
+      "target": "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    }
+  ],
+  "review_gates": [
+    {
+      "id": "01KZ0NMGHPX5PJAVW2N3J7V7XT",
+      "gate_type": "test-evidence",
+      "description": [
+        "All twelve 0.3.3 schema fingerprints remain identical before new descriptors are published."
+      ],
+      "required": 1,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    }
+  ],
+  "verification_steps": [
+    {
+      "id": "01KZ0NMGHPB07CJ969CSB885V1",
+      "phase": "after",
+      "command": "dotnet test tests/Tally.Tests/Tally.Tests.csproj --filter FullyQualifiedName~ClassifyOperatorErgonomicsContractTests",
+      "expected_result": "exit 0; at least 24 schema source-generation bounds privacy and released-fingerprint cases discovered and 0 fail",
+      "required": 1,
+      "timeout_seconds": 300,
+      "sort_order": 0,
+      "created_at": "2026-08-02T07:22:25.7167506+00:00"
+    }
+  ]
+}

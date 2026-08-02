@@ -8,10 +8,11 @@
   "surface": "persistence",
   "scenario": "edge",
   "automation": "automated",
-  "status": "planned",
+  "status": "implemented",
   "preconditions": "Accepted, rejected, corrected, historical, missing-evidence, and feedback-derived candidate examples are available.",
   "steps": "Record each decision; derive proposals; attempt automatic activation and broadening; validate and explicitly activate a safe successor; inspect old feedback after retirement.",
   "expected": "FR-CLASSIFY-CORRECTION-FEEDBACK holds: feedback remains attributable, one correction never generalizes or activates a rule, and missing evidence produces no reconstructed proposal.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Feedback/ClassificationFeedbackTests.cs",
   "owner": "CLASSIFY implementation",
   "created_at": "2026-07-19T04:21:10.6026750+00:00",
   "links": [

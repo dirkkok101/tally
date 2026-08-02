@@ -1,0 +1,39 @@
+{
+  "id": "01KZ0MGBWESV51GN7XHN0XA90G",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "UC-CLASSIFY-007",
+  "title": "Discover outcomes and preview an explicit batch",
+  "preconditions": "The evaluation is retained and completed; the caller has the trusted owner actor context; the public CLASSIFY schemas are discoverable; any continuation belongs to the same evaluation, filters, page size, and fingerprint.",
+  "postconditions": "Every returned row is deterministically ordered and attributable to the retained evaluation; the selected preview is frozen and idempotent; no Ledger mutation occurs before an explicit apply.run; broadApplyAllowed=false never authorizes unattended or implicit bulk mutation.",
+  "main_flow": "The caller invokes classify.outcome.list with an evaluation ID and bounded filters; follows the opaque continuation until the required rows are available; invokes classify.outcome.get only when deeper single-row evidence is needed; selects exact returned outcome IDs; and sends those IDs in the existing selected_outcomes mode to classify.apply.preview before any optional classify.apply.run.",
+  "alt_flows": [
+    "Reject a malformed, expired, cross-evaluation, cross-filter, cross-page-size, or fingerprint-mismatched cursor with a typed error and no partial page.",
+    "Reject an expired or missing evaluation, stale Ledger generation, archived suggested category, missing active rule set, or integrity mismatch without a partial result or mutation.",
+    "Reject oversized pages or selected batches before preview durability and preserve the existing explicit-selection boundary."
+  ],
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"A completed evaluation exists and the owner or Hermes needs to review or select more than one retained outcome.\",\"status\":\"draft\"}",
+  "created_at": "2026-08-02T07:02:41.2956763+00:00",
+  "links": [
+    {
+      "id": "01KZ0MQVKT60WP0WD3MNF73692",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:46.7790166+00:00"
+    },
+    {
+      "id": "01KZ0MQTVEQSGY3DKNT13CMP08",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:45.9998459+00:00"
+    },
+    {
+      "id": "01KZ0MQRNP7X1X3GXKNHT9JQ0H",
+      "target_type": "external_dependency",
+      "target": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "rel": "depends-on",
+      "created_at": "2026-08-02T07:06:43.7672972+00:00"
+    }
+  ]
+}

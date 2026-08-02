@@ -4,7 +4,7 @@
   "ref_code": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
   "name": "LEDGER Public Contract",
   "description": [
-    "Validated current-state claim from installed Tally 0.3.2 schema discovery and current main source: snapshot actuals, transaction detail, active categories, idempotent assignment, and correction exist; classification_v1 and allocation revision preconditions do not. PLAN-CLASSIFY-RULEBOOK-V1 owns the bounded Ledger extension and published-contract gate before any CLASSIFY consumer. No private Ledger storage access is authorized."
+    "Released and validated in Tally 0.3.3: ledger.actuals.query publishes purpose=evaluation and purpose=apply_preflight with itemProjection=classification_v1, frozen pagination, active category identity/lifecycle metadata, store generation and snapshot expiry, and bounded revision-bearing mutation preconditions. CLASSIFY consumes this public contract through LedgerContractClient only; private Ledger storage access and reconstruction of transfer, refund, allocation, void, supersession, or eligibility semantics remain forbidden."
   ],
   "type": "api",
   "owner": "LEDGER",

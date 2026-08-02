@@ -8,10 +8,11 @@
   "surface": "contract",
   "scenario": "unhappy",
   "automation": "automated",
-  "status": "planned",
+  "status": "implemented",
   "preconditions": "Current suggestion, no-suggestion, conflict, stale, selected-item, unauthorized exact-rule, and authorized exact-rule examples exist.",
   "steps": "Complete evaluation without apply; request previews for each outcome partition; request rule-wide apply with and without authority; change one fingerprint after preview.",
   "expected": "FR-CLASSIFY-APPLY-AUTHORIZATION holds: preview is read-only and exact, only current authorized suggestions enter scope, and missing authority or stale evidence blocks mutation.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Apply/ApplyAuthorizationTests.cs",
   "owner": "CLASSIFY implementation",
   "created_at": "2026-07-19T04:21:09.9315623+00:00",
   "links": [

@@ -22,23 +22,23 @@ UC-CLASSIFY-006 proves an AI Agent Host can orchestrate CLASSIFY without prose s
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry | `design_decision` | `governed-by` | `true` |
-| EXT-CLASSIFY-AI-AGENT-HOST: AI Agent Host | `external_dependency` | `references` | `true` |
-| FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md) | `design_decision` | `governed-by` | `true` |
+| [EXT-CLASSIFY-AI-AGENT-HOST: AI Agent Host](../../../prd/classify/prd.md#ext-classify-ai-agent-host-ai-agent-host) | `external_dependency` | `references` | `true` |
+| [FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract](../../../prd/classify/prd.md#fr-classify-contract-discovery-discover-the-classify-command-contract) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively](../../../prd/classify/prd.md#fr-classify-structured-invocation-invoke-classify-operations-non-interactively) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT: Verify CLASSIFY contract discovery | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT: Verify structured CLASSIFY invocation | `test_case` | `verifies` | `true` |
-| UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract | `use_case` | `covers` | `true` |
+| [UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract](../../../prd/classify/prd.md#uc-classify-006-discover-and-invoke-the-shipped-classify-v033-agent-contract) | `use_case` | `covers` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md) | `compile` | The host consumes the complete published contract. |
-| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md) | `compile` | The host uses safe status for lifecycle orchestration. |
+| [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md) | `compile` | The host consumes the complete published contract. |
+| [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md) | `compile` | The host uses safe status for lifecycle orchestration. |
 
 ## Recipe
 
@@ -72,14 +72,15 @@ UC-CLASSIFY-006 proves an AI Agent Host can orchestrate CLASSIFY without prose s
 | Path | Action | Role | Required | Notes |
 |---|---|---|---|---|
 | `tests/Tally.Tests/Classify/Acceptance/ClassifyUc006AgentContractTests.cs` | `test` | UC-006 host contract matrix | `true` |  |
+| `src/Tally/Features/Classify/Contract/ClassifyOperationModule.cs` | `modify` | publish exact private-corpus failure codes required by the UC-006 structured invocation contract | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| CompleteClassifyPublicContract | `consumes` | DM-CLASSIFY-OPERATION-CONTRACTS |  |
-| GetClassificationStatusQuery.HandleAsync | `consumes` | DM-CLASSIFY-STATE-STORE |  |
-| VerifiedClassifyUc006 | `produces` | UC-CLASSIFY-006 |  |
+| CompleteClassifyPublicContract | `consumes` | [DM-CLASSIFY-OPERATION-CONTRACTS](../../../designs/classify/data-model.md#classifyoperationcontracts) |  |
+| GetClassificationStatusQuery.HandleAsync | `consumes` | [DM-CLASSIFY-STATE-STORE](../../../designs/classify/data-model.md#classificationstatestore) |  |
+| VerifiedClassifyUc006 | `produces` | [UC-CLASSIFY-006](../../../prd/classify/prd.md#uc-classify-006-discover-and-invoke-the-shipped-classify-v033-agent-contract) |  |
 
 ### Verification
 
@@ -104,16 +105,16 @@ UC-CLASSIFY-006 proves an AI Agent Host can orchestrate CLASSIFY without prose s
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-1n2r` (verified)
-- `covers` -> UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](../tasks/rulebook-gate-int-public-contract.md): The host consumes the complete published contract.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](../tasks/rulebook-status-workflow.md): The host uses safe status for lifecycle orchestration.
-- `governed-by` -> DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam
-- `governed-by` -> DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry
-- `implements` -> FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract
-- `implements` -> FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts
-- `implements` -> FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history
-- `implements` -> FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively
-- `references` -> EXT-CLASSIFY-AI-AGENT-HOST: AI Agent Host
+- `covers` -> [UC-CLASSIFY-006: Discover and invoke the CLASSIFY agent contract](../../../prd/classify/prd.md#uc-classify-006-discover-and-invoke-the-shipped-classify-v033-agent-contract)
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT: TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT](rulebook-gate-int-public-contract.md): The host consumes the complete published contract.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW: TASK-CLASSIFY-RULEBOOK-STATUS-WORKFLOW](rulebook-status-workflow.md): The host uses safe status for lifecycle orchestration.
+- `governed-by` -> [DD-CLASSIFY-APPLICATION-ARCHITECTURE: Single-process vertical slices with one earned external seam](../../../designs/classify/decisions/application-architecture.md)
+- `governed-by` -> [DD-CLASSIFY-CLI-OPERATION-CONTRACT: Twelve explicit CLASSIFY operations from one registry](../../../designs/classify/decisions/cli-operation-contract.md)
+- `implements` -> [FR-CLASSIFY-CONTRACT-DISCOVERY: Discover the CLASSIFY command contract](../../../prd/classify/prd.md#fr-classify-contract-discovery-discover-the-classify-command-contract)
+- `implements` -> [FR-CLASSIFY-STATE-RETENTION-CLEANUP: Retain attributable state and clean derived artifacts](../../../prd/classify/prd.md#fr-classify-state-retention-cleanup-retain-attributable-state-and-clean-derived-artifacts)
+- `implements` -> [FR-CLASSIFY-STATUS-HISTORY: Inspect classification status and history](../../../prd/classify/prd.md#fr-classify-status-history-inspect-classification-status-and-history)
+- `implements` -> [FR-CLASSIFY-STRUCTURED-INVOCATION: Invoke CLASSIFY operations non-interactively](../../../prd/classify/prd.md#fr-classify-structured-invocation-invoke-classify-operations-non-interactively)
+- `references` -> [EXT-CLASSIFY-AI-AGENT-HOST: AI Agent Host](../../../prd/classify/prd.md#ext-classify-ai-agent-host-ai-agent-host)
 - `verifies` -> TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT: Verify CLASSIFY contract discovery
 - `verifies` -> TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT: Verify structured CLASSIFY invocation
 

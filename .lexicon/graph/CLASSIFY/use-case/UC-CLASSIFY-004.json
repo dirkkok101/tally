@@ -12,7 +12,7 @@
     "Refuse activation when required private evidence is absent, stale, or contains an incorrect-application canary.",
     "Surface overlapping incompatible matches as conflicts instead of silently choosing a winner."
   ],
-  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner creates, changes, retires, or proposes activation of a classification rule.\",\"status\":\"draft\"}",
+  "metadata": "{\"depth_tier\":3,\"primary_actor\":\"P1\",\"trigger\":\"The owner creates, changes, retires, or proposes activation of a classification rule.\",\"status\":\"implemented\"}",
   "created_at": "2026-07-18T18:57:28.7141658+00:00",
   "links": [
     {

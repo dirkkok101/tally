@@ -22,11 +22,11 @@ The owner can reproduce a retained outcome or learn exactly why it is stale with
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome | `data_model` | `touches` | `true` |
-| FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome | `requirement` | `implements` | `true` |
-| FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome](../../../designs/classify/data-model.md#classificationevaluationandoutcome) | `data_model` | `touches` | `true` |
+| [FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome](../../../prd/classify/prd.md#fr-classify-outcome-explanation-explain-a-classification-outcome) | `requirement` | `implements` | `true` |
+| [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT: Verify bounded outcome explanation | `test_case` | `verifies` | `true` |
 | TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT: Verify every staleness trigger | `test_case` | `verifies` | `true` |
 
@@ -34,8 +34,8 @@ The owner can reproduce a retained outcome or learn exactly why it is stale with
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md) | `compile` | Outcome inspection reads the retained evaluation and evidence produced by this task. |
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT. |
+| [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md) | `compile` | Outcome inspection reads the retained evaluation and evidence produced by this task. |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT. |
 
 ## Recipe
 
@@ -67,6 +67,9 @@ The owner can reproduce a retained outcome or learn exactly why it is stale with
 ### Notes
 
 - Staleness comparison is field-complete against EvaluationFingerprint; tests enumerate every PRD trigger.
+- Hermes blocker resolution (2026-08-01): the existing public ClassifyOutcomeGetResult is an authorized seam for this bead and must expose the already-accepted bounded explanation: retained normalization_version and rule_set_version_id; stable safe_reason; ordered contributing_rule_version_ids; ordered allowed matched_field_keys only; for conflicts an ordered list of (rule_version_id, proposed_category_id) resolved only from immutable rule versions named by retained MatchEvidence; and nullable permitted_next_operation whose sole possible value is re_evaluate/classify.evaluate for stale, conflict, or no-suggestion outcomes. Fresh suggestions return no forced next operation here. Never expose predicate values, normalized hashes, descriptions, requests, or unrelated rule payload.
+- Same-identifier active category rename is the specific exception to generic store-generation churn: if category identity/lifecycle, item lifecycle, ordered membership, contract, projection, normalization, rule-set, snapshot validity, and all other semantic dimensions are unchanged, display-name-only rename remains fresh and returns the current name. Any archive, missing category, reactivation lifecycle change, or other changed dimension remains stale; reactivation must be proven by lifecycle fingerprint/history, not current active status alone.
+- If retained MatchEvidence names a missing immutable rule version or a conflict rule cannot be mapped unambiguously to its proposed category, return stable evidence-unavailable/integrity and never reconstruct from current evaluation logic. Public contract tests must assert field presence, deterministic ordering, nullability, and private-data exclusion.
 
 ### File Contracts
 
@@ -78,15 +81,19 @@ The owner can reproduce a retained outcome or learn exactly why it is stale with
 | `src/Tally/Bootstrap/Features/ClassifyEvaluationExtensions.cs` | `create` | explicit evaluation registration | `true` |  |
 | `tests/Tally.Tests/Classify/Evaluation/OutcomeExplanationTests.cs` | `test` | explanation partitions | `true` |  |
 | `tests/Tally.Tests/Classify/Evaluation/OutcomeInvalidationTests.cs` | `test` | complete staleness matrix | `true` |  |
+| `src/Tally/Contracts/Classify/Operations/ClassifyResults.cs` | `modify` | complete bounded public outcome explanation contract | `true` |  |
+| `src/Tally/Contracts/Classify/ClassifyJsonContext.cs` | `modify` | source-generated explanation and conflict proposal contracts | `true` |  |
+| `tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs` | `test` | public outcome result schema serialization and disclosure boundary | `true` |  |
 
 ### Interface Contracts
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| ClassificationEvaluationStore | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| GetClassificationOutcomeQuery.HandleAsync | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| ClassificationStalenessPolicy.Evaluate | `produces` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
+| ClassificationEvaluationStore | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| LedgerContractClient.QueryClassificationProjectionAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| GetClassificationOutcomeQuery.HandleAsync | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassificationStalenessPolicy.Evaluate | `produces` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassifyOutcomeGetResult | `produces` | [FR-CLASSIFY-OUTCOME-EXPLANATION](../../../prd/classify/prd.md#fr-classify-outcome-explanation-explain-a-classification-outcome) | bounded public explanation including conflict proposals and nullable re-evaluate action |
 
 ### Verification
 
@@ -111,13 +118,13 @@ The owner can reproduce a retained outcome or learn exactly why it is stale with
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-zae9` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](../tasks/rulebook-evaluation-workflow.md): Outcome inspection reads the retained evaluation and evidence produced by this task.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `governed-by` -> DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract
-- `implements` -> FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome
-- `implements` -> FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes
-- `touches` -> DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW: TASK-CLASSIFY-RULEBOOK-EVALUATION-WORKFLOW](rulebook-evaluation-workflow.md): Outcome inspection reads the retained evaluation and evidence produced by this task.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `governed-by` -> [DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION: Use purpose-scoped classification projections on the public Ledger actuals contract](../../../designs/classify/decisions/ledger-public-projection.md)
+- `implements` -> [FR-CLASSIFY-OUTCOME-EXPLANATION: Explain a classification outcome](../../../prd/classify/prd.md#fr-classify-outcome-explanation-explain-a-classification-outcome)
+- `implements` -> [FR-CLASSIFY-OUTCOME-INVALIDATION: Invalidate Stale Classification Outcomes](../../../prd/classify/prd.md#fr-classify-outcome-invalidation-invalidate-stale-classification-outcomes)
+- `touches` -> [DM-CLASSIFY-EVALUATION-OUTCOME: ClassificationEvaluationAndOutcome](../../../designs/classify/data-model.md#classificationevaluationandoutcome)
 - `verifies` -> TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT: Verify bounded outcome explanation
 - `verifies` -> TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT: Verify every staleness trigger
 

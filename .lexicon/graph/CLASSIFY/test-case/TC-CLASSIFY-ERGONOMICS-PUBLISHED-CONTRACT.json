@@ -1,0 +1,56 @@
+{
+  "id": "01KZ0MTCNEH570SCT8DVCW8FGP",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "ref_code": "TC-CLASSIFY-ERGONOMICS-PUBLISHED-CONTRACT",
+  "slug": "ERGONOMICS-PUBLISHED-CONTRACT",
+  "title": "Verify additive CLASSIFY ergonomics compatibility and inventory",
+  "level": "e2e",
+  "surface": "contract",
+  "scenario": "edge",
+  "automation": "automated",
+  "status": "planned",
+  "preconditions": "The implementation contains the released twelve-operation baseline plus the five accepted ergonomics operations.",
+  "steps": "Run schema list/show, strict source-generated JSON round trips, unknown-field failures, handler composition, declared-error-to-exit parity, Linux Native-AOT invocation, old twelve-operation request fixtures, migration/open of existing classify.db, privacy scans, module gates, and rollback compatibility checks.",
+  "expected": "All twelve 0.3.3 identifiers retain their 1.0 request/result/error behavior; exactly five additive operations are discoverable and composed; old stores open without data migration where specified; unsupported versions fail before data access; rollback remains possible because no new durable query/report schema is required and corpus outputs stay external private files.",
+  "cleanup": "Remove temporary publish and isolated roots; retain no private corpus.",
+  "implementation_ref": "tests/Tally.Tests/Classify/Contract/ClassifyErgonomicsPublishedContractTests.cs",
+  "owner": "CLASSIFY",
+  "created_at": "2026-08-02T07:08:09.7754337+00:00",
+  "links": [
+    {
+      "id": "01KZ0MW5G1S2CQC3NMTNHS67JV",
+      "target_type": "nfr",
+      "target": "NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:07.9700027+00:00"
+    },
+    {
+      "id": "01KZ0MWBHGZ7TBV5TPM5WWB4PB",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-007",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:14.1617607+00:00"
+    },
+    {
+      "id": "01KZ0MWC7RS3K0K5H152CJS1QQ",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-008",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:14.8729002+00:00"
+    },
+    {
+      "id": "01KZ0MWCX97TY6YG78VAS4MC5E",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-009",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:15.5631273+00:00"
+    },
+    {
+      "id": "01KZ0MWDMESJYY2EHW3P53TXTQ",
+      "target_type": "use_case",
+      "target": "UC-CLASSIFY-010",
+      "rel": "verifies",
+      "created_at": "2026-08-02T07:09:16.3037258+00:00"
+    }
+  ]
+}

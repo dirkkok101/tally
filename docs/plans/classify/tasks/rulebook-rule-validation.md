@@ -22,22 +22,22 @@ Candidate rules receive aggregate private evidence that blocks unsafe activation
 
 | Ref | Type | Relationship | Required |
 |---|---|---|---|
-| DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability | `design_decision` | `governed-by` | `true` |
-| DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance | `design_decision` | `governed-by` | `true` |
-| DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle | `data_model` | `touches` | `true` |
-| DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun | `data_model` | `touches` | `true` |
-| FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence | `requirement` | `implements` | `true` |
+| [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md) | `design_decision` | `governed-by` | `true` |
+| [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md) | `design_decision` | `governed-by` | `true` |
+| [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle) | `data_model` | `touches` | `true` |
+| [DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun](../../../designs/classify/data-model.md#classificationvalidationrun) | `data_model` | `touches` | `true` |
+| [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence) | `requirement` | `implements` | `true` |
 | TC-CLASSIFY-RULE-VALIDATION-CONTRACT: Verify private candidate validation | `test_case` | `verifies` | `true` |
 
 ## Dependencies
 
 | Depends On | Type | Reason |
 |---|---|---|
-| [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](../tasks/rulebook-deterministic-engine.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE. |
-| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md) | `compile` | Validation binds the current public projection and category lifecycle contract. |
-| [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](../tasks/rulebook-private-corpus-reader.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER. |
-| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md) | `compile` | Validation binds exact immutable candidate rule versions. |
+| [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE: TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](rulebook-deterministic-engine.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE. |
+| [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md) | `compile` | Validation binds the current public projection and category lifecycle contract. |
+| [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER: TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](rulebook-private-corpus-reader.md) | `compile` | Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER. |
+| [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md) | `compile` | Validation binds exact immutable candidate rule versions. |
 
 ## Recipe
 
@@ -85,12 +85,12 @@ None recorded.
 
 | Name | Direction | Contract | Notes |
 |---|---|---|---|
-| PrivateCorpusReader.ReadAsync | `consumes` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationEngine.Evaluate | `consumes` | DM-CLASSIFY-EVALUATION-OUTCOME |  |
-| ClassificationRuleStore | `consumes` | DM-CLASSIFY-RULE-LIFECYCLE |  |
-| LedgerContractClient.ListClassificationCategoriesAsync | `consumes` | DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT |  |
-| ValidateClassificationRuleCommand.HandleAsync | `produces` | DM-CLASSIFY-VALIDATION-RUN |  |
-| ClassificationValidationStore | `produces` | DM-CLASSIFY-VALIDATION-RUN |  |
+| PrivateCorpusReader.ReadAsync | `consumes` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationEngine.Evaluate | `consumes` | [DM-CLASSIFY-EVALUATION-OUTCOME](../../../designs/classify/data-model.md#classificationevaluationandoutcome) |  |
+| ClassificationRuleStore | `consumes` | [DM-CLASSIFY-RULE-LIFECYCLE](../../../designs/classify/data-model.md#classificationrulelifecycle) |  |
+| LedgerContractClient.ListClassificationCategoriesAsync | `consumes` | [DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT](../../../designs/classify/data-model.md#ledgerclassificationprojectioncontracts) |  |
+| ValidateClassificationRuleCommand.HandleAsync | `produces` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
+| ClassificationValidationStore | `produces` | [DM-CLASSIFY-VALIDATION-RUN](../../../designs/classify/data-model.md#classificationvalidationrun) |  |
 
 ### Verification
 
@@ -115,16 +115,16 @@ None recorded.
 Generated from task provenance, task dependency, task reference, and bead-ref graph rows.
 
 - `bead-ref` -> `bd-2kpw` (verified)
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](../tasks/rulebook-deterministic-engine.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](../tasks/rulebook-ledger-classification-client.md): Validation binds the current public projection and category lifecycle contract.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](../tasks/rulebook-private-corpus-reader.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER.
-- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](../tasks/rulebook-rule-draft-save.md): Validation binds exact immutable candidate rule versions.
-- `governed-by` -> DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence
-- `governed-by` -> DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability
-- `governed-by` -> DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance
-- `implements` -> FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence
-- `touches` -> DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle
-- `touches` -> DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE: TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE](rulebook-deterministic-engine.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-DETERMINISTIC-ENGINE.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT: TASK-CLASSIFY-RULEBOOK-LEDGER-CLASSIFICATION-CLIENT](rulebook-ledger-classification-client.md): Validation binds the current public projection and category lifecycle contract.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER: TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER](rulebook-private-corpus-reader.md): Consumes an interface produced by TASK-CLASSIFY-RULEBOOK-PRIVATE-CORPUS-READER.
+- `depends-on:compile` -> [TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE: TASK-CLASSIFY-RULEBOOK-RULE-DRAFT-SAVE](rulebook-rule-draft-save.md): Validation binds exact immutable candidate rule versions.
+- `governed-by` -> [DD-CLASSIFY-DETERMINISTIC-EVALUATION: Pure ordered evaluation with fingerprint-bound evidence](../../../designs/classify/decisions/deterministic-evaluation.md)
+- `governed-by` -> [DD-CLASSIFY-PRIVATE-VALIDATION: Memory-only private corpus validation with aggregate durability](../../../designs/classify/decisions/private-validation.md)
+- `governed-by` -> [DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE: Record minimal rule authority provenance](../../../designs/classify/decisions/rule-authority-provenance.md)
+- `implements` -> [FR-CLASSIFY-RULE-VALIDATION: Validate candidate rule sets against private evidence](../../../prd/classify/prd.md#fr-classify-rule-validation-validate-candidate-rule-sets-against-private-evidence)
+- `touches` -> [DM-CLASSIFY-RULE-LIFECYCLE: ClassificationRuleLifecycle](../../../designs/classify/data-model.md#classificationrulelifecycle)
+- `touches` -> [DM-CLASSIFY-VALIDATION-RUN: ClassificationValidationRun](../../../designs/classify/data-model.md#classificationvalidationrun)
 - `verifies` -> TC-CLASSIFY-RULE-VALIDATION-CONTRACT: Verify private candidate validation
 
 ## Navigation
