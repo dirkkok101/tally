@@ -582,7 +582,10 @@ public sealed class ClassifySecurityGateTests : IAsyncLifetime
             .Where(id => id.StartsWith("classify.", StringComparison.Ordinal))
             .ToHashSet(StringComparer.Ordinal);
 
-        Assert.Equal(12, ids.Count);
+        // Current inventory is 17 (C12 + five additive); released C12 remains 12.
+        Assert.Equal(17, ids.Count);
+        Assert.Equal(12, ClassifyOperationIds.ReleasedC12.Count);
+        Assert.All(ClassifyOperationIds.ReleasedC12, id => Assert.Contains(id, ids));
         foreach (var forbidden in new[]
                  {
                      "classify.sync", "classify.import", "classify.export", "classify.watch", "classify.schedule",

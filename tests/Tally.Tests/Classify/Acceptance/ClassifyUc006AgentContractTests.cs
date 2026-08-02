@@ -86,10 +86,12 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
             .Where(id => id.StartsWith("classify.", StringComparison.Ordinal))
             .Order(StringComparer.Ordinal)
             .ToArray();
-        Assert.Equal(12, classifyIds.Length);
+        Assert.Equal(17, classifyIds.Length);
+        Assert.Equal(12, ClassifyOperationIds.ReleasedC12.Count);
         Assert.Equal(
             ClassifyOperationIds.All.Order(StringComparer.Ordinal),
             classifyIds);
+        Assert.All(ClassifyOperationIds.ReleasedC12, id => Assert.Contains(id, classifyIds));
         // Discovery-safe: no private storage surface.
         Assert.DoesNotContain("classify.db", result.Stdout, StringComparison.OrdinalIgnoreCase);
         Assert.DoesNotContain("ClassifyStateStore", result.Stdout, StringComparison.Ordinal);
@@ -137,13 +139,14 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         var classify = registry.Descriptors
             .Where(d => d.OperationId.StartsWith("classify.", StringComparison.Ordinal))
             .ToArray();
-        Assert.Equal(12, classify.Length);
-        // Canonical C12 order is the published inventory (not registry sort order).
+        Assert.Equal(17, classify.Length);
+        Assert.Equal(12, ClassifyOperationIds.ReleasedC12.Count);
+        // Canonical order is the published inventory (not registry sort order).
         Assert.Equal(
             ClassifyOperationIds.All.Order(StringComparer.Ordinal),
             classify.Select(d => d.OperationId).Order(StringComparer.Ordinal));
         Assert.Equal(ClassifyOperationIds.All, ClassifyOperationIds.All);
-        Assert.Equal(12, classify.Select(d => d.CliPath).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(17, classify.Select(d => d.CliPath).Distinct(StringComparer.Ordinal).Count());
         Assert.All(classify, d =>
         {
             Assert.StartsWith("tally classify ", d.CliPath, StringComparison.Ordinal);
@@ -151,10 +154,13 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
             Assert.Equal("1.0", d.MinimumContractVersion);
             Assert.Equal("1.0", d.MaximumContractVersion);
         });
-        // Host can still recover C12 order from the published All inventory used by discovery.
-        Assert.Equal(12, ClassifyOperationIds.All.Count);
+        // Released C12 remains the frozen 0.3.3 compatibility surface; All is C12 + five additive.
+        Assert.Equal(17, ClassifyOperationIds.All.Count);
         Assert.Equal("classify.evaluate", ClassifyOperationIds.All[0]);
-        Assert.Equal("classify.cleanup", ClassifyOperationIds.All[^1]);
+        Assert.Equal("classify.cleanup", ClassifyOperationIds.ReleasedC12[^1]);
+        Assert.Equal("classify.unresolved.report", ClassifyOperationIds.All[^1]);
+        Assert.All(ClassifyOperationIds.ReleasedC12, id =>
+            Assert.Contains(id, classify.Select(d => d.OperationId)));
     }
 
     [Fact]
@@ -661,12 +667,25 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
     [Fact]
     public void UC006_mutating_operations_require_idempotency_in_published_descriptors()
     {
+        // Queries (no idempotency): outcome.get/list, rule.list, rule-set.active.get, status, unresolved.report.
+        // Mutations (idempotency required): evaluate/apply/rule lifecycle/feedback/abandon/cleanup/corpus.build.
         foreach (var operationId in ClassifyOperationIds.All)
         {
             var descriptor = registry.Find(operationId)!;
-            var isQuery = operationId is ClassifyOperationIds.OutcomeGet or ClassifyOperationIds.Status;
+            var isQuery = operationId is
+                ClassifyOperationIds.OutcomeGet
+                or ClassifyOperationIds.OutcomeList
+                or ClassifyOperationIds.RuleList
+                or ClassifyOperationIds.RuleSetActiveGet
+                or ClassifyOperationIds.Status
+                or ClassifyOperationIds.UnresolvedReport;
             Assert.Equal(!isQuery, descriptor.RequiresIdempotencyKey);
             Assert.Equal(isQuery ? "query" : "mutation", descriptor.Kind);
+            if (operationId == ClassifyOperationIds.CorpusBuild)
+            {
+                Assert.True(descriptor.RequiresIdempotencyKey);
+                Assert.Equal("mutation", descriptor.Kind);
+            }
         }
     }
 
@@ -684,7 +703,8 @@ public sealed class ClassifyUc006AgentContractTests : IAsyncLifetime
         var classifyOps = operations.EnumerateArray()
             .Where(o => o.GetProperty("operationId").GetString()!.StartsWith("classify.", StringComparison.Ordinal))
             .ToArray();
-        Assert.Equal(12, classifyOps.Length);
+        Assert.Equal(17, classifyOps.Length);
+        Assert.Equal(12, ClassifyOperationIds.ReleasedC12.Count);
         foreach (var op in classifyOps)
         {
             var operationId = op.GetProperty("operationId").GetString()!;

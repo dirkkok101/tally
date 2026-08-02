@@ -1,22 +1,27 @@
-using System.Reflection;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text.RegularExpressions;
+using Tally.Cli;
+using Tally.Features.Classify.Contract;
 using Xunit;
 
 namespace Tally.Tests.Classify;
 
 /// <summary>
-/// TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY / PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES / bd-1yaj.
-/// Named-suite presence and forbidden-surface guards for ClassifyGraphQualityEvidence.
+/// TASK-CLASSIFY-ERGONOMICS-GATE-MODULE / PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES / bd-2u6r.
+/// Named-suite presence, plan/bead tracing, inventory, and forbidden-surface guards for
+/// ClassifyGraphQualityEvidence under PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1.
 /// Per-class discovery non-vacuity is asserted by scripts/verify-classify-graph.sh.
 /// </summary>
 [SupportedOSPlatform("linux")]
 public sealed class ClassifyGraphEvidenceGuardTests
 {
+    public const string ErgonomicsPlanRef = "PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1";
+    public const string RulebookPlanRef = "PLAN-CLASSIFY-RULEBOOK-V1";
+
     /// <summary>
     /// Feature, integration/ledger, security, private-evidence, contract, recovery, storage,
-    /// and UC suites that must each contribute nonzero discovery before aggregate totals.
+    /// operator ergonomics, and UC suites that must each contribute nonzero discovery.
     /// </summary>
     public static readonly string[] NamedSuites =
     [
@@ -30,6 +35,8 @@ public sealed class ClassifyGraphEvidenceGuardTests
         "EvaluationPersistenceTests",
         "OutcomeExplanationTests",
         "OutcomeInvalidationTests",
+        "OutcomeListTests",
+        "OutcomeCursorStalenessTests",
         // Feature — rules
         "ClassificationRuleVocabularyTests",
         "NormalizerV1Tests",
@@ -37,6 +44,7 @@ public sealed class ClassifyGraphEvidenceGuardTests
         "RuleDraftPersistenceTests",
         "RuleRetirementTests",
         "SaveClassificationRuleTests",
+        "RuleDiscoveryTests",
         // Feature — apply / recovery apply
         "ApplyAuthorizationTests",
         "ApplyPreviewTests",
@@ -51,10 +59,15 @@ public sealed class ClassifyGraphEvidenceGuardTests
         // Storage
         "ClassifyHistoryInvariantTests",
         "ClassifyStateStoreTests",
-        // Contract / process
+        // Contract / process / ergonomics
         "ClassifyOperationContractTests",
         "ClassifyPublishedContractTests",
         "ClassifyProcessContractTests",
+        "ClassifyOperatorErgonomicsContractTests",
+        "ClassifyOperatorErgonomicsSecurityTests",
+        "ClassifyOperatorErgonomicsProcessTests",
+        "ClassifyOperatorBatchPreviewTests",
+        "ClassifyCursorCodecTests",
         // Integration — LEDGER public contract
         "ClassifyLedgerBoundaryArchitectureTests",
         "ClassifyLedgerContractClientTests",
@@ -64,13 +77,19 @@ public sealed class ClassifyGraphEvidenceGuardTests
         // Security
         "ClassifyArtifactProtectionTests",
         "ClassifySecurityGateTests",
-        // Private-evidence / validation
+        // Private-evidence / validation / corpus
         "OwnerRulebookGateTests",
         "ClassificationRuleValidationTests",
+        "ClassificationProjectionCorpusMapperTests",
         "PrivateCorpusPrivacyTests",
         "PrivateCorpusReaderTests",
+        "PrivateCorpusBuilderTests",
+        "PrivateCorpusWriterRecoveryTests",
         "ValidationLimitTests",
         "ValidationPrivacyTests",
+        // Unresolved report
+        "UnresolvedPatternGroupingPolicyTests",
+        "UnresolvedPatternReportTests",
         // UC acceptance
         "ClassifyUc001EvaluationTests",
         "ClassifyUc002OutcomeTests",
@@ -80,6 +99,51 @@ public sealed class ClassifyGraphEvidenceGuardTests
         "ClassifyUc006AgentContractTests",
         // This gate suite
         "ClassifyGraphEvidenceGuardTests"
+    ];
+
+    /// <summary>Every ergonomics plan task must appear in graph + bead inventory.</summary>
+    public static readonly string[] ErgonomicsTaskRefs =
+    [
+        "TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION",
+        "TASK-CLASSIFY-ERGONOMICS-CORPUS-MAPPER",
+        "TASK-CLASSIFY-ERGONOMICS-OUTCOME-LIST",
+        "TASK-CLASSIFY-ERGONOMICS-RUNTIME-CONVERGENCE",
+        "TASK-CLASSIFY-ERGONOMICS-CORPUS-BUILDER",
+        "TASK-CLASSIFY-ERGONOMICS-CURSOR-POLICY",
+        "TASK-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY-GATE",
+        "TASK-CLASSIFY-ERGONOMICS-RULE-DISCOVERY",
+        "TASK-CLASSIFY-ERGONOMICS-BULK-PREVIEW-COMPOSITION",
+        "TASK-CLASSIFY-ERGONOMICS-PROCESS-THROUGHPUT-GATE",
+        "TASK-CLASSIFY-ERGONOMICS-UNRESOLVED-POLICY",
+        "TASK-CLASSIFY-ERGONOMICS-UNRESOLVED-REPORT",
+        "TASK-CLASSIFY-ERGONOMICS-GATE-MODULE"
+    ];
+
+    /// <summary>Bead IDs compiled for PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1 (order free).</summary>
+    public static readonly string[] ErgonomicsBeadIds =
+    [
+        "bd-1gly",
+        "bd-3k1z",
+        "bd-vg33",
+        "bd-rly1",
+        "bd-1cik",
+        "bd-29ch",
+        "bd-3mdk",
+        "bd-2vbg",
+        "bd-wsjo",
+        "bd-2byd",
+        "bd-elq8",
+        "bd-3ciw",
+        "bd-2u6r"
+    ];
+
+    public static readonly string[] FiveAdditiveOperations =
+    [
+        ClassifyOperationIds.OutcomeList,
+        ClassifyOperationIds.RuleList,
+        ClassifyOperationIds.RuleSetActiveGet,
+        ClassifyOperationIds.CorpusBuild,
+        ClassifyOperationIds.UnresolvedReport
     ];
 
     private static readonly string[] ForbiddenCompositionTokens =
@@ -112,6 +176,18 @@ public sealed class ClassifyGraphEvidenceGuardTests
         "\\b(" + string.Join("|", "TO" + "DO", "FIX" + "ME", "HA" + "CK", "XX" + "X", "NotImplemented" + "Exception") + ")\\b",
         RegexOptions.Compiled | RegexOptions.CultureInvariant);
 
+    // Private-payload tokens that must never appear as live data in verification companions.
+    // Gate scripts may name canary *families* in negative assertions (e.g. CANARY_PROC_); those
+    // are metadata, not fixture payloads — forbid only raw financial/private shapes here.
+    private static readonly string[] PrivacyForbiddenTokens =
+    [
+        "sourceDescription",
+        "normalized_description",
+        "SELECT * FROM",
+        "BEGIN RSA PRIVATE",
+        "HARD_LINK_CANARY_CONTENT"
+    ];
+
     [Fact]
     public void All_named_classify_suites_exist_in_the_test_assembly()
     {
@@ -125,8 +201,7 @@ public sealed class ClassifyGraphEvidenceGuardTests
 
     /// <summary>
     /// Reverse inventory: every public Classify *Tests class must appear in NamedSuites so a new
-    /// suite cannot ship without a discovery floor. Module-final gate suites are not present yet
-    /// (bd-3l4k owns TASK-CLASSIFY-RULEBOOK-GATE-MODULE).
+    /// suite cannot ship without a discovery floor. Module-final guard lives outside this namespace.
     /// </summary>
     [Fact]
     public void Every_classify_test_class_in_the_assembly_is_a_named_graph_suite()
@@ -251,35 +326,85 @@ public sealed class ClassifyGraphEvidenceGuardTests
     }
 
     [Fact]
-    public void Exactly_twelve_classify_operations_and_zero_http_aliases_are_intended()
+    public void Exactly_one_hundred_five_global_and_seventeen_classify_operations_are_published()
     {
-        var registryType = typeof(Tally.Cli.OperationRegistry);
-        var create = registryType.GetMethod(
-            "Create",
-            BindingFlags.Public | BindingFlags.Static,
-            binder: null,
-            types: Type.EmptyTypes,
-            modifiers: null);
-        Assert.NotNull(create);
+        var registry = OperationRegistry.Create();
+        Assert.Equal(105, registry.Descriptors.Count);
 
-        var registry = create!.Invoke(null, null)!;
-        var descriptorsProperty = registry.GetType().GetProperty("Descriptors")!;
-        var descriptors = (System.Collections.IEnumerable)descriptorsProperty.GetValue(registry)!;
-        var classifyIds = new List<string>();
-        foreach (var descriptor in descriptors)
-        {
-            var id = (string)descriptor.GetType().GetProperty("OperationId")!.GetValue(descriptor)!;
-            if (id.StartsWith("classify.", StringComparison.Ordinal))
-            {
-                classifyIds.Add(id);
-            }
-        }
+        var classifyIds = registry.Descriptors
+            .Where(d => d.OperationId.StartsWith("classify.", StringComparison.Ordinal))
+            .Select(d => d.OperationId)
+            .Order(StringComparer.Ordinal)
+            .ToArray();
 
-        Assert.Equal(12, classifyIds.Count);
+        Assert.Equal(17, classifyIds.Length);
+        Assert.Equal(17, ClassifyOperationIds.All.Count);
+        Assert.All(FiveAdditiveOperations, id => Assert.Contains(id, classifyIds));
         Assert.DoesNotContain(classifyIds, id => id.Contains("http", StringComparison.OrdinalIgnoreCase));
         Assert.DoesNotContain(classifyIds, id => id.Contains("endpoint", StringComparison.OrdinalIgnoreCase));
         Assert.DoesNotContain(classifyIds, id => id.Contains("watch", StringComparison.OrdinalIgnoreCase));
         Assert.DoesNotContain(classifyIds, id => id.Contains("daemon", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public void Ergonomics_plan_tasks_and_beads_are_present_in_graph()
+    {
+        var root = RepositoryRoot();
+        Assert.True(File.Exists(Path.Combine(
+            root, ".lexicon", "graph", "CLASSIFY", "plan", ErgonomicsPlanRef + ".json")));
+        Assert.True(File.Exists(Path.Combine(
+            root, ".lexicon", "graph", "CLASSIFY", "plan", RulebookPlanRef + ".json")));
+
+        foreach (var task in ErgonomicsTaskRefs)
+        {
+            Assert.True(
+                File.Exists(Path.Combine(root, ".lexicon", "graph", "CLASSIFY", "task", task + ".json")),
+                "missing ergonomics task entity " + task);
+        }
+
+        // Bead IDs must appear in beads issues export (metadata only — no private payloads).
+        var beadsPath = Path.Combine(root, ".beads", "issues.jsonl");
+        Assert.True(File.Exists(beadsPath));
+        var beadsText = File.ReadAllText(beadsPath);
+        foreach (var bead in ErgonomicsBeadIds)
+        {
+            Assert.Contains(bead, beadsText, StringComparison.Ordinal);
+        }
+    }
+
+    [Fact]
+    public void Governing_ergonomics_decisions_and_requirements_exist()
+    {
+        var root = RepositoryRoot();
+        string[] decisions =
+        [
+            "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+            "DD-CLASSIFY-SHIPPED-BASELINE",
+            "DD-CLASSIFY-PAGINATED-DISCOVERY",
+            "DD-CLASSIFY-PRIVATE-CORPUS-PUBLICATION",
+            "DD-CLASSIFY-UNRESOLVED-REPORT-BOUNDARY"
+        ];
+        foreach (var dd in decisions)
+        {
+            Assert.True(
+                File.Exists(Path.Combine(root, ".lexicon", "graph", "CLASSIFY", "decision", dd + ".json")),
+                "missing governing decision " + dd);
+        }
+
+        string[] frs =
+        [
+            "FR-CLASSIFY-OUTCOME-DISCOVERY",
+            "FR-CLASSIFY-RULEBOOK-DISCOVERY",
+            "FR-CLASSIFY-PRIVATE-CORPUS-BUILDER",
+            "FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT",
+            "FR-CLASSIFY-BULK-PREVIEW-COMPOSITION"
+        ];
+        foreach (var fr in frs)
+        {
+            Assert.True(
+                File.Exists(Path.Combine(root, ".lexicon", "graph", "CLASSIFY", "fr", fr + ".json")),
+                "missing FR " + fr);
+        }
     }
 
     [Fact]
@@ -368,6 +493,69 @@ public sealed class ClassifyGraphEvidenceGuardTests
         // Privacy: module description may mention domains abstractly, but this guard only
         // fingerprints identity fields — never private fixture rows or financial payloads.
         Assert.DoesNotContain("SELECT ", text, StringComparison.OrdinalIgnoreCase);
+    }
+
+    [Fact]
+    public void Graph_docs_and_gate_scripts_are_privacy_safe()
+    {
+        var root = RepositoryRoot();
+        // Companion docs must stay free of private payloads. Gate scripts may enumerate
+        // forbidden tokens as scan needles — they are not live financial data.
+        string[] docPaths =
+        [
+            Path.Combine(root, "docs", "verification", "classify-graph.md"),
+            Path.Combine(root, "docs", "verification", "classify-v1.md")
+        ];
+        string[] scriptPaths =
+        [
+            Path.Combine(root, "scripts", "verify-classify-graph.sh"),
+            Path.Combine(root, "scripts", "verify-classify-module.sh")
+        ];
+
+        foreach (var path in docPaths)
+        {
+            Assert.True(File.Exists(path), "missing " + path);
+            var text = File.ReadAllText(path);
+            foreach (var token in PrivacyForbiddenTokens)
+            {
+                Assert.False(
+                    text.Contains(token, StringComparison.Ordinal),
+                    $"privacy token '{token}' found in {Relative(root, path)}");
+            }
+
+            Assert.DoesNotContain("unbuilt classification", text, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain("unpublished classification_v1", text, StringComparison.OrdinalIgnoreCase);
+        }
+
+        foreach (var path in scriptPaths)
+        {
+            Assert.True(File.Exists(path), "missing " + path);
+            var text = File.ReadAllText(path);
+            Assert.DoesNotContain("unbuilt classification", text, StringComparison.OrdinalIgnoreCase);
+            Assert.DoesNotContain("unpublished classification_v1", text, StringComparison.OrdinalIgnoreCase);
+            // Scripts must document never-open live-root policy (path may appear only as guard).
+            Assert.True(
+                text.Contains("never", StringComparison.OrdinalIgnoreCase)
+                || text.Contains("must not", StringComparison.OrdinalIgnoreCase)
+                || !text.Contains("/home/ubuntu/.local/share/tally", StringComparison.Ordinal),
+                "gate script live-root mention without never-guard: " + Relative(root, path));
+        }
+    }
+
+    [Fact]
+    public void Graph_report_traces_ergonomics_plan_and_inventory()
+    {
+        var root = RepositoryRoot();
+        var report = File.ReadAllText(Path.Combine(root, "docs", "verification", "classify-graph.md"));
+        Assert.Contains(ErgonomicsPlanRef, report, StringComparison.Ordinal);
+        Assert.Contains("105", report, StringComparison.Ordinal);
+        Assert.Contains("17", report, StringComparison.Ordinal);
+        Assert.Contains("PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1", report, StringComparison.Ordinal);
+        Assert.Contains("operator ergonomics", report, StringComparison.OrdinalIgnoreCase);
+        foreach (var bead in ErgonomicsBeadIds)
+        {
+            Assert.Contains(bead, report, StringComparison.Ordinal);
+        }
     }
 
     private static string RepositoryRoot()

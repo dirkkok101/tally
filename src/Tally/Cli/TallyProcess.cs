@@ -430,8 +430,12 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         BudgetErrors.Unexpected
             => Error(10, code, "host", "The budget operation could not be completed."),
         // CLASSIFY published domain errors (ErrorSchema lists on ClassifyOperationModule).
+        // Include additive ergonomics codes so null-descriptor fallback remains coherent with
+        // each descriptor's DomainErrors (RegistryDomainErrorProcessTests).
         ClassifyErrors.InvalidInput or ClassifyErrors.ActorRequired or ClassifyErrors.IdempotencyRequired
             or ClassifyErrors.SelectionInvalid
+            or ClassifyErrors.PrivacyRejected
+            or ClassifyErrors.LabelInvalid
             or "CLASSIFY-CORPUS-PATH-REQUIRED" or "CLASSIFY-CORPUS-SYMLINK" or "CLASSIFY-CORPUS-OWNER"
             or "CLASSIFY-CORPUS-PERMISSIONS" or "CLASSIFY-CORPUS-NOT-REGULAR" or "CLASSIFY-CORPUS-MALFORMED"
             or "CLASSIFY-CORPUS-DUPLICATE-ORDINAL" or "CLASSIFY-CORPUS-FIELD-INVALID"
@@ -439,19 +443,22 @@ public sealed class TallyProcess(OperationRegistry registry, LedgerServices? con
         ClassifyErrors.NotFound or ClassifyErrors.EvaluationNotFound or ClassifyErrors.OutcomeNotFound
             or ClassifyErrors.PreviewNotFound or ClassifyErrors.RuleNotFound or ClassifyErrors.RuleVersionNotFound
             or ClassifyErrors.ValidationNotFound
+            or ClassifyErrors.ActiveRuleSetNotFound
             or "CLASSIFY-CORPUS-NOT-FOUND"
             => Error(4, code, "not_found", "The classify target was not found."),
         ClassifyErrors.Conflict or ClassifyErrors.IdempotencyConflict or ClassifyErrors.Stale
+            or ClassifyErrors.DestinationExists
             => Error(5, code, "conflict", "The classify request conflicts with current state."),
         ClassifyErrors.Lifecycle
             or "CLASSIFY-CORPUS-CANCELLED"
             => Error(6, code, "lifecycle", "The classify lifecycle does not allow the operation."),
         ClassifyErrors.UnsupportedVersion or ClassifyErrors.LedgerIncompatible
+            or ClassifyErrors.CursorInvalid or ClassifyErrors.CursorStale
             => Error(7, code, "compatibility", "The classify request is not compatible with this executable contract."),
         ClassifyErrors.Integrity
             => Error(8, code, "integrity", "The classify request could not preserve its integrity contract."),
         ClassifyErrors.LedgerUnavailable or ClassifyErrors.ResourceLimit
-            or "CLASSIFY-CORPUS-READ-FAILED"
+            or "CLASSIFY-CORPUS-READ-FAILED" or "CLASSIFY-CORPUS-LIMIT" or "CLASSIFY-CORPUS-TIMEOUT"
             => Error(9, code, "host", "The classify operation could not access a required host resource."),
         ClassifyErrors.Unexpected
             => Error(10, code, "host", "The classify operation could not be completed."),

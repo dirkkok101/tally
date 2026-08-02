@@ -1,12 +1,16 @@
 # CLASSIFY graph and evidence quality
 
-Status: verification gate for `TASK-CLASSIFY-RULEBOOK-GATE-GRAPH-QUALITY` /
-`PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES` / bead `bd-1yaj`.
+Status: verification gate for TASK-CLASSIFY-ERGONOMICS-GATE-MODULE /
+PAT-CORE-IMPLEMENTATION-PLAN-QUALITY-GATES / bead bd-2u6r under
+PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1 (also revalidates shipped PLAN-CLASSIFY-RULEBOOK-V1).
 
 This report is **metadata-only**. It records graph commands, exact counts, graph ref-codes,
-suite discovery floors, and content fingerprints. It does **not** include private fixture
-paths or content, descriptions, normalized tokens, amounts, expected corpus rows, secrets,
-request/response JSON, or other financial/private payloads.
+suite discovery floors, plan/bead inventory, and content fingerprints. It does **not** include
+private fixture paths or content, descriptions, normalized tokens, amounts, expected corpus
+rows, secrets, request/response JSON, or other financial/private payloads.
+
+The report **must not embed its own raw self-hash**; live report hashing is emitted only by
+scripts/verify-classify-graph.sh.
 
 ## Gate command
 
@@ -14,146 +18,105 @@ request/response JSON, or other financial/private payloads.
 bash scripts/verify-classify-graph.sh
 ```
 
-Expected: exit 0; coverage is 13 of 13 active FRs with at least 20 linked test cases and zero
-gaps/orphans; all design paths match (floor ≥ 30); link suggestions are empty; three CLI-only
-endpoint heuristics are recorded as non-applicable; every named suite discovers tests; plan
-coverage/audit/context/dependency checks are clean; forbidden-surface and placeholder scans are
-empty.
+Expected: exit 0; coverage is 18 of 18 active FRs with at least 27 linked test cases and zero
+coverage orphans; all design paths match (floor >= 30); link suggestions are empty; three CLI-only
+endpoint heuristics are recorded as non-applicable; every named suite discovers tests; ergonomics
+plan coverage/audit is gap-free; 105/17 inventory claim and five additive operations are present;
+forbidden-surface and placeholder scans are empty.
 
 ## Evidence surface
 
 | Artifact | Role |
 |---|---|
-| `tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs` | Named-suite presence + forbidden-surface + placeholder guards (`ClassifyGraphQualityEvidence`) |
-| `scripts/verify-classify-graph.sh` | Graph, plan, discovery, and forbidden-surface runner |
-| `docs/verification/classify-graph.md` | This metadata-only report |
-| `.lexicon/graph/CLASSIFY/module.json` | Canonical module identity (read-only for this gate) |
+| tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs | Named-suite presence, plan/bead tracing, inventory, privacy, forbidden-surface guards |
+| scripts/verify-classify-graph.sh | Graph, plan, discovery, and forbidden-surface runner |
+| docs/verification/classify-graph.md | This metadata-only report |
+| .lexicon/graph/CLASSIFY/module.json | Canonical module identity (read-only for this gate) |
+
+## Inventory and operator ergonomics
+
+| Claim | Expected |
+|---|---|
+| Global registry | 105 operations |
+| CLASSIFY operations | 17 (released C12 + five additive) |
+| Additive ops | classify.outcome.list, classify.rule.list, classify.rule-set.active.get, classify.corpus.build, classify.unresolved.report |
+| Production-usable engine | Shipped CLASSIFY 0.3.3 C12 baseline remains authoritative |
+| Operator ergonomics | Additive discovery/report/corpus surfaces on that baseline (no migration) |
+
+## Plans, tasks, and beads
+
+PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1 has 13 tasks. Bead inventory:
+
+| `bd-1gly` | ergonomics plan bead |
+| `bd-3k1z` | ergonomics plan bead |
+| `bd-vg33` | ergonomics plan bead |
+| `bd-rly1` | ergonomics plan bead |
+| `bd-1cik` | ergonomics plan bead |
+| `bd-29ch` | ergonomics plan bead |
+| `bd-3mdk` | ergonomics plan bead |
+| `bd-2vbg` | ergonomics plan bead |
+| `bd-wsjo` | ergonomics plan bead |
+| `bd-2byd` | ergonomics plan bead |
+| `bd-elq8` | ergonomics plan bead |
+| `bd-3ciw` | ergonomics plan bead |
+| `bd-2u6r` | ergonomics plan bead |
+
+| Task | Bead |
+|---|---|
+| TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION | bd-1gly |
+| TASK-CLASSIFY-ERGONOMICS-CORPUS-MAPPER | bd-3k1z |
+| TASK-CLASSIFY-ERGONOMICS-OUTCOME-LIST | bd-vg33 |
+| TASK-CLASSIFY-ERGONOMICS-RUNTIME-CONVERGENCE | bd-rly1 |
+| TASK-CLASSIFY-ERGONOMICS-CORPUS-BUILDER | bd-1cik |
+| TASK-CLASSIFY-ERGONOMICS-CURSOR-POLICY | bd-29ch |
+| TASK-CLASSIFY-ERGONOMICS-PRIVACY-RECOVERY-GATE | bd-3mdk |
+| TASK-CLASSIFY-ERGONOMICS-RULE-DISCOVERY | bd-2vbg |
+| TASK-CLASSIFY-ERGONOMICS-BULK-PREVIEW-COMPOSITION | bd-wsjo |
+| TASK-CLASSIFY-ERGONOMICS-PROCESS-THROUGHPUT-GATE | bd-2byd |
+| TASK-CLASSIFY-ERGONOMICS-UNRESOLVED-POLICY | bd-elq8 |
+| TASK-CLASSIFY-ERGONOMICS-UNRESOLVED-REPORT | bd-3ciw |
+| TASK-CLASSIFY-ERGONOMICS-GATE-MODULE | bd-2u6r |
+
+PLAN-CLASSIFY-RULEBOOK-V1 remains the historical 30-task shipped baseline.
 
 ## Graph commands and expected counts
 
 | Command | Expected |
 |---|---|
-| `lex coverage --module CLASSIFY --json` | Status `healthy`; 13/13 active FRs covered; ≥20 unique linked TCs; 0 orphans; 0 gaps; 0 warnings |
-| `lex test-case list --module CLASSIFY --json` | Inventory equals unique linked TC count |
-| `lex decision path-check --module CLASSIFY --json` | Status `healthy`; matched = total; `missing_count=0`; total ≥ 30 |
-| `lex link suggest --module CLASSIFY --json` | Empty list |
-| `lex endpoint suggest --module CLASSIFY --json` | Exactly 3 heuristics (below), recorded as non-applicable |
-| `lex endpoint list --module CLASSIFY --json` | Empty (no HTTP endpoint entities) |
-| `lex external-dependency check --module CLASSIFY --json` | Four deps with linked TC evidence |
-| `lex plan coverage PLAN-CLASSIFY-RULEBOOK-V1 --json` | `gap_count=0` |
-| `lex plan audit PLAN-CLASSIFY-RULEBOOK-V1 --json` | `blocking_finding_count=0` |
-| `lex plan status PLAN-CLASSIFY-RULEBOOK-V1 --json` | `planning_state=ready`; 30 tasks |
-| `lex context <TASK> --max-tokens 2500 --json` | All 30 plan tasks core sections within 2500 tokens |
+| lex coverage --module CLASSIFY --json | Status healthy; 18/18 active FRs; >=27 linked TCs; 0 orphans |
+| lex decision path-check --module CLASSIFY --json | healthy; matched=total; missing=0; total>=30 |
+| lex link suggest --module CLASSIFY --json | Empty |
+| lex plan coverage PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1 --json | gap_count=0 |
+| lex plan audit PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1 --json | blocking_finding_count=0 |
+| lex plan status PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1 --json | ready; 13 tasks |
+| lex plan coverage PLAN-CLASSIFY-RULEBOOK-V1 --json | historical baseline (residual additive gaps tolerated) |
+| lex plan audit PLAN-CLASSIFY-RULEBOOK-V1 --json | blocking_finding_count=0 |
+| lex plan status PLAN-CLASSIFY-RULEBOOK-V1 --json | ready; 30 tasks |
 
-## Endpoint heuristics (CLI-only, non-applicable)
+## Governing decisions / FRs (ergonomics)
 
-The accepted design is **local structured CLI** with zero Lex endpoint entities. The three known
-heuristics must remain present and must **not** be silenced by adding HTTP:
+Decisions: DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT, DD-CLASSIFY-SHIPPED-BASELINE,
+DD-CLASSIFY-PAGINATED-DISCOVERY, DD-CLASSIFY-PRIVATE-CORPUS-PUBLICATION,
+DD-CLASSIFY-UNRESOLVED-REPORT-BOUNDARY.
 
-| Rule | Source FR | Disposition |
-|---|---|---|
-| `detail-flow` | `FR-CLASSIFY-CONTRACT-DISCOVERY` | Non-applicable — discovery is a CLI schema operation, not GET item-detail |
-| `management-write-flow` | `FR-CLASSIFY-RULE-LIFECYCLE` | Non-applicable — rule lifecycle is typed CLI mutation, not POST |
-| `search-flow` | `FR-CLASSIFY-STATUS-HISTORY` | Non-applicable — status is a CLI query, not HTTP search |
+FRs: FR-CLASSIFY-OUTCOME-DISCOVERY, FR-CLASSIFY-RULEBOOK-DISCOVERY,
+FR-CLASSIFY-PRIVATE-CORPUS-BUILDER, FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT,
+FR-CLASSIFY-BULK-PREVIEW-COMPOSITION.
 
-## External dependencies (evidence-linked)
+## Content fingerprints (immutable inputs; raw SHA-256)
 
-| Ref | Linked test cases (examples) | Recorded status |
-|---|---|---|
-| `EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT` | `TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT`, `TC-CLASSIFY-APPLY-EXECUTION-CONTRACT` | evidence-linked |
-| `EXT-CLASSIFY-HOST-OS-SECURITY` | `TC-CLASSIFY-LOCAL-ARTIFACT-PROTECTION`, `TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT` | evidence-linked |
-| `EXT-CLASSIFY-AI-AGENT-HOST` | `TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT` | evidence-linked |
-| `EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS` | `TC-CLASSIFY-RULE-VALIDATION-CONTRACT` | evidence-linked |
-
-Final module gate (`bd-3l4k`) owns any additional consumer pairing; this gate does not force-validate without evidence.
-
-## Named suites (nonzero discovery required)
-
-Per-class discovery must meet its floor (≥1 for feature suites; higher floors for UC, security,
-private-evidence, and contract suites) **before** aggregate CLASSIFY totals are accepted:
-
-| Family | Classes |
-|---|---|
-| Feature — evaluation | `ClassificationDeterminismPropertyTests`, `ClassificationEngineTests`, `ClassificationEvaluationInput*`, `EvaluateClassificationCommandTests`, `EvaluationLimitTests`, `EvaluationPersistenceTests`, `OutcomeExplanationTests`, `OutcomeInvalidationTests` |
-| Feature — rules | `ClassificationRuleVocabularyTests`, `NormalizerV1Tests`, `RuleActivationTests`, `RuleDraftPersistenceTests`, `RuleRetirementTests`, `SaveClassificationRuleTests` |
-| Feature — apply | `ApplyAuthorizationTests`, `ApplyPreviewTests`, `ClassificationApplySagaTests`, `ClassificationApplyCrashRecoveryTests` |
-| Feature — feedback / recovery | `ClassificationFeedbackTests`, `FeedbackProposalTests`, `AbandonCleanupTests`, `ClassificationStatusTests`, `StatusPrivacyTests` |
-| Storage | `ClassifyHistoryInvariantTests`, `ClassifyStateStoreTests` |
-| Contract / process | `ClassifyOperationContractTests`, `ClassifyPublishedContractTests`, `ClassifyProcessContractTests` |
-| Integration (LEDGER) | `ClassifyLedgerBoundaryArchitectureTests`, `ClassifyLedgerContractClientTests`, `LedgerClassification*`, `LedgerClassifyPrerequisiteTests` |
-| Security | `ClassifyArtifactProtectionTests`, `ClassifySecurityGateTests` |
-| Private-evidence / validation | `OwnerRulebookGateTests`, `ClassificationRuleValidationTests`, `PrivateCorpus*`, `ValidationLimitTests`, `ValidationPrivacyTests` |
-| UC | `ClassifyUc001EvaluationTests` … `ClassifyUc006AgentContractTests` |
-| Graph gate | `ClassifyGraphEvidenceGuardTests` |
-
-## Forbidden surfaces and placeholders
-
-Scans over CLASSIFY `src` and `tests` must find **zero**:
-
-- HTTP / FastEndpoints / AspNetCore / `HttpClient` / listeners
-- EF / `DbContext` / Npgsql
-- Hosted services / plugin loaders
-- `TODO` / `FIXME` / `HACK` / `XXX` / `NotImplementedException`
-
-## Plan quality
-
-- Coverage: all required refs covered; gate/validation tasks may remain intentionally loose (no `implements`)
-- Audit: zero blocking findings (informational optional-generic-ref notes allowed)
-- Dependencies among `TASK-CLASSIFY-RULEBOOK-*` are acyclic
-- Context budgets: core recipe sections ≤ 2500 tokens per plan task
-
-## How to re-run
-
-```bash
-dotnet build Tally.slnx -c Release --nologo
-lex coverage --module CLASSIFY --json | jq '.Summary'
-lex decision path-check --module CLASSIFY --json | jq '{status, missing_count}'
-bash scripts/verify-classify-graph.sh
-```
-
-## Result
-
-Record the runner exit code, FR/TC/path counts, per-class discovery counts, endpoint-heuristic
-disposition, external-dep statuses, and content fingerprints when the gate is executed. Do not
-paste private fixtures, descriptions, tokens, amounts, or financial payloads.
-
-## Latest run
-
-Executed on 2026-08-01 via `bash scripts/verify-classify-graph.sh` for `bd-1yaj`
-(fingerprint-truth correction).
-
-| Check | Result |
-|---|---|
-| `lex coverage` | 13/13 FRs; 21 unique linked TCs (≥20 floor); 0 orphans; healthy |
-| `lex decision path-check` | 35/35 paths matched; healthy (≥30 floor) |
-| `lex link suggest` | 0 suggestions |
-| `lex endpoint suggest` | 3 heuristics → non-applicable CLI-only |
-| `lex endpoint list` | 0 entities |
-| External deps | 4 evidence-linked |
-| Plan coverage / audit | 174/174 covered; 0 gaps; 0 blocking findings |
-| Context budgets | 30/30 core sections ≤ 2500 tokens |
-| Dependencies | Acyclic (30 rulebook tasks, 97 edges) |
-| Named suite discovery | 49 classes, each ≥ floor (aggregate CLASSIFY discovery 1020 — not sole evidence) |
-| Guard tests | 9/9 passed (includes recorded-fingerprint agreement) |
-| Recorded fingerprints | 3 immutable-input rows match live raw SHA-256/bytes |
-| Live report fingerprint | emitted by runner only (not embedded): see gate log |
-| Forbidden / placeholder scans | 0 hits |
-| Script exit | 0 |
-
-### Recorded immutable-input fingerprints (raw SHA-256)
-
-These rows are for artifacts that do **not** contain their own hash. Each recorded
-`SHA-256` / `Bytes` pair is the raw content hash of the file at commit time.
-
-`docs/verification/classify-graph.md` **must not embed its own raw self-hash or byte
-size**: a raw file cannot truthfully contain its own final raw SHA-256 because that
-field changes the file. The runner (`bash scripts/verify-classify-graph.sh`) always
-prints the **live** raw hash and size for the Markdown report at execution time, and
-both the runner and `ClassifyGraphEvidenceGuardTests` fail if any recorded
-immutable-input row disagrees with the current artifact.
+This report path (docs/verification/classify-graph.md) is excluded from the raw hash table:
+it is the artifact being written, so a pre-write hash cannot match final bytes. The report
+must not embed its own raw self-hash. Live report hash is emitted by
+scripts/verify-classify-graph.sh only.
 
 | Artifact | SHA-256 | Bytes |
 |---|---|---:|
-| `scripts/verify-classify-graph.sh` | `577bebaa02a225ebbc5821a50a6ecf8d333ace9ec9d1f1fe73152acc8f3919f3` | 26821 |
-| `tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs` | `3b39a93759d7c8582ff37785f524f811cee8fbd4fcdab5b125b9668b5fd0c1c8` | 16167 |
-| `.lexicon/graph/CLASSIFY/module.json` | `3975f321fe72cc7f86c82934af1c0be8add2e6fbe9dc444750d7b7ce42f8df91` | 18902 |
+| `scripts/verify-classify-graph.sh` | `de53f6a420b85bf17fa20696ec90dc674d6f63ca106f2600cb9e556fdd5808b3` | 32668 |
+| `tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs` | `c1783c84791b486615b0c061f5d6b6de53b6f70dd3a4bfa6449b9dfc5b420b97` | 23881 |
+| `.lexicon/graph/CLASSIFY/module.json` | `9f10ec81f359bc1d2d164c4fd58588a1ab80ab9ef26ab8a117bdd86ff558a478` | 7918 |
+
+## Result
+
+Never open or mutate live data. ClassifyGraphQualityEvidence is current when
+bash scripts/verify-classify-graph.sh exits 0.

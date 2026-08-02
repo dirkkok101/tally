@@ -20,7 +20,7 @@ public sealed class UC006ExternalOrchestratorContractWorkflowTests(PublishedTall
 
         Assert.Equal("1.0", version.GetProperty("contractVersion").GetString());
         Assert.Equal("1.0", version.GetProperty("compatibility").GetString());
-        Assert.Equal(100, help.GetProperty("operations").GetArrayLength());
+        Assert.Equal(105, help.GetProperty("operations").GetArrayLength());
         Assert.False(Directory.Exists(Path.Combine(dataRoot, ".agents")));
         Assert.False(Directory.Exists(Path.Combine(dataRoot, ".claude")));
     }
@@ -42,7 +42,7 @@ public sealed class UC006ExternalOrchestratorContractWorkflowTests(PublishedTall
         var operations = list.GetProperty("operations").EnumerateArray().Select(operation => operation.Clone()).ToArray();
         var operationIds = operations.Select(operation => operation.GetProperty("operationId").GetString()!).ToArray();
 
-        Assert.Equal(100, operations.Length);
+        Assert.Equal(105, operations.Length);
         Assert.Equal(operationIds.Order(StringComparer.Ordinal), operationIds);
         foreach (var operation in operations)
         {
@@ -287,7 +287,7 @@ public sealed class UC006ExternalOrchestratorContractWorkflowTests(PublishedTall
         Directory.Delete(Path.Combine(scope, ".agents"), true);
 
         var schemas = await SuccessWithoutStore(["help"], null, "system.schema.list");
-        Assert.Equal(100, schemas.GetProperty("operations").GetArrayLength());
+        Assert.Equal(105, schemas.GetProperty("operations").GetArrayLength());
         var firstParent = await CreateCategory("First parent", null, "first-parent");
         var secondParent = await CreateCategory("Second parent", null, "second-parent");
         var child = await CreateCategory("Child", firstParent.GetProperty("categoryId").GetString(), "child");

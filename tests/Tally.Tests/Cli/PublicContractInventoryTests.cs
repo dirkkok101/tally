@@ -76,9 +76,9 @@ public sealed class PublicContractInventoryTests(PublicContractFixture fixture) 
         Assert.Equal(8, ingest.Length);
         Assert.Equal(6, budget.Length);
         Assert.Equal(6, system.Length);
-        Assert.Equal(100, descriptors.Count);
-        Assert.Equal(100, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
-        Assert.Equal(100, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(105, descriptors.Count);
+        Assert.Equal(105, descriptors.Select(descriptor => descriptor.OperationId).Distinct(StringComparer.Ordinal).Count());
+        Assert.Equal(105, descriptors.Select(descriptor => descriptor.CliPath).Distinct(StringComparer.Ordinal).Count());
         Assert.Equal(descriptors.Select(descriptor => descriptor.OperationId).Order(StringComparer.Ordinal), descriptors.Select(descriptor => descriptor.OperationId));
         Assert.Equal("budget.insights.evidence.get", descriptors[0].OperationId);
         Assert.Equal("system.version", descriptors[^1].OperationId);

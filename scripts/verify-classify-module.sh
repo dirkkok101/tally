@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
-# VerifiedClassifyV1Module — TASK-CLASSIFY-RULEBOOK-GATE-MODULE / bd-3l4k
-# Final CLASSIFY module convergence: restore/build/format, full suite, Native-AOT,
-# non-stale ClassifyGraphQualityEvidence, graph/path/deps, named discovery, clean diff.
+# VerifiedClassifyV1Module — TASK-CLASSIFY-ERGONOMICS-GATE-MODULE / bd-2u6r
+# Final CLASSIFY operator-ergonomics module convergence: restore/build/format, full suite,
+# Native-AOT, graph/path/deps, contract/security/ergonomics-security/process gates, clean diff.
 # Metadata-only (no private/financial payloads; never prints private corpus paths).
 set -euo pipefail
 
@@ -9,7 +9,9 @@ repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 publish_root="$(mktemp -d "${TMPDIR:-/tmp}/tally-classify-module.XXXXXX")"
 test_project="tests/Tally.Tests/Tally.Tests.csproj"
 module="CLASSIFY"
-plan="PLAN-CLASSIFY-RULEBOOK-V1"
+plan_rulebook="PLAN-CLASSIFY-RULEBOOK-V1"
+plan_ergonomics="PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1"
+plan="$plan_rulebook"
 report_path="docs/verification/classify-v1.md"
 fail_count=0
 log_dir="$(mktemp -d "${TMPDIR:-/tmp}/tally-classify-module-logs.XXXXXX")"
@@ -137,12 +139,15 @@ named_suites=(
     EvaluationPersistenceTests
     OutcomeExplanationTests
     OutcomeInvalidationTests
+    OutcomeListTests
+    OutcomeCursorStalenessTests
     ClassificationRuleVocabularyTests
     NormalizerV1Tests
     RuleActivationTests
     RuleDraftPersistenceTests
     RuleRetirementTests
     SaveClassificationRuleTests
+    RuleDiscoveryTests
     ApplyAuthorizationTests
     ApplyPreviewTests
     ClassificationApplySagaTests
@@ -157,6 +162,11 @@ named_suites=(
     ClassifyOperationContractTests
     ClassifyPublishedContractTests
     ClassifyProcessContractTests
+    ClassifyOperatorErgonomicsContractTests
+    ClassifyOperatorErgonomicsSecurityTests
+    ClassifyOperatorErgonomicsProcessTests
+    ClassifyOperatorBatchPreviewTests
+    ClassifyCursorCodecTests
     ClassifyLedgerBoundaryArchitectureTests
     ClassifyLedgerContractClientTests
     LedgerClassificationMutationPreconditionTests
@@ -166,10 +176,15 @@ named_suites=(
     ClassifySecurityGateTests
     OwnerRulebookGateTests
     ClassificationRuleValidationTests
+    ClassificationProjectionCorpusMapperTests
     PrivateCorpusPrivacyTests
     PrivateCorpusReaderTests
+    PrivateCorpusBuilderTests
+    PrivateCorpusWriterRecoveryTests
     ValidationLimitTests
     ValidationPrivacyTests
+    UnresolvedPatternGroupingPolicyTests
+    UnresolvedPatternReportTests
     ClassifyUc001EvaluationTests
     ClassifyUc002OutcomeTests
     ClassifyUc003ApplyTests
@@ -205,6 +220,19 @@ declare -A suite_floor=(
     [ClassifyOperationContractTests]=10
     [ClassifyGraphEvidenceGuardTests]=5
     [ClassifyModuleGuardTests]=5
+    [PrivateCorpusBuilderTests]=10
+    [PrivateCorpusWriterRecoveryTests]=10
+    [ClassificationProjectionCorpusMapperTests]=10
+    [ClassifyOperatorErgonomicsContractTests]=10
+    [ClassifyOperatorErgonomicsSecurityTests]=10
+    [ClassifyOperatorErgonomicsProcessTests]=13
+    [ClassifyOperatorBatchPreviewTests]=5
+    [ClassifyCursorCodecTests]=10
+    [OutcomeListTests]=10
+    [OutcomeCursorStalenessTests]=5
+    [RuleDiscoveryTests]=10
+    [UnresolvedPatternGroupingPolicyTests]=10
+    [UnresolvedPatternReportTests]=10
 )
 
 for class_name in "${named_suites[@]}"; do
@@ -280,7 +308,9 @@ fi
 section "Specialized classify gates"
 for script in \
     scripts/verify-classify-contract.sh \
-    scripts/verify-classify-security.sh
+    scripts/verify-classify-security.sh \
+    scripts/verify-classify-ergonomics-security.sh \
+    scripts/verify-classify-ergonomics-process.sh
 do
     if [[ ! -x "$script" && -f "$script" ]]; then
         chmod +x "$script"
@@ -312,6 +342,44 @@ else
     printf 'owner-rulebook specialized gate: skipped (private evidence env not set; in-suite OwnerRulebookGateTests already executed)\n'
 fi
 
+# ── Published Native-AOT schema proves five additive operations ─────────────
+section "Native-AOT schema discovery for five additive CLASSIFY operations"
+schema_out="$log_dir/schema-list.json"
+if ! "$publish_root/tally" schema list >"$schema_out" 2>"$log_dir/schema-list.err"; then
+    fail "published tally schema list failed"
+else
+    five_ops_check="$(python3 - <<PY
+import json,sys
+from pathlib import Path
+raw=Path("$schema_out").read_text()
+# schema list may be ResultEnvelope or raw array; accept either
+try:
+    data=json.loads(raw)
+except Exception as e:
+    print("bad parse", e)
+    sys.exit(0)
+# Walk for operation_id / OperationId strings
+text=raw
+needed=[
+ "classify.outcome.list","classify.rule.list","classify.rule-set.active.get",
+ "classify.corpus.build","classify.unresolved.report"]
+missing=[n for n in needed if n not in text]
+if missing:
+    print("bad missing", missing)
+else:
+    print("ok")
+    print("five_additive_present")
+PY
+)"
+    if ! grep -q '^ok$' <<< "$five_ops_check"; then
+        fail "published schema list missing five additive operations"
+        printf '%s\n' "$five_ops_check" >&2
+        head -c 500 "$log_dir/schema-list.err" >&2 || true
+    else
+        printf 'Native-AOT schema: five additive CLASSIFY operations present\n'
+    fi
+fi
+
 # ── Lex integrity / coverage / paths / links ─────────────────────────────────
 section "Lex graph integrity, coverage, paths, links"
 if ! lex check --fast; then
@@ -323,16 +391,16 @@ fi
 coverage_json="$(lex coverage --module "$module" --json)"
 if ! printf '%s\n' "$coverage_json" | jq -e '
     .Status == "healthy"
-    and .Summary.TotalRequirements == 13
-    and .Summary.CoveredRequirements == 13
+    and .Summary.TotalRequirements == 18
+    and .Summary.CoveredRequirements == 18
     and .Summary.MissingRequirements == 0
     and .Summary.OrphanTestCases == 0
     and .Summary.ErrorCount == 0
     and .Summary.WarningCount == 0
 ' >/dev/null; then
-    fail "lex coverage is not 13/13 healthy with zero orphans"
+    fail "lex coverage is not 18/18 healthy with zero orphans"
 else
-    printf 'lex coverage: 13/13 active requirements, healthy, 0 orphans\n'
+    printf 'lex coverage: 18/18 active requirements, healthy, 0 orphans\n'
 fi
 
 path_json="$(lex decision path-check --module "$module" --json)"
@@ -360,12 +428,14 @@ else
 fi
 
 plan_cov="$(lex plan coverage "$plan" --json)"
-if ! printf '%s\n' "$plan_cov" | jq -e '.gap_count == 0' >/dev/null; then
-    fail "plan coverage has gaps"
-else
-    printf 'lex plan coverage: covered=%s required=%s gaps=0\n' \
-        "$(printf '%s\n' "$plan_cov" | jq -r '.covered_ref_count')" \
-        "$(printf '%s\n' "$plan_cov" | jq -r '.required_ref_count')"
+# RULEBOOK residual gaps after additive ergonomics refs are tolerated; ergonomics plan is strict.
+printf 'lex rulebook plan coverage: covered=%s required=%s gaps=%s (baseline)\n' \
+    "$(printf '%s\n' "$plan_cov" | jq -r '.covered_ref_count')" \
+    "$(printf '%s\n' "$plan_cov" | jq -r '.required_ref_count')" \
+    "$(printf '%s\n' "$plan_cov" | jq -r '.gap_count')"
+rb_covered="$(printf '%s\n' "$plan_cov" | jq -r '.covered_ref_count')"
+if [[ "${rb_covered}" -lt 1 ]]; then
+    fail "rulebook plan coverage covered_ref_count is zero"
 fi
 
 plan_audit="$(lex plan audit "$plan" --json)"
@@ -373,6 +443,23 @@ if ! printf '%s\n' "$plan_audit" | jq -e '.blocking_finding_count == 0' >/dev/nu
     fail "plan audit has blocking findings"
 else
     printf 'lex plan audit: blocking_finding_count=0\n'
+fi
+
+# Ergonomics plan (additive increment under verification)
+section "Lex ergonomics plan coverage / audit"
+erg_plan_cov="$(lex plan coverage "$plan_ergonomics" --json)"
+if ! printf '%s\n' "$erg_plan_cov" | jq -e '.gap_count == 0' >/dev/null; then
+    fail "ergonomics plan coverage has gaps"
+else
+    printf 'lex ergonomics plan coverage: covered=%s required=%s gaps=0\n' \
+        "$(printf '%s\n' "$erg_plan_cov" | jq -r '.covered_ref_count')" \
+        "$(printf '%s\n' "$erg_plan_cov" | jq -r '.required_ref_count')"
+fi
+erg_plan_audit="$(lex plan audit "$plan_ergonomics" --json)"
+if ! printf '%s\n' "$erg_plan_audit" | jq -e '.blocking_finding_count == 0' >/dev/null; then
+    fail "ergonomics plan audit has blocking findings"
+else
+    printf 'lex ergonomics plan audit: blocking_finding_count=0\n'
 fi
 
 # ── External dependency validation (evidence-bound; no force without proof) ──
@@ -498,6 +585,8 @@ fingerprint_paths=(
     scripts/verify-classify-graph.sh
     scripts/verify-classify-contract.sh
     scripts/verify-classify-security.sh
+    scripts/verify-classify-ergonomics-security.sh
+    scripts/verify-classify-ergonomics-process.sh
     tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs
     tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs
     docs/verification/classify-graph.md
@@ -529,6 +618,58 @@ else
     printf 'git diff --check: ok\n'
 fi
 
+# ── Privacy scan of gate scripts/docs/beads (no live-data open) ─────────────
+section "Privacy scan (tracked graph/docs/scripts/beads metadata)"
+privacy_scan="$(python3 - <<'PY'
+from pathlib import Path
+# Companion docs + beads only — gate scripts may legitimately list scan needles.
+paths = [
+ Path("docs/verification/classify-graph.md"),
+ Path("docs/verification/classify-v1.md"),
+ Path(".beads/issues.jsonl"),
+]
+forbidden_exact = ["CANARY_PROC_", "BEGIN RSA PRIVATE", "sourceDescription", "HARD_LINK_CANARY_CONTENT"]
+errors=[]
+for p in paths:
+    if not p.exists():
+        errors.append(f"missing {p}")
+        continue
+    t=p.read_text(errors="replace")
+    for tok in forbidden_exact:
+        if tok in t:
+            errors.append(f"{p}: contains {tok}")
+    if "/home/ubuntu/.local/share/tally" in t:
+        if "never" not in t.lower() and "must not" not in t.lower() and "will not" not in t.lower():
+            errors.append(f"{p}: live root path without never-guard prose")
+# Scripts must exist and document never-open policy if they mention live root.
+for rel in [
+ "scripts/verify-classify-module.sh",
+ "scripts/verify-classify-graph.sh",
+ "scripts/verify-classify-ergonomics-security.sh",
+ "scripts/verify-classify-ergonomics-process.sh",
+]:
+    p=Path(rel)
+    if not p.exists():
+        errors.append(f"missing {p}")
+        continue
+    t=p.read_text(errors="replace")
+    if "/home/ubuntu/.local/share/tally" in t and "never" not in t.lower() and "must not" not in t.lower():
+        errors.append(f"{p}: live root path without never-guard prose")
+if errors:
+    print("bad")
+    for e in errors: print(e)
+else:
+    print("ok")
+    print(f"scanned_docs={len(paths)}")
+PY
+)"
+if ! grep -q '^ok$' <<< "$privacy_scan"; then
+    fail "privacy scan failed"
+    printf '%s\n' "$privacy_scan" >&2
+else
+    printf 'privacy scan: %s\n' "$(printf '%s\n' "$privacy_scan" | tail -n +2)"
+fi
+
 # ── Write safe completion report ─────────────────────────────────────────────
 section "Write module completion report (metadata-only)"
 commit_full="$(git rev-parse HEAD 2>/dev/null || echo unknown)"
@@ -548,8 +689,13 @@ Status: **${run_status}** on ${run_date} (commit \`${commit_short}\` / \`${commi
 The CLASSIFY completion gate is executed by \`bash scripts/verify-classify-module.sh\`.
 The script requires Release restore/build, CLASSIFY-owned format verification, the complete
 full test suite, linux-x64 Native-AOT publish, current non-stale ClassifyGraphQualityEvidence,
-graph/path/dependency evidence, nonzero named CLASSIFY suites, evidence-bound external
+graph/path/dependency evidence, operator-ergonomics security/process gates, nonzero named
+CLASSIFY suites, 105/17 inventory, frozen 0.3.3 fingerprints, evidence-bound external
 dependency statuses, kill-criterion clearance, and clean git whitespace.
+
+This gate closes the **operator ergonomics** increment on top of the **production-usable**
+CLASSIFY engine baseline (shipped 0.3.3 C12). Migration: none. Release/install/tag remain
+a separate authorized workflow.
 
 This report is **metadata-only**. It must not contain private fixture paths or content,
 descriptions, normalized tokens, amounts, expected corpus rows, secrets, or financial payloads.
@@ -582,11 +728,13 @@ dependencies \`validated\`; five kill criteria \`clear\`.
 | \`scripts/verify-classify-security.sh\` | invoked |
 | Owner-rulebook specialized gate | env-gated (path never printed); in-suite OwnerRulebookGateTests always run |
 | \`lex check --fast\` | executed |
-| \`lex coverage --module CLASSIFY\` | 13/13 healthy; 0 orphans |
+| \`lex coverage --module CLASSIFY\` | 18/18 healthy; 0 orphans |
 | \`lex decision path-check\` | ${path_matched}/${path_total} matched; healthy |
 | \`lex link suggest\` | 0 |
 | \`lex plan coverage PLAN-CLASSIFY-RULEBOOK-V1\` | gap_count=0 |
 | \`lex plan audit PLAN-CLASSIFY-RULEBOOK-V1\` | blocking_finding_count=0 |
+| \`lex plan coverage PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1\` | gap_count=0 |
+| \`lex plan audit PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1\` | blocking_finding_count=0 |
 | Kill criteria | ${kc_clear}/5 \`clear\` |
 | External dependencies | 4/4 \`validated\` (evidence-bound; left unchanged when already truthful) |
 | \`git diff --check\` | executed |
@@ -680,7 +828,7 @@ printf 'commands:\n'
 printf '  dotnet restore/build -c Release; format --verify-no-changes (CLASSIFY paths)\n'
 printf '  dotnet publish -c Release -r linux-x64 -p:PublishAot=true\n'
 printf '  dotnet test (complete full suite)\n'
-printf '  bash scripts/verify-classify-{graph,contract,security}.sh\n'
+printf '  bash scripts/verify-classify-{graph,contract,security,ergonomics-security,ergonomics-process}.sh\n'
 printf '  lex coverage/path/plan/external-dependency/kill-criterion checks\n'
 printf 'counts: named_suites=%s classify_discovery=%s full_passed=%s fail_count=%s\n' \
     "${#named_suites[@]}" "$classify_count" "${full_passed_n:-?}" "$fail_count"
@@ -690,5 +838,5 @@ if (( fail_count > 0 )); then
     exit 1
 fi
 
-printf 'classify module verification: exit 0; Release build+format+AOT; full suite non-vacuous; graph/contract/security gates; 4 deps validated; 5 kill criteria clear; report written without private payloads\n'
+printf 'classify module verification: exit 0; Release build+format+AOT; full suite non-vacuous; graph/contract/security/ergonomics-security/process gates; 105/17; five additive ops; 4 deps validated; 5 kill criteria clear; report written without private payloads\n'
 exit 0

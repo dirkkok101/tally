@@ -25,7 +25,7 @@ public sealed class PublishedLedgerContractTests(PublishedTallyFixture fixture) 
 
         AssertSuccess(result, "system.schema.list");
         using var document = JsonDocument.Parse(result.Stdout);
-        Assert.Equal(100, document.RootElement.GetProperty("result").GetProperty("operations").GetArrayLength());
+        Assert.Equal(105, document.RootElement.GetProperty("result").GetProperty("operations").GetArrayLength());
         foreach (var forbidden in new[] { "mailbox", "mime", "recipient", "whatsapp", "providerCursor", "rawPayload", "statementDocument" })
         {
             Assert.DoesNotContain(forbidden, result.Stdout, StringComparison.OrdinalIgnoreCase);

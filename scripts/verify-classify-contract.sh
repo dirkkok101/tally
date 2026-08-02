@@ -58,18 +58,27 @@ done
 section "CLASSIFY contract tests"
 dotnet test "$test_project" --no-build --filter "$filter"
 
-section "Published binary: schema list includes exactly twelve CLASSIFY ops"
+section "Published binary: schema list includes exactly seventeen CLASSIFY ops (C12 + five additive)"
 schema_list="$("$publish_root/tally" schema list)"
 classify_count="$(printf '%s\n' "$schema_list" | python3 -c '
 import json,sys
 doc=json.load(sys.stdin)
 ops=doc.get("result",{}).get("operations",doc.get("operations",[]))
-print(sum(1 for o in ops if str(o.get("operationId","")).startswith("classify.")))
+ids=[str(o.get("operationId","")) for o in ops if str(o.get("operationId","")).startswith("classify.")]
+print(len(ids))
+c12=["classify.evaluate","classify.outcome.get","classify.apply.preview","classify.apply.run",
+ "classify.rule.save","classify.rule.validate","classify.rule.activate","classify.rule.retire",
+ "classify.feedback.record","classify.status","classify.abandon","classify.cleanup"]
+missing=[x for x in c12 if x not in ids]
+if missing:
+    print("missing_c12", ",".join(missing), file=sys.stderr)
+    raise SystemExit(2)
 ')"
-if [[ "$classify_count" != "12" ]]; then
-    printf 'published binary schema list has %s classify ops; expected 12\n' "$classify_count" >&2
+if [[ "$classify_count" != "17" ]]; then
+    printf 'published binary schema list has %s classify ops; expected 17 (ReleasedC12=12 + five additive)\n' "$classify_count" >&2
     exit 1
 fi
+printf 'published binary schema list: classify_ops=17 including ReleasedC12=12\n'
 
 section "Published binary: evaluate schema carries limits; ledger omits limits"
 eval_schema="$("$publish_root/tally" schema show classify.evaluate)"

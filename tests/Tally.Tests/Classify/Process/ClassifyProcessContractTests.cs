@@ -25,18 +25,22 @@ public sealed class ClassifyProcessContractTests
         process = new TallyProcess(registry, LedgerServices.Create());
     }
 
-    public static TheoryData<string, int, string> DeclaredClassifyErrors
+    /// <summary>
+    /// (operationId, code, exit, category) — each code is mapped through the descriptor that
+    /// declares it (ErrorForHandler with that descriptor), not the global null-descriptor fallback.
+    /// </summary>
+    public static TheoryData<string, string, int, string> DeclaredClassifyErrors
     {
         get
         {
-            var data = new TheoryData<string, int, string>();
-            var declared = OperationRegistry.Create().Descriptors
-                .Where(descriptor => descriptor.OperationId.StartsWith("classify.", StringComparison.Ordinal))
-                .SelectMany(descriptor => descriptor.DomainErrors ?? [])
-                .DistinctBy(schema => schema.Code, StringComparer.Ordinal);
-            foreach (var schema in declared)
+            var data = new TheoryData<string, string, int, string>();
+            foreach (var descriptor in OperationRegistry.Create().Descriptors
+                         .Where(d => d.OperationId.StartsWith("classify.", StringComparison.Ordinal)))
             {
-                data.Add(schema.Code, schema.ExitCode, schema.Category);
+                foreach (var schema in descriptor.DomainErrors ?? [])
+                {
+                    data.Add(descriptor.OperationId, schema.Code, schema.ExitCode, schema.Category);
+                }
             }
 
             return data;
@@ -51,12 +55,25 @@ public sealed class ClassifyProcessContractTests
 
     [Theory]
     [MemberData(nameof(DeclaredClassifyErrors))]
-    public void Declared_classify_errors_map_to_public_process_contract(string code, int exitCode, string category)
+    public void Declared_classify_errors_map_to_public_process_contract(
+        string operationId,
+        string code,
+        int exitCode,
+        string category)
     {
+        // Descriptor-aware mapping is the published contract (DD-CLASSIFY-CLI-OPERATION-CONTRACT).
+        // Do not invoke ErrorForHandler with a null descriptor — additive CLASSIFY codes are not
+        // required to live in the unrelated global fallback switch.
+        var descriptor = registry.Find(operationId);
+        Assert.NotNull(descriptor);
+        Assert.Contains(
+            descriptor!.DomainErrors ?? [],
+            schema => string.Equals(schema.Code, code, StringComparison.Ordinal));
+
         var mapper = typeof(TallyProcess).GetMethod(
             "ErrorForHandler",
             BindingFlags.NonPublic | BindingFlags.Static);
-        var result = Assert.IsType<ProcessResult>(mapper!.Invoke(null, [code, null]));
+        var result = Assert.IsType<ProcessResult>(mapper!.Invoke(null, [code, descriptor]));
 
         Assert.Equal(exitCode, result.ExitCode);
         Assert.Equal("tally: " + code, result.Stderr);
@@ -67,7 +84,7 @@ public sealed class ClassifyProcessContractTests
     }
 
     [Fact]
-    public async Task Schema_list_includes_exactly_twelve_classify_operations_with_limits()
+    public async Task Schema_list_includes_exactly_seventeen_classify_operations_with_limits()
     {
         var result = await process.RunAsync(["schema", "list"], null, CancellationToken.None);
         Assert.Equal(0, result.ExitCode);
@@ -78,7 +95,11 @@ public sealed class ClassifyProcessContractTests
             .Where(e => e.GetProperty("operationId").GetString()!
                 .StartsWith("classify.", StringComparison.Ordinal))
             .ToArray();
-        Assert.Equal(12, operations.Length);
+        Assert.Equal(17, operations.Length);
+        Assert.Equal(17, ClassifyOperationIds.All.Count);
+        Assert.Equal(12, ClassifyOperationIds.ReleasedC12.Count);
+        var ids = operations.Select(o => o.GetProperty("operationId").GetString()!).ToHashSet(StringComparer.Ordinal);
+        Assert.All(ClassifyOperationIds.ReleasedC12, id => Assert.Contains(id, ids));
         Assert.All(operations, op =>
         {
             Assert.True(op.TryGetProperty("limits", out var limits));

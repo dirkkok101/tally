@@ -1,4 +1,3 @@
-using System.Reflection;
 using System.Runtime.Versioning;
 using Tally.Cli;
 using Tally.Features.Classify.Contract;
@@ -10,16 +9,17 @@ using Xunit;
 namespace Tally.Tests;
 
 /// <summary>
-/// TASK-CLASSIFY-RULEBOOK-GATE-MODULE / bd-3l4k / VerifiedClassifyV1Module.
-/// Final module-gate architecture and suite guards. Discovery non-vacuity and
-/// multi-step convergence are asserted by scripts/verify-classify-module.sh.
+/// TASK-CLASSIFY-ERGONOMICS-GATE-MODULE / bd-2u6r —
+/// Final CLASSIFY operator-ergonomics module-gate architecture and suite guards.
+/// Discovery non-vacuity and multi-step convergence are asserted by
+/// scripts/verify-classify-module.sh (105/17 inventory, five additive ops, frozen 0.3.3).
 /// </summary>
 [SupportedOSPlatform("linux")]
 public sealed class ClassifyModuleGuardTests
 {
     /// <summary>
     /// Named CLASSIFY suites the module gate requires with nonzero discovery,
-    /// including graph evidence and this module guard.
+    /// including graph evidence, operator ergonomics families, and this module guard.
     /// </summary>
     public static readonly string[] NamedSuites =
     [
@@ -32,12 +32,15 @@ public sealed class ClassifyModuleGuardTests
         "EvaluationPersistenceTests",
         "OutcomeExplanationTests",
         "OutcomeInvalidationTests",
+        "OutcomeListTests",
+        "OutcomeCursorStalenessTests",
         "ClassificationRuleVocabularyTests",
         "NormalizerV1Tests",
         "RuleActivationTests",
         "RuleDraftPersistenceTests",
         "RuleRetirementTests",
         "SaveClassificationRuleTests",
+        "RuleDiscoveryTests",
         "ApplyAuthorizationTests",
         "ApplyPreviewTests",
         "ClassificationApplySagaTests",
@@ -52,6 +55,11 @@ public sealed class ClassifyModuleGuardTests
         "ClassifyOperationContractTests",
         "ClassifyPublishedContractTests",
         "ClassifyProcessContractTests",
+        "ClassifyOperatorErgonomicsContractTests",
+        "ClassifyOperatorErgonomicsSecurityTests",
+        "ClassifyOperatorErgonomicsProcessTests",
+        "ClassifyOperatorBatchPreviewTests",
+        "ClassifyCursorCodecTests",
         "ClassifyLedgerBoundaryArchitectureTests",
         "ClassifyLedgerContractClientTests",
         "LedgerClassificationMutationPreconditionTests",
@@ -61,10 +69,15 @@ public sealed class ClassifyModuleGuardTests
         "ClassifySecurityGateTests",
         "OwnerRulebookGateTests",
         "ClassificationRuleValidationTests",
+        "ClassificationProjectionCorpusMapperTests",
         "PrivateCorpusPrivacyTests",
         "PrivateCorpusReaderTests",
+        "PrivateCorpusBuilderTests",
+        "PrivateCorpusWriterRecoveryTests",
         "ValidationLimitTests",
         "ValidationPrivacyTests",
+        "UnresolvedPatternGroupingPolicyTests",
+        "UnresolvedPatternReportTests",
         "ClassifyUc001EvaluationTests",
         "ClassifyUc002OutcomeTests",
         "ClassifyUc003ApplyTests",
@@ -81,7 +94,9 @@ public sealed class ClassifyModuleGuardTests
         "verify-classify-graph.sh",
         "verify-classify-contract.sh",
         "verify-classify-security.sh",
-        "verify-classify-owner-rulebook.sh"
+        "verify-classify-owner-rulebook.sh",
+        "verify-classify-ergonomics-security.sh",
+        "verify-classify-ergonomics-process.sh"
     ];
 
     private static readonly string[] RequiredExternalDeps =
@@ -92,17 +107,49 @@ public sealed class ClassifyModuleGuardTests
         "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS"
     ];
 
+    private static readonly string[] FiveAdditiveOperations =
+    [
+        ClassifyOperationIds.OutcomeList,
+        ClassifyOperationIds.RuleList,
+        ClassifyOperationIds.RuleSetActiveGet,
+        ClassifyOperationIds.CorpusBuild,
+        ClassifyOperationIds.UnresolvedReport
+    ];
+
+    private static readonly string[] ReleasedC12Operations =
+    [
+        ClassifyOperationIds.Evaluate,
+        ClassifyOperationIds.OutcomeGet,
+        ClassifyOperationIds.ApplyPreview,
+        ClassifyOperationIds.ApplyRun,
+        ClassifyOperationIds.RuleSave,
+        ClassifyOperationIds.RuleValidate,
+        ClassifyOperationIds.RuleActivate,
+        ClassifyOperationIds.RuleRetire,
+        ClassifyOperationIds.FeedbackRecord,
+        ClassifyOperationIds.Status,
+        ClassifyOperationIds.Abandon,
+        ClassifyOperationIds.Cleanup
+    ];
+
     [Fact]
-    public void Exactly_twelve_classify_operations_are_published()
+    public void Exactly_one_hundred_five_global_and_seventeen_classify_operations_are_published()
     {
-        var classify = OperationRegistry.Create().Descriptors
+        var registry = OperationRegistry.Create();
+        Assert.Equal(105, registry.Descriptors.Count);
+        Assert.Equal(105, registry.Descriptors.Select(d => d.OperationId).Distinct(StringComparer.Ordinal).Count());
+
+        var classify = registry.Descriptors
             .Where(d => d.OperationId.StartsWith("classify.", StringComparison.Ordinal))
             .Select(d => d.OperationId)
             .Order(StringComparer.Ordinal)
             .ToArray();
 
         Assert.Equal(ClassifyOperationIds.All.Order(StringComparer.Ordinal), classify);
-        Assert.Equal(12, classify.Length);
+        Assert.Equal(17, classify.Length);
+        Assert.Equal(17, ClassifyOperationIds.All.Count);
+        Assert.All(ReleasedC12Operations, id => Assert.Contains(id, classify));
+        Assert.All(FiveAdditiveOperations, id => Assert.Contains(id, classify));
         Assert.DoesNotContain(classify, id => id.Contains("http", StringComparison.OrdinalIgnoreCase));
         Assert.DoesNotContain(classify, id => id.Contains("daemon", StringComparison.OrdinalIgnoreCase));
         Assert.DoesNotContain(classify, id => id.Contains("sync", StringComparison.OrdinalIgnoreCase));
@@ -201,6 +248,19 @@ public sealed class ClassifyModuleGuardTests
     }
 
     [Fact]
+    public void Ergonomics_plan_and_gate_task_entities_exist()
+    {
+        var root = RepositoryRoot();
+        Assert.True(File.Exists(Path.Combine(
+            root, ".lexicon", "graph", "CLASSIFY", "plan", "PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1.json")));
+        Assert.True(File.Exists(Path.Combine(
+            root, ".lexicon", "graph", "CLASSIFY", "task", "TASK-CLASSIFY-ERGONOMICS-GATE-MODULE.json")));
+        // Prior rulebook module gate remains as historical baseline evidence surface.
+        Assert.True(File.Exists(Path.Combine(
+            root, ".lexicon", "graph", "CLASSIFY", "plan", "PLAN-CLASSIFY-RULEBOOK-V1.json")));
+    }
+
+    [Fact]
     public void Classify_composition_has_no_forbidden_http_ef_or_host_surfaces()
     {
         var root = RepositoryRoot();
@@ -291,6 +351,19 @@ public sealed class ClassifyModuleGuardTests
         Assert.True(File.Exists(Path.Combine(root, "docs", "verification", "classify-graph.md")));
         Assert.True(
             File.Exists(Path.Combine(root, "tests", "Tally.Tests", "Classify", "ClassifyGraphEvidenceGuardTests.cs")));
+    }
+
+    [Fact]
+    public void Module_report_must_not_claim_unbuilt_or_unpublished_classification_v1()
+    {
+        var root = RepositoryRoot();
+        var report = File.ReadAllText(Path.Combine(root, "docs", "verification", "classify-v1.md"));
+        Assert.DoesNotContain("unbuilt", report, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("unpublished classification", report, StringComparison.OrdinalIgnoreCase);
+        Assert.DoesNotContain("not yet published", report, StringComparison.OrdinalIgnoreCase);
+        // Positive: report must acknowledge production-usable engine vs operator ergonomics.
+        Assert.Contains("operator ergonomics", report, StringComparison.OrdinalIgnoreCase);
+        Assert.Contains("production-usable", report, StringComparison.OrdinalIgnoreCase);
     }
 
     private static string RepositoryRoot()
