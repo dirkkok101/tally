@@ -60,7 +60,7 @@
   ],
   "files": [
     {
-      "id": "01KZ20C9F7KPR65JFRSP7BJG08",
+      "id": "01KZ263ERX7PAFG6G0K49839TX",
       "path": "scripts/verify-classify-module.sh",
       "action": "modify",
       "role": "complete additive module convergence gate",
@@ -69,10 +69,10 @@
         "Invoke new named gates and exact counts."
       ],
       "sort_order": 0,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7BTV94XGW7NW069HC",
+      "id": "01KZ263ERX9FG2KFBAARNCGWMY",
       "path": "scripts/verify-classify-graph.sh",
       "action": "modify",
       "role": "current plan task bead and graph evidence checks",
@@ -81,10 +81,10 @@
         "No stale greenfield assumptions."
       ],
       "sort_order": 1,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F71PPDGFNQ4C0YEZX3",
+      "id": "01KZ263ERXQPSGQGTCXTQ9DV05",
       "path": "tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs",
       "action": "modify",
       "role": "105/17 and gate inventory guards",
@@ -93,10 +93,10 @@
         "Non-vacuous exact expectations."
       ],
       "sort_order": 2,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7Y53EW1FT0X1KKF2X",
+      "id": "01KZ263ERX5188MX612MP6BP8W",
       "path": "tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs",
       "action": "modify",
       "role": "new plan refs path and privacy guards",
@@ -105,10 +105,10 @@
         "Trace every required task and bead."
       ],
       "sort_order": 3,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7JY77BS5EQ13ARZ3K",
+      "id": "01KZ263ERX2A6D1SQMT0W7372S",
       "path": "docs/verification/classify-v1.md",
       "action": "modify",
       "role": "aggregate ship-gate evidence",
@@ -117,10 +117,10 @@
         "Human-authored verification output."
       ],
       "sort_order": 4,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7K8R29S1885V98X3B",
+      "id": "01KZ263ERX2Z6V9701F1RS8G30",
       "path": "docs/verification/classify-graph.md",
       "action": "modify",
       "role": "coverage audit review and bead evidence",
@@ -129,10 +129,10 @@
         "Human-authored verification output."
       ],
       "sort_order": 5,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7BXDJBYHE76K1EWVT",
+      "id": "01KZ263ERXAYGN5PXG5MKDPN2N",
       "path": "tests/Tally.Tests/Cli/CliContractTests.cs",
       "action": "modify",
       "role": "global registry inventory compatibility",
@@ -141,10 +141,10 @@
         "Update only 100 to 105 additive inventory expectations."
       ],
       "sort_order": 6,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F8A70YBPYW445ZC4NF",
+      "id": "01KZ263ERXXEE9ZQBP9YPRG0JW",
       "path": "tests/Tally.Tests/Features/Ledger/Transactions/TransactionRecordingTests.cs",
       "action": "modify",
       "role": "global registry inventory compatibility",
@@ -153,10 +153,10 @@
         "Preserve LEDGER operation assertions."
       ],
       "sort_order": 7,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F8Y7RQB7NT33CFM50V",
+      "id": "01KZ263ERX2RF9R8YDHVX688Q9",
       "path": "tests/Tally.Tests/Features/Ledger/Categories/CategoryOperationTests.cs",
       "action": "modify",
       "role": "global registry inventory compatibility",
@@ -165,10 +165,10 @@
         "Preserve category contract assertions."
       ],
       "sort_order": 8,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F84XF82W8T02FFBC01",
+      "id": "01KZ263ERXXB1Q2MQRYX7DP4VE",
       "path": "tests/Tally.Tests/Ledger/SpendPoolOperationTests.cs",
       "action": "modify",
       "role": "global registry inventory compatibility",
@@ -177,10 +177,10 @@
         "Preserve pool operation count."
       ],
       "sort_order": 9,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F8B4GDY5GW86PQNK0A",
+      "id": "01KZ263ERX8J198AP8ZA080K41",
       "path": "tests/Tally.Tests/Ledger/PaymentIdentityOperationTests.cs",
       "action": "modify",
       "role": "global registry inventory compatibility",
@@ -189,10 +189,10 @@
         "Preserve payment identity operation count."
       ],
       "sort_order": 10,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F8WFSA4HRHHVSTYTGF",
+      "id": "01KZ263ERY4G7AN5Q1VXMNDT58",
       "path": "tests/Tally.Tests/EndToEnd/UC006ExternalOrchestratorContractWorkflowTests.cs",
       "action": "modify",
       "role": "published global inventory compatibility",
@@ -201,10 +201,10 @@
         "Update additive inventory only."
       ],
       "sort_order": 11,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F8X77Q8C749H92A0CA",
+      "id": "01KZ263ERYSDB54Y1F6B6RWTCA",
       "path": "tests/Tally.Tests/Process/PublishedLedgerContractTests.cs",
       "action": "modify",
       "role": "published global inventory compatibility",
@@ -213,10 +213,10 @@
         "Update additive inventory only."
       ],
       "sort_order": 12,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F8E5T5FR335PZCDH71",
+      "id": "01KZ263ERYZAC0GGXABGR3GKE6",
       "path": "tests/Tally.Tests/Process/PublishedBinaryCoreTests.cs",
       "action": "modify",
       "role": "published global inventory compatibility",
@@ -225,10 +225,10 @@
         "Update additive inventory only."
       ],
       "sort_order": 13,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F86A17Z58F0VY3KTYG",
+      "id": "01KZ263ERYXC151W5EGW50TQDG",
       "path": "tests/Tally.Tests/Cli/PublicContractInventoryTests.cs",
       "action": "modify",
       "role": "public registry inventory compatibility",
@@ -237,10 +237,10 @@
         "Require 105 unique operation IDs and CLI paths."
       ],
       "sort_order": 14,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F8DB499BAFXQDBZ01Q",
+      "id": "01KZ263ERY7JSTNFM2T0K5136M",
       "path": "tests/Tally.Tests/Classify/Process/ClassifyProcessContractTests.cs",
       "action": "modify",
       "role": "descriptor-aware additive error mapping and 17 operation discovery",
@@ -249,10 +249,10 @@
         "Do not add additive codes to unrelated global fallback."
       ],
       "sort_order": 15,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F84WNQQV08GYAC5T15",
+      "id": "01KZ263ERYBW2GN8990RKS85Z4",
       "path": "tests/Tally.Tests/Classify/Acceptance/ClassifyUc006AgentContractTests.cs",
       "action": "modify",
       "role": "17-operation agent discovery and explicit query mutation kinds",
@@ -261,7 +261,43 @@
         "Preserve released C12 subset while including five additive operations."
       ],
       "sort_order": 16,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
+    },
+    {
+      "id": "01KZ263ERYK1C94YG0ZFN9B0ST",
+      "path": "src/Tally/Cli/TallyProcess.cs",
+      "action": "modify",
+      "role": "shared fallback coherence for cross-descriptor CLASSIFY errors",
+      "required": 1,
+      "notes": [
+        "Keep additive declared errors aligned with registry-wide fallback contract."
+      ],
+      "sort_order": 17,
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
+    },
+    {
+      "id": "01KZ263ERY1EPSYGVENZA5RXP1",
+      "path": "scripts/verify-classify-contract.sh",
+      "action": "modify",
+      "role": "published 17-operation CLASSIFY contract gate",
+      "required": 1,
+      "notes": [
+        "Preserve and assert ReleasedC12 while proving five additive operations."
+      ],
+      "sort_order": 18,
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
+    },
+    {
+      "id": "01KZ263ERYV6NQMK2AWAFJ5K28",
+      "path": "tests/Tally.Tests/Classify/Security/ClassifySecurityGateTests.cs",
+      "action": "modify",
+      "role": "17-operation security inventory guard",
+      "required": 1,
+      "notes": [
+        "Preserve forbidden background and remote surfaces."
+      ],
+      "sort_order": 19,
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     }
   ],
   "interfaces": [
@@ -309,74 +345,84 @@
   ],
   "recipe_items": [
     {
-      "id": "01KZ20C9F5EET3ATZCCZVVX4S5",
+      "id": "01KZ263ERW0P1RAFN6F65MNGBE",
       "kind": "acceptance_check",
       "text": [
         "scripts/verify-classify-module.sh invokes non-vacuous graph, contract, security, operator-ergonomics security, operator-process, focused, full dotnet test, and linux-x64 Native-AOT gates and prints exact discovered/passed/failed totals."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F79MEH0D72WJ3XACZH",
+      "id": "01KZ263ERXQCG0BGSZ2FX5QRHZ",
       "kind": "acceptance_check",
       "text": [
         "Graph guards require PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1, every task/bead reference, the five governing decisions/data models/FRs/NFRs/test cases, 105/17 inventory, and no stale unbuilt or unpublished classification_v1 claim."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F71V06VVP9WANJTQRY",
+      "id": "01KZ263ERXMMQ9QYSKTHS3B1CT",
       "kind": "acceptance_check",
       "text": [
         "Full tests pass with zero failure and Native-AOT schema discovery proves all five operations while every 0.3.3 fingerprint remains identical."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7G73G5J0MXHAE0CYS",
+      "id": "01KZ263ERX038JHCEA9A4BBGQ1",
       "kind": "acceptance_check",
       "text": [
         "Verification companions document operation sequence, CLI examples, migration-none decision, rollout/rollback, privacy, recovery, typed failures, process bounds, and the distinction between production-usable engine and operator ergonomics."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7CVRWEFY0D0CD6BHH",
+      "id": "01KZ263ERX7BPC422ESW9B982C",
       "kind": "acceptance_check",
       "text": [
         "The gate scans tracked graph/docs/beads/log output for private paths, rows, descriptions, normalized tokens, amounts, IDs, account identifiers, secrets, and fixture canaries without opening live data."
       ],
       "required": 1,
       "sort_order": 4,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7N6SHNSKVAN92GZ5C",
+      "id": "01KZ263ERXYS6EVPWE9JM9Z9V6",
       "kind": "acceptance_check",
       "text": [
         "All historical global-registry assertions recognize exactly 105 unique operations, all CLASSIFY discovery assertions distinguish the released C12 subset from the current 17-operation inventory, and non-CLASSIFY prefix counts remain unchanged."
       ],
       "required": 1,
       "sort_order": 5,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
-      "id": "01KZ20C9F7DYQP6KDYGEBD9YM2",
+      "id": "01KZ263ERXZFE2PSAQK7C2RJWC",
       "kind": "acceptance_check",
       "text": [
         "Additive CLASSIFY domain errors are tested through the invoked descriptor contract rather than unrelated global fallback mapping; additive query versus mutation idempotency expectations match each operation descriptor."
       ],
       "required": 1,
       "sort_order": 6,
-      "created_at": "2026-08-02T19:49:25.0931098+00:00"
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
+    },
+    {
+      "id": "01KZ263ERXAE10DXDY0991PT3D",
+      "kind": "acceptance_check",
+      "text": [
+        "Registry-wide cross-descriptor fallback mapping remains coherent with every additive CLASSIFY ErrorSchema; the published contract and security gates assert 17 current operations while preserving the released C12 subset and forbidden-surface protections."
+      ],
+      "required": 1,
+      "sort_order": 7,
+      "created_at": "2026-08-02T21:29:27.0682996+00:00"
     },
     {
       "id": "01KZ0NTG3TJFMC6AYY30NS74EB",
