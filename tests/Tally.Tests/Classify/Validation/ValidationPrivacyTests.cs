@@ -314,7 +314,7 @@ public sealed class ValidationPrivacyTests : IAsyncLifetime
     private async Task<AccountDetail> CreateAccountAsync()
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
-        var digits = (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(CultureInfo.InvariantCulture);
+        var digits = ((int)((uint)unique.GetHashCode() % 9000u) + 1000).ToString(CultureInfo.InvariantCulture);
         return await ExecuteSuccessAsync(
             "ledger.account.create",
             new CreateAccountInput("Priv Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + digits, "ZAR"),

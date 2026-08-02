@@ -704,7 +704,7 @@ public sealed class ClassificationRuleValidationTests : IAsyncLifetime
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
         // MaskedIdentifier requires 1–4 digits (not all-digit); hex-only suffixes fail closed.
-        var digits = (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(CultureInfo.InvariantCulture);
+        var digits = ((int)((uint)unique.GetHashCode() % 9000u) + 1000).ToString(CultureInfo.InvariantCulture);
         return await ExecuteSuccessAsync(
             "ledger.account.create",
             new CreateAccountInput("Val Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + digits, "ZAR"),

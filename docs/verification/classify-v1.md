@@ -121,23 +121,28 @@ dependencies `validated`; five kill criteria `clear`.
 - `ClassifyGraphEvidenceGuardTests` — discovery 9
 - `ClassifyModuleGuardTests` — discovery 9
 
-## Content fingerprints (live at report write; raw SHA-256)
+## Content fingerprints (immutable inputs live at report write; raw SHA-256)
+
+This report path (`docs/verification/classify-v1.md`) is **excluded** from the raw hash
+table: it is the artifact being written, so a pre-write hash cannot match final bytes.
+Raw self-hashing is impossible; no fabricated post-write self-hash is recorded. All
+hashes below are immutable inputs only (no private/financial payloads).
 
 | Artifact | SHA-256 | Bytes |
 |---|---|---:|
-| `scripts/verify-classify-module.sh` | `6576de31f5e7e838c21340049da00387cc9d6816d8806a1a81b39d68464b14c2` | 28653 |
+| `scripts/verify-classify-module.sh` | `cc2a1d6c72f830c520a0ab456d3a551e150a55688156b1e1a4cb3d725b59807c` | 29413 |
 | `scripts/verify-classify-graph.sh` | `577bebaa02a225ebbc5821a50a6ecf8d333ace9ec9d1f1fe73152acc8f3919f3` | 26821 |
 | `scripts/verify-classify-contract.sh` | `dd8bca2ade757964b85eae2b3a291c5cabf4e2dc744474bdfaa7ea5142e6e96d` | 3819 |
 | `scripts/verify-classify-security.sh` | `e2ca022dd0f6d81e3f9c1c70af62a7cba549b704b8cc1cb7506451a91daffd39` | 12444 |
 | `tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs` | `6bd3619dce3bfa9fe388b912708e814b0406f110f290b7e9f83489b4a6694640` | 12280 |
 | `tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs` | `3b39a93759d7c8582ff37785f524f811cee8fbd4fcdab5b125b9668b5fd0c1c8` | 16167 |
-| `docs/verification/classify-v1.md` | `9767ff5344183ba9ca75224cda47790444c93b5064c0228be2a4ef0683570fed` | 8343 |
 | `docs/verification/classify-graph.md` | `7b16a90ff89b5212d64da4d04312e7cf4361a7769f7a3e7465678c1ff1ddf6ce` | 9102 |
 | `.lexicon/graph/CLASSIFY/module.json` | `3975f321fe72cc7f86c82934af1c0be8add2e6fbe9dc444750d7b7ce42f8df91` | 18902 |
 | `.lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT.json` | `6a1dfd30eff93113657f2a68609c439d654e92bef1d614578e14737da7792882` | 2406 |
 | `.lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-AI-AGENT-HOST.json` | `e6b24f6d393aa97d4a2d5d016c3f661085e211225017e181bf7cc362234916b9` | 1071 |
 | `.lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-HOST-OS-SECURITY.json` | `374020520bc1c5d4f067cdd086477e1a372e64a403fc865042db428a462f33e8` | 937 |
 | `.lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS.json` | `0088fb75dff5518590e1d1d96afb85e86cab4b873a3049cf4a7ceb610641e29b` | 1055 |
+| `docs/verification/classify-v1.md` | *(excluded — report write target; raw self-hash impossible)* | — |
 
 ## How to re-run
 

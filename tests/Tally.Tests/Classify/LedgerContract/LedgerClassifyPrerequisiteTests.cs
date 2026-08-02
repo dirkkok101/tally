@@ -700,7 +700,7 @@ public sealed class LedgerClassifyPrerequisiteTests : IAsyncLifetime
     private async Task<AccountDetail> CreateAccount(string bank = "Prereq Bank")
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
-        var input = new CreateAccountInput(bank + " " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR");
+        var input = new CreateAccountInput(bank + " " + unique, "Primary-" + unique, AccountType.Cheque, "****" + ((int)((uint)unique.GetHashCode() % 9000u) + 1000).ToString(), "ZAR");
         return Success(await Run("ledger.account.create", JsonSerializer.SerializeToElement(input, LedgerJsonContext.Default.CreateAccountInput), NextKey()), LedgerJsonContext.Default.AccountDetail);
     }
 

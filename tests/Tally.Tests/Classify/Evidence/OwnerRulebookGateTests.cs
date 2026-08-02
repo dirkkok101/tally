@@ -771,7 +771,7 @@ public sealed class OwnerRulebookGateTests : IAsyncLifetime
     {
         var unique = Guid.NewGuid().ToString("N")[..8];
         var input = new CreateAccountInput(
-            "Gate Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR");
+            "Gate Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + ((int)((uint)unique.GetHashCode() % 9000u) + 1000).ToString(), "ZAR");
         return await ExecuteSuccessAsync(
             "ledger.account.create",
             input,

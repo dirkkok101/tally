@@ -489,6 +489,9 @@ done < <(printf '%s\n' "$kc_list" | jq -c '.[]')
 printf 'kill criteria: %s/%s clear\n' "$kc_clear" "$kc_count"
 
 # ── Content fingerprints ─────────────────────────────────────────────────────
+# Hash only immutable inputs. Never raw-hash docs/verification/classify-v1.md here:
+# that path is the report write target, so a pre-write hash cannot equal the final
+# bytes (raw self-hash is impossible). The report table records that exclusion.
 section "Content fingerprints (paths + hashes, no private payloads)"
 fingerprint_paths=(
     scripts/verify-classify-module.sh
@@ -497,7 +500,6 @@ fingerprint_paths=(
     scripts/verify-classify-security.sh
     tests/Tally.Tests/Classify/ClassifyModuleGuardTests.cs
     tests/Tally.Tests/Classify/ClassifyGraphEvidenceGuardTests.cs
-    docs/verification/classify-v1.md
     docs/verification/classify-graph.md
     .lexicon/graph/CLASSIFY/module.json
     .lexicon/graph/CLASSIFY/external-dependency/EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT.json
@@ -516,6 +518,8 @@ for path in "${fingerprint_paths[@]}"; do
         fail "missing required artifact ${path}"
     fi
 done
+printf '  note: %s excluded from raw fingerprint table (report write target; self-hash impossible)\n' \
+    "$report_path"
 
 # ── Repository diff integrity ────────────────────────────────────────────────
 section "Repository diff integrity"
@@ -622,7 +626,12 @@ EOF
 
     cat <<EOF
 
-## Content fingerprints (live at report write; raw SHA-256)
+## Content fingerprints (immutable inputs live at report write; raw SHA-256)
+
+This report path (\`${report_path}\`) is **excluded** from the raw hash table: it is the
+artifact being written, so a pre-write hash cannot match final bytes. Raw self-hashing
+is impossible; no fabricated post-write self-hash is recorded. All hashes below are
+immutable inputs only (no private/financial payloads).
 
 | Artifact | SHA-256 | Bytes |
 |---|---|---:|
@@ -634,6 +643,7 @@ EOF
     done
 
     cat <<EOF
+| \`${report_path}\` | *(excluded — report write target; raw self-hash impossible)* | — |
 
 ## How to re-run
 

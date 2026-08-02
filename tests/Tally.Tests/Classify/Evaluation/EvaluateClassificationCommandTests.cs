@@ -558,7 +558,7 @@ public sealed class EvaluateClassificationCommandTests : IAsyncLifetime
         return await ExecuteSuccessAsync(
             "ledger.account.create",
             new CreateAccountInput(
-                "EvalCmd Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + (Math.Abs(unique.GetHashCode()) % 9000 + 1000).ToString(), "ZAR"),
+                "EvalCmd Bank " + unique, "Primary-" + unique, AccountType.Cheque, "****" + ((int)((uint)unique.GetHashCode() % 9000u) + 1000).ToString(), "ZAR"),
             NextKey(),
             LedgerJsonContext.Default.CreateAccountInput,
             LedgerJsonContext.Default.AccountDetail);
