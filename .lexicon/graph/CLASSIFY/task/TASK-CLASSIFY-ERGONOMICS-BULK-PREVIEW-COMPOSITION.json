@@ -89,44 +89,44 @@
   ],
   "recipe_items": [
     {
-      "id": "01KZ0NQWXF2Z57F4RZ8R6ANHVE",
+      "id": "01KZ1D5SDKQQ4VCS0TK0EW7576",
       "kind": "acceptance_check",
       "text": [
         "One outcome.list page supplies an explicit ordered ID subset accepted by the unchanged selected_outcomes preview request without outcome.get calls."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-02T07:24:16.6850618+00:00"
+      "created_at": "2026-08-02T14:13:49.1066961+00:00"
     },
     {
-      "id": "01KZ0NQWXFWF1ZNES0HJD1MHC7",
+      "id": "01KZ1D5SDMN6NSC93HX27H0HQX",
       "kind": "acceptance_check",
       "text": [
         "Preview freezes evaluation, category, rule-set, normalization, Ledger generation/revision, selection, actor, expiry, and idempotency evidence exactly as in 0.3.3."
       ],
       "required": 1,
       "sort_order": 1,
-      "created_at": "2026-08-02T07:24:16.6850618+00:00"
+      "created_at": "2026-08-02T14:13:49.1066961+00:00"
     },
     {
-      "id": "01KZ0NQWXFB5W774XT9KN0KSY8",
+      "id": "01KZ1D5SDM44FACK7GVF539VKE",
       "kind": "acceptance_check",
       "text": [
-        "Duplicate, missing, stale, conflict, no-suggestion, archived-category, and 201-item selections fail with the existing typed errors, no preview receipt, and no Ledger mutation."
+        "Duplicate outcome IDs are accounted for by the released canonical deduplication behavior: repeated copies select one candidate and create no extra candidate or Ledger mutation; missing, stale, conflict, no-suggestion, archived-category, and 201-item selections fail with the existing typed errors, no preview receipt, and no Ledger mutation."
       ],
       "required": 1,
       "sort_order": 2,
-      "created_at": "2026-08-02T07:24:16.6850618+00:00"
+      "created_at": "2026-08-02T14:13:49.1066961+00:00"
     },
     {
-      "id": "01KZ0NQWXFCV9NCTEQHSHXG2H4",
+      "id": "01KZ1D5SDMN7TFJZJMX30VNQZ5",
       "kind": "acceptance_check",
       "text": [
         "broadApplyAllowed=false continues to reject exact-rule/unattended authority and no request shape means all, cursor, filter, or omitted selection."
       ],
       "required": 1,
       "sort_order": 3,
-      "created_at": "2026-08-02T07:24:16.6850618+00:00"
+      "created_at": "2026-08-02T14:13:49.1066961+00:00"
     },
     {
       "id": "01KZ0NQWXFXF6QEV1TTCJ087KK",
