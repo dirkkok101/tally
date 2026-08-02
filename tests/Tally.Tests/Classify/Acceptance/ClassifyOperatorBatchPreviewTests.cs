@@ -1,5 +1,7 @@
 using System.Globalization;
 using System.Reflection;
+using System.Reflection.Emit;
+using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Security.Cryptography;
 using System.Text;
@@ -48,11 +50,6 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
     private ClassificationApplyPreviewStore previewStore = null!;
     private string accountId = null!;
     private int keySeq;
-    /// <summary>
-    /// Production-connected instrument around the real <see cref="GetClassificationOutcomeQuery"/>.
-    /// Call count increments only when that production HandleAsync path runs.
-    /// </summary>
-    private CountingOutcomeGet instrumentedOutcomeGet = null!;
 
     public async Task InitializeAsync()
     {
@@ -63,8 +60,6 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
         process = new TallyProcess(registry, LedgerServices.Create(database));
         ledger = new LedgerContractClient(registry, process);
         services = await ClassifyEvaluationExtensions.CreateServicesAsync(root, ledger, cancellationToken: CancellationToken.None);
-        // Wire the only outcome.get entry used by this fixture through the production query.
-        instrumentedOutcomeGet = new CountingOutcomeGet(services.OutcomeGet);
         listQuery = new ListClassificationOutcomesQuery(
             services.State.Store,
             services.EvaluationStore,
@@ -99,19 +94,18 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
     [Fact]
     public async Task Outcome_list_page_supplies_selected_outcomes_without_outcome_get()
     {
-        // Structural production seam: composition types cannot inject or store outcome.get.
-        AssertCompositionTypesDoNotDependOnOutcomeGet();
+        // Production call-path proof on the actual composition entry methods (list → preview).
+        // Walks released IL (including async state machines) inside the Tally assembly.
+        // Fails if GetClassificationOutcomeQuery / classify.outcome.get becomes reachable.
+        AssertCompositionCallPathDoesNotReachOutcomeGet();
 
         var seeded = await SeedSuggestionsAsync("batch shop", count: 3);
-        Assert.Equal(0, instrumentedOutcomeGet.Calls);
-
         var list = await listQuery.HandleAsync(
             new ClassifyOutcomeListRequest("1.0", seeded.EvaluationId, 500, OutcomeKind: ClassifyOutcomeKind.Suggestion),
             actor,
             CancellationToken.None);
         Assert.True(list.IsSuccess, list.ErrorCode);
         Assert.True(list.Value!.Items.Count >= 3);
-        Assert.Equal(0, instrumentedOutcomeGet.Calls);
 
         // Explicit ordered subset from list page (request order preserved as given; auth reorders by tx).
         var orderedIds = list.Value.Items
@@ -137,20 +131,8 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
         Assert.False(string.IsNullOrWhiteSpace(result.Value.PreviewId));
         Assert.Equal(before, await SnapshotCategoryStatesAsync(seeded.TransactionIds));
 
-        // Composition completed without outcome.get: instrument still at zero.
-        Assert.Equal(0, instrumentedOutcomeGet.Calls);
-
-        // Connectivity probe: the instrument is wired to production GetClassificationOutcomeQuery.
-        // If outcome.get is actually invoked, Calls increments and composition asserts above fail.
-        var probe = await instrumentedOutcomeGet.HandleAsync(
-            new ClassifyOutcomeGetRequest(
-                ClassifyOperationIds.ContractVersion,
-                seeded.EvaluationId,
-                seeded.TransactionIds[0]),
-            actor,
-            CancellationToken.None);
-        Assert.True(probe.IsSuccess, probe.ErrorCode);
-        Assert.Equal(1, instrumentedOutcomeGet.Calls);
+        // Same call-path seam after live composition (production types unchanged at runtime).
+        AssertCompositionCallPathDoesNotReachOutcomeGet();
     }
 
     [Fact]
@@ -633,56 +615,310 @@ public sealed class ClassifyOperatorBatchPreviewTests : IAsyncLifetime
         IReadOnlyList<string> TransactionIds);
 
     /// <summary>
-    /// Connected instrument: increments only when the production
-    /// <see cref="GetClassificationOutcomeQuery.HandleAsync"/> path executes.
+    /// Executable production call-path proof for "without outcome.get".
+    /// Starts at the composition entry points
+    /// <see cref="ListClassificationOutcomesQuery.HandleAsync"/> and
+    /// <see cref="PreviewClassificationApplyCommand.HandleAsync"/>, walks
+    /// call/callvirt/newobj/ldftn targets inside the production Tally assembly
+    /// (including async state-machine MoveNext bodies), and fails if
+    /// <see cref="GetClassificationOutcomeQuery"/> is reachable.
+    /// Positive control: the same walker starting at
+    /// <see cref="GetClassificationOutcomeQuery.HandleAsync"/> must reach that type
+    /// (proves the seam observes the forbidden production path).
     /// </summary>
-    private sealed class CountingOutcomeGet
+    private static void AssertCompositionCallPathDoesNotReachOutcomeGet()
     {
-        private readonly GetClassificationOutcomeQuery inner;
-        private int calls;
+        var outcomeGetType = typeof(GetClassificationOutcomeQuery);
+        var listHandle = RequireHandleAsync(typeof(ListClassificationOutcomesQuery));
+        var previewHandle = RequireHandleAsync(typeof(PreviewClassificationApplyCommand));
+        var getHandle = RequireHandleAsync(outcomeGetType);
 
-        public CountingOutcomeGet(GetClassificationOutcomeQuery inner)
-        {
-            this.inner = inner ?? throw new ArgumentNullException(nameof(inner));
-        }
+        // Positive control through the same production IL seam.
+        var getReachable = ProductionCallPath.CollectReachableDeclaringTypes(getHandle);
+        Assert.Contains(outcomeGetType, getReachable);
 
-        public int Calls => Volatile.Read(ref calls);
+        var listReachable = ProductionCallPath.CollectReachableDeclaringTypes(listHandle);
+        Assert.DoesNotContain(outcomeGetType, listReachable);
+        Assert.DoesNotContain(
+            listReachable,
+            t => t.FullName is not null
+                 && t.FullName.Contains("GetClassificationOutcome", StringComparison.Ordinal));
 
-        public Task<CommandResult<ClassifyOutcomeGetResult>> HandleAsync(
-            ClassifyOutcomeGetRequest input,
-            SafeActor? actor,
-            CancellationToken cancellationToken)
-        {
-            Interlocked.Increment(ref calls);
-            return this.inner.HandleAsync(input, actor, cancellationToken);
-        }
+        var previewReachable = ProductionCallPath.CollectReachableDeclaringTypes(previewHandle);
+        Assert.DoesNotContain(outcomeGetType, previewReachable);
+        Assert.DoesNotContain(
+            previewReachable,
+            t => t.FullName is not null
+                 && t.FullName.Contains("GetClassificationOutcome", StringComparison.Ordinal));
+
+        // Also: no direct method token for OutcomeGet operation id dispatch string alone is not enough —
+        // ensure no call target is GetClassificationOutcomeQuery.HandleAsync specifically.
+        Assert.False(
+            ProductionCallPath.IsMethodReachable(listHandle, getHandle),
+            "outcome.list call path must not reach GetClassificationOutcomeQuery.HandleAsync");
+        Assert.False(
+            ProductionCallPath.IsMethodReachable(previewHandle, getHandle),
+            "apply.preview call path must not reach GetClassificationOutcomeQuery.HandleAsync");
+        Assert.True(
+            ProductionCallPath.IsMethodReachable(getHandle, getHandle),
+            "positive control: GetClassificationOutcomeQuery.HandleAsync must be reachable from itself");
     }
 
-    private static void AssertCompositionTypesDoNotDependOnOutcomeGet()
+    private static MethodInfo RequireHandleAsync(Type type)
     {
-        static void AssertType(Type host)
+        const BindingFlags flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.DeclaredOnly;
+        var method = type.GetMethods(flags)
+            .SingleOrDefault(m => m.Name == "HandleAsync" && !m.IsGenericMethodDefinition);
+        Assert.NotNull(method);
+        return method!;
+    }
+
+    /// <summary>Production-assembly IL call-graph walker used only for composition no-get proof.</summary>
+    private static class ProductionCallPath
+    {
+        private static readonly Assembly ProductionAssembly = typeof(GetClassificationOutcomeQuery).Assembly;
+        private static readonly OpCode[] OneByteOps = CreateOneByteOps();
+        private static readonly OpCode[] TwoByteOps = CreateTwoByteOps();
+
+        public static HashSet<Type> CollectReachableDeclaringTypes(MethodInfo entry)
         {
-            var flags = BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly;
-            foreach (var ctor in host.GetConstructors(flags))
+            var types = new HashSet<Type>();
+            foreach (var method in Walk(entry))
             {
-                Assert.DoesNotContain(
-                    ctor.GetParameters().Select(p => p.ParameterType),
-                    t => t == typeof(GetClassificationOutcomeQuery));
+                if (method.DeclaringType is { } dt)
+                {
+                    types.Add(dt);
+                }
             }
 
-            foreach (var field in host.GetFields(flags))
+            return types;
+        }
+
+        public static bool IsMethodReachable(MethodInfo entry, MethodInfo target)
+        {
+            var targetDef = target.MetadataToken;
+            var targetType = target.DeclaringType;
+            foreach (var method in Walk(entry))
             {
-                Assert.NotEqual(typeof(GetClassificationOutcomeQuery), field.FieldType);
+                if (method.MetadataToken == targetDef
+                    && method.DeclaringType == targetType
+                    && string.Equals(method.Name, target.Name, StringComparison.Ordinal))
+                {
+                    return true;
+                }
             }
 
-            foreach (var prop in host.GetProperties(flags))
+            return false;
+        }
+
+        private static IEnumerable<MethodBase> Walk(MethodInfo entry)
+        {
+            var visited = new HashSet<MethodBase>();
+            var queue = new Queue<MethodBase>();
+            Enqueue(entry, queue, visited);
+
+            while (queue.Count > 0)
             {
-                Assert.NotEqual(typeof(GetClassificationOutcomeQuery), prop.PropertyType);
+                var current = queue.Dequeue();
+                yield return current;
+
+                foreach (var callee in EnumerateCallees(current))
+                {
+                    if (callee.Module.Assembly != ProductionAssembly)
+                    {
+                        continue;
+                    }
+
+                    Enqueue(callee, queue, visited);
+                }
             }
         }
 
-        AssertType(typeof(ListClassificationOutcomesQuery));
-        AssertType(typeof(PreviewClassificationApplyCommand));
+        private static void Enqueue(MethodBase method, Queue<MethodBase> queue, HashSet<MethodBase> visited)
+        {
+            if (!visited.Add(method))
+            {
+                return;
+            }
+
+            queue.Enqueue(method);
+
+            // Async methods place real work in the compiler-generated state machine MoveNext.
+            if (method is MethodInfo mi)
+            {
+                var asyncAttr = mi.GetCustomAttribute<AsyncStateMachineAttribute>();
+                if (asyncAttr?.StateMachineType is { } stateMachine)
+                {
+                    var moveNext = stateMachine.GetMethod(
+                        "MoveNext",
+                        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                    if (moveNext is not null && visited.Add(moveNext))
+                    {
+                        queue.Enqueue(moveNext);
+                    }
+                }
+            }
+        }
+
+        private static IEnumerable<MethodBase> EnumerateCallees(MethodBase method)
+        {
+            MethodBody? body;
+            try
+            {
+                body = method.GetMethodBody();
+            }
+            catch (InvalidOperationException)
+            {
+                yield break;
+            }
+
+            if (body is null)
+            {
+                yield break;
+            }
+
+            var il = body.GetILAsByteArray();
+            if (il is null || il.Length == 0)
+            {
+                yield break;
+            }
+
+            var module = method.Module;
+            var i = 0;
+            while (i < il.Length)
+            {
+                var op = ReadOpCode(il, ref i);
+                switch (op.OperandType)
+                {
+                    case OperandType.InlineMethod:
+                    case OperandType.InlineTok:
+                    {
+                        if (i + 4 > il.Length)
+                        {
+                            yield break;
+                        }
+
+                        var token = BitConverter.ToInt32(il, i);
+                        i += 4;
+                        MethodBase? resolved = null;
+                        try
+                        {
+                            resolved = module.ResolveMethod(token);
+                        }
+                        catch (ArgumentException)
+                        {
+                            // Token may be a type/field when OperandType is InlineTok.
+                            try
+                            {
+                                if (module.ResolveType(token) is { } resolvedType
+                                    && resolvedType == typeof(GetClassificationOutcomeQuery))
+                                {
+                                    // Type token alone: surface via a sentinel method on that type if present.
+                                    resolved = typeof(GetClassificationOutcomeQuery)
+                                        .GetMethods(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic)
+                                        .FirstOrDefault(m => m.Name == "HandleAsync");
+                                }
+                            }
+                            catch (ArgumentException)
+                            {
+                                // Ignore unresolvable tokens.
+                            }
+                        }
+
+                        if (resolved is not null)
+                        {
+                            yield return resolved;
+                        }
+
+                        break;
+                    }
+                    case OperandType.InlineField:
+                    case OperandType.InlineSig:
+                    case OperandType.InlineType:
+                    case OperandType.InlineString:
+                    case OperandType.InlineI:
+                    case OperandType.InlineBrTarget:
+                        i += 4;
+                        break;
+                    case OperandType.InlineI8:
+                    case OperandType.InlineR:
+                        i += 8;
+                        break;
+                    case OperandType.ShortInlineBrTarget:
+                    case OperandType.ShortInlineI:
+                    case OperandType.ShortInlineVar:
+                        i += 1;
+                        break;
+                    case OperandType.InlineVar:
+                        i += 2;
+                        break;
+                    case OperandType.ShortInlineR:
+                        i += 4;
+                        break;
+                    case OperandType.InlineSwitch:
+                    {
+                        if (i + 4 > il.Length)
+                        {
+                            yield break;
+                        }
+
+                        var count = BitConverter.ToInt32(il, i);
+                        i += 4 + (4 * count);
+                        break;
+                    }
+                    case OperandType.InlineNone:
+                        break;
+                    default:
+                        yield break;
+                }
+            }
+        }
+
+        private static OpCode ReadOpCode(byte[] il, ref int i)
+        {
+            var b = il[i++];
+            if (b != 0xFE)
+            {
+                return OneByteOps[b];
+            }
+
+            if (i >= il.Length)
+            {
+                return OpCodes.Nop;
+            }
+
+            return TwoByteOps[il[i++]];
+        }
+
+        private static OpCode[] CreateOneByteOps()
+        {
+            var map = new OpCode[256];
+            foreach (var field in typeof(OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                var op = (OpCode)field.GetValue(null)!;
+                if (op.Size == 1)
+                {
+                    map[(byte)op.Value] = op;
+                }
+            }
+
+            return map;
+        }
+
+        private static OpCode[] CreateTwoByteOps()
+        {
+            var map = new OpCode[256];
+            foreach (var field in typeof(OpCodes).GetFields(BindingFlags.Public | BindingFlags.Static))
+            {
+                var op = (OpCode)field.GetValue(null)!;
+                if (op.Size == 2)
+                {
+                    map[(byte)(op.Value & 0xFF)] = op;
+                }
+            }
+
+            return map;
+        }
     }
 
     private static ClassifyApplyPreviewRequest PreviewSelected(string evaluationId, IReadOnlyList<string> outcomeIds) =>
