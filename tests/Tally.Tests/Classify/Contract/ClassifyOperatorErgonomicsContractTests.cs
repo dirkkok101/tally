@@ -13,10 +13,10 @@ using Xunit;
 namespace Tally.Tests.Classify.Contract;
 
 /// <summary>
-/// TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION / bd-1gly —
+/// TASK-CLASSIFY-ERGONOMICS-CONTRACT-FOUNDATION / bd-1gly (+ bd-rly1 phase transition) —
 /// Additive request/result/enum/error shapes under source-generated JSON with
-/// pure contract validation, closed enums, FR/DM field reconciliation, and
-/// frozen 0.3.3 compatibility fingerprints. No descriptors or handlers.
+/// pure contract validation, closed enums, FR/DM field reconciliation,
+/// frozen 0.3.3 compatibility fingerprints, and published 105/17 inventory proofs.
 /// </summary>
 public sealed class ClassifyOperatorErgonomicsContractTests
 {
@@ -450,12 +450,15 @@ public sealed class ClassifyOperatorErgonomicsContractTests
         }
     }
 
-    // ── Frozen 0.3.3 released fingerprints ───────────────────────────────────
+    // ── Frozen 0.3.3 released fingerprints / published-phase inventory ───────
 
     [Fact]
-    public void Released_c12_operation_inventory_remains_exactly_twelve()
+    public void Published_inventory_is_one_hundred_five_global_and_seventeen_classify()
     {
-        Assert.Equal(12, ClassifyOperationIds.All.Count);
+        // Phase transition (bd-rly1): five additive ergonomics IDs are published.
+        // Released C12 IDs remain the stable prefix; total inventory is 105 / 17.
+        Assert.Equal(17, ClassifyOperationIds.All.Count);
+        Assert.Equal(12, ClassifyOperationIds.ReleasedC12.Count);
         Assert.Equal(
             [
                 "classify.evaluate",
@@ -471,20 +474,63 @@ public sealed class ClassifyOperatorErgonomicsContractTests
                 "classify.abandon",
                 "classify.cleanup"
             ],
+            ClassifyOperationIds.ReleasedC12);
+        Assert.Equal(ClassifyOperationIds.ReleasedC12, ClassifyOperationIds.All.Take(12));
+        Assert.Equal(
+            [
+                "classify.evaluate",
+                "classify.outcome.get",
+                "classify.apply.preview",
+                "classify.apply.run",
+                "classify.rule.save",
+                "classify.rule.validate",
+                "classify.rule.activate",
+                "classify.rule.retire",
+                "classify.feedback.record",
+                "classify.status",
+                "classify.abandon",
+                "classify.cleanup",
+                "classify.outcome.list",
+                "classify.rule.list",
+                "classify.rule-set.active.get",
+                "classify.corpus.build",
+                "classify.unresolved.report"
+            ],
             ClassifyOperationIds.All);
-        Assert.DoesNotContain("classify.outcome.list", ClassifyOperationIds.All);
-        Assert.DoesNotContain("classify.rule.list", ClassifyOperationIds.All);
-        Assert.DoesNotContain("classify.rule-set.active.get", ClassifyOperationIds.All);
-        Assert.DoesNotContain("classify.corpus.build", ClassifyOperationIds.All);
-        Assert.DoesNotContain("classify.unresolved.report", ClassifyOperationIds.All);
+        Assert.Contains("classify.outcome.list", ClassifyOperationIds.All);
+        Assert.Contains("classify.rule.list", ClassifyOperationIds.All);
+        Assert.Contains("classify.rule-set.active.get", ClassifyOperationIds.All);
+        Assert.Contains("classify.corpus.build", ClassifyOperationIds.All);
+        Assert.Contains("classify.unresolved.report", ClassifyOperationIds.All);
+
+        var registry = OperationRegistry.Create().Descriptors;
+        Assert.Equal(105, registry.Count);
+        Assert.Equal(
+            17,
+            registry.Count(d => d.OperationId.StartsWith("classify.", StringComparison.Ordinal)));
     }
 
     [Fact]
-    public void Released_c12_module_still_publishes_exactly_twelve_descriptors()
+    public void Published_module_publishes_exactly_seventeen_descriptors_including_five_additive()
     {
         var module = new ClassifyOperationModule();
-        Assert.Equal(12, module.Descriptors.Count);
+        Assert.Equal(17, module.Descriptors.Count);
         Assert.Equal(ClassifyOperationIds.All, module.Descriptors.Select(d => d.OperationId));
+        Assert.Contains(
+            module.Descriptors,
+            d => d.OperationId == ClassifyOperationIds.OutcomeList);
+        Assert.Contains(
+            module.Descriptors,
+            d => d.OperationId == ClassifyOperationIds.RuleList);
+        Assert.Contains(
+            module.Descriptors,
+            d => d.OperationId == ClassifyOperationIds.RuleSetActiveGet);
+        Assert.Contains(
+            module.Descriptors,
+            d => d.OperationId == ClassifyOperationIds.CorpusBuild);
+        Assert.Contains(
+            module.Descriptors,
+            d => d.OperationId == ClassifyOperationIds.UnresolvedReport);
     }
 
     [Theory]
