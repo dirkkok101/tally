@@ -11,7 +11,7 @@ public sealed class SystemOperationModule
     {
         cancellationToken.ThrowIfCancellationRequested();
         return Task.FromResult(CommandResult<JsonElement>.Success(JsonSerializer.SerializeToElement(
-            new VersionResult("tally", "0.3.3", "1.0", "1.0"),
+            new VersionResult("tally", "0.3.4", "1.0", "1.0"),
             LedgerJsonContext.Default.VersionResult)));
     }
 
