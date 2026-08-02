@@ -157,3 +157,154 @@ public sealed record ClassifyAbandonRequest(
 public sealed record ClassifyCleanupRequest(
     [property: JsonRequired] string ContractVersion,
     [property: JsonRequired] string PolicyVersion);
+
+// ── Operator ergonomics additive contracts (PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1) ──
+// Contract-only shapes for outcome.list, rule.list, rule-set.active.get, corpus.build,
+// and unresolved.report. Descriptors/handlers are owned by later beads; inventory remains C12.
+
+/// <summary>Closed stale filter for classify.outcome.list (DM-CLASSIFY-OUTCOME-PAGE).</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<ClassifyOutcomeStaleFilter>))]
+public enum ClassifyOutcomeStaleFilter
+{
+    [JsonStringEnumMemberName("any")]
+    Any,
+
+    [JsonStringEnumMemberName("fresh")]
+    Fresh,
+
+    [JsonStringEnumMemberName("stale")]
+    Stale
+}
+
+/// <summary>Closed rule lifecycle filter for classify.rule.list (DM-CLASSIFY-RULE-DISCOVERY).</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<ClassifyRuleLifecycleFilter>))]
+public enum ClassifyRuleLifecycleFilter
+{
+    [JsonStringEnumMemberName("draft")]
+    Draft,
+
+    [JsonStringEnumMemberName("active")]
+    Active,
+
+    [JsonStringEnumMemberName("retired")]
+    Retired,
+
+    [JsonStringEnumMemberName("superseded")]
+    Superseded
+}
+
+/// <summary>Closed provenance enum for rule discovery items (DM-CLASSIFY-RULE-DISCOVERY).</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<ClassifyRuleProvenanceKind>))]
+public enum ClassifyRuleProvenanceKind
+{
+    [JsonStringEnumMemberName("owner_authored")]
+    OwnerAuthored,
+
+    [JsonStringEnumMemberName("feedback_derived")]
+    FeedbackDerived
+}
+
+/// <summary>Closed category lifecycle enum for discovery surfaces (no free-text).</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<ClassifyCategoryLifecycleState>))]
+public enum ClassifyCategoryLifecycleState
+{
+    [JsonStringEnumMemberName("active")]
+    Active,
+
+    [JsonStringEnumMemberName("archived")]
+    Archived
+}
+
+/// <summary>
+/// classify.outcome.list request (DM-CLASSIFY-OUTCOME-PAGE / FR-CLASSIFY-OUTCOME-DISCOVERY).
+/// pageSize is 1..500; continuation is opaque and snapshot-bound.
+/// </summary>
+public sealed record ClassifyOutcomeListRequest(
+    [property: JsonRequired] string ContractVersion,
+    [property: JsonRequired] string EvaluationId,
+    [property: JsonRequired] int PageSize,
+    ClassifyOutcomeKind? OutcomeKind = null,
+    string? SuggestedCategoryId = null,
+    string? ContributingRuleVersionId = null,
+    ClassifyOutcomeStaleFilter? StaleState = null,
+    string? TransactionId = null,
+    string? Continuation = null);
+
+/// <summary>
+/// classify.rule.list request (DM-CLASSIFY-RULE-DISCOVERY / FR-CLASSIFY-RULEBOOK-DISCOVERY).
+/// pageSize is 1..500; continuation is opaque and high-water bound.
+/// </summary>
+public sealed record ClassifyRuleListRequest(
+    [property: JsonRequired] string ContractVersion,
+    [property: JsonRequired] int PageSize,
+    string? LogicalRuleId = null,
+    ClassifyRuleLifecycleFilter? Lifecycle = null,
+    string? CategoryId = null,
+    bool? ActiveMembership = null,
+    string? Continuation = null);
+
+/// <summary>
+/// classify.rule-set.active.get request — no caller-supplied authority flag.
+/// </summary>
+public sealed record ClassifyRuleSetActiveGetRequest(
+    [property: JsonRequired] string ContractVersion);
+
+/// <summary>
+/// One explicit owner label for classify.corpus.build
+/// (DM-CLASSIFY-PRIVATE-CORPUS-BUILD / FR-CLASSIFY-PRIVATE-CORPUS-BUILDER).
+/// expectedCategoryId is required when the outcome kind requires a category.
+/// </summary>
+public sealed record ClassifyCorpusBuildLabel(
+    [property: JsonRequired] string TransactionId,
+    [property: JsonRequired] ClassifyOutcomeKind ExpectedOutcome,
+    string? ExpectedCategoryId = null);
+
+/// <summary>
+/// One projection member required to bind a corpus row. Owner supplies a fresh complete
+/// classification_v1 evaluation projection; never invents labels or rows.
+/// </summary>
+public sealed record ClassifyCorpusBuildProjectionItem(
+    [property: JsonRequired] string TransactionId,
+    [property: JsonRequired] int Ordinal,
+    [property: JsonRequired] string AccountId,
+    [property: JsonRequired] string SourceDescription,
+    string? AmountDirection,
+    [property: JsonRequired] long AmountAbsoluteMinor,
+    [property: JsonRequired] string ItemLifecycleFingerprint);
+
+/// <summary>
+/// Complete fresh classification_v1 projection envelope for corpus.build.
+/// Bound into the request for exact matching; never returned on the public receipt.
+/// </summary>
+public sealed record ClassifyCorpusBuildProjectionEnvelope(
+    [property: JsonRequired] string LedgerContractVersion,
+    [property: JsonRequired] string ProjectionVersion,
+    [property: JsonRequired] string StoreGenerationFingerprint,
+    [property: JsonRequired] string SnapshotId,
+    [property: JsonRequired] string SnapshotExpiresAt,
+    [property: JsonRequired] string CategoryLifecycleFingerprint,
+    [property: JsonRequired] string NormalizationVersion,
+    [property: JsonRequired] IReadOnlyList<ClassifyCorpusBuildProjectionItem> Items);
+
+/// <summary>
+/// classify.corpus.build request. Idempotent; labels 1..10000; absolute outputPath required.
+/// Aggregate receipt never echoes path or row data.
+/// </summary>
+public sealed record ClassifyCorpusBuildRequest(
+    [property: JsonRequired] string ContractVersion,
+    [property: JsonRequired] string IdempotencyKey,
+    [property: JsonRequired] string OutputPath,
+    [property: JsonRequired] ClassifyCorpusBuildProjectionEnvelope Projection,
+    [property: JsonRequired] IReadOnlyList<ClassifyCorpusBuildLabel> Labels);
+
+/// <summary>
+/// classify.unresolved.report request (DM-CLASSIFY-UNRESOLVED-REPORT).
+/// topN 1..500; minimumCount 2..500; optional account/direction filters.
+/// </summary>
+public sealed record ClassifyUnresolvedReportRequest(
+    [property: JsonRequired] string ContractVersion,
+    [property: JsonRequired] string EvaluationId,
+    [property: JsonRequired] int TopN,
+    [property: JsonRequired] int MinimumCount,
+    string? AccountId = null,
+    ClassificationAmountDirectionValue? AmountDirection = null);
