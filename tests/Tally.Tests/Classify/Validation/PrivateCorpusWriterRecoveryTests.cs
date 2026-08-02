@@ -152,30 +152,22 @@ public sealed class PrivateCorpusWriterRecoveryTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Temp_hard_link_attack_before_rename_is_rejected()
+    public async Task Temp_hard_link_identity_cleanup_refuses_wrong_name()
     {
-        // If an attacker hard-links the recognized temp after create, nlink!=1 must fail closed
-        // before renameat2. Force the condition by publishing to a path we pre-stage: create
-        // temp ourselves matching the recognized pattern, hard-link it, then observe writer
-        // refuses destinations that would rename a multi-linked inode.
-        // Direct unit of identity check: after a successful create path, hard-link temp and
-        // re-publish to a free destination — the writer's pre-rename identity check fails.
-        // We simulate by hard-linking a published file and ensuring NOREPLACE / exists path
-        // does not destroy it; plus a dedicated hard-link on a temp name that fails delete/identity.
-        var dest = Path.Combine(root, "hl-dest.jsonl");
         var temp = Path.Combine(
             root,
             PrivateCorpusWriter.RecognizedTempPrefix + "attack" + PrivateCorpusWriter.RecognizedTempSuffix);
         await File.WriteAllBytesAsync(temp, Encoding.UTF8.GetBytes("x\n"));
         File.SetUnixFileMode(temp, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        Assert.Equal(0, Lstat(temp, out var st));
         var alias = Path.Combine(root, "alias-hardlink");
         Assert.Equal(0, Link(temp, alias));
         Assert.True(LstatNlink(temp) >= 2);
-        // Recognized temp with nlink>1 must not be deleted by cleanup helper.
+        // Prefix-only delete refuses.
         Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(temp));
-        Assert.True(File.Exists(temp));
-        // Publish to a free dest still succeeds (new exclusive temp), competitor hard-link intact.
-        Assert.True((await writer.PublishAsync(dest, [Row(0, "tx-1")], CancellationToken.None)).IsSuccess);
+        // Identity delete of the recognized name is allowed (exact ino); alias hard-link remains.
+        Assert.True(PrivateCorpusWriter.TryDeleteRecognizedTemp(temp, st.st_dev, st.st_ino));
+        Assert.False(File.Exists(temp));
         Assert.True(File.Exists(alias));
         Assert.Equal("x\n", await File.ReadAllTextAsync(alias));
     }
@@ -329,20 +321,34 @@ public sealed class PrivateCorpusWriterRecoveryTests : IAsyncLifetime
     // ── Recognized temporary cleanup ─────────────────────────────────────────
 
     [Fact]
-    public async Task TryDeleteRecognizedTemp_removes_only_recognized_names()
+    public async Task TryDeleteRecognizedTemp_requires_exact_inode_identity()
     {
         var temp = Path.Combine(
             root,
             PrivateCorpusWriter.RecognizedTempPrefix + "deadbeef" + PrivateCorpusWriter.RecognizedTempSuffix);
         await File.WriteAllTextAsync(temp, "x");
         File.SetUnixFileMode(temp, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        Assert.True(PrivateCorpusWriter.TryDeleteRecognizedTemp(temp));
+        Assert.Equal(0, Lstat(temp, out var st));
+        // Correct identity removes the entry.
+        Assert.True(PrivateCorpusWriter.TryDeleteRecognizedTemp(temp, st.st_dev, st.st_ino));
         Assert.False(File.Exists(temp));
+
+        // Recreate and attempt delete with wrong ino — must leave file intact.
+        await File.WriteAllTextAsync(temp, "x2");
+        File.SetUnixFileMode(temp, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        Assert.Equal(0, Lstat(temp, out var st2));
+        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(temp, st2.st_dev, st2.st_ino + 1));
+        Assert.True(File.Exists(temp));
+
+        // Prefix-only overload refuses all deletes.
+        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(temp));
+        Assert.True(File.Exists(temp));
 
         var unknown = Path.Combine(root, "not-recognized.tmp");
         await File.WriteAllTextAsync(unknown, "y");
         File.SetUnixFileMode(unknown, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(unknown));
+        Assert.Equal(0, Lstat(unknown, out var stU));
+        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(unknown, stU.st_dev, stU.st_ino));
         Assert.True(File.Exists(unknown));
     }
 
@@ -352,9 +358,88 @@ public sealed class PrivateCorpusWriterRecoveryTests : IAsyncLifetime
         var dest = Path.Combine(root, "corpus.jsonl");
         await File.WriteAllTextAsync(dest, "z");
         File.SetUnixFileMode(dest, UnixFileMode.UserRead | UnixFileMode.UserWrite);
-        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(dest));
+        Assert.Equal(0, Lstat(dest, out var st));
+        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(dest, st.st_dev, st.st_ino));
         Assert.True(File.Exists(dest));
         await Task.CompletedTask;
+    }
+
+    [Fact]
+    public async Task Path_substitution_after_write_still_publishes_retained_inode()
+    {
+        // Adversary replaces the temp pathname with different content after write/fsync.
+        // Publication must still publish the retained O_EXCL inode; substituted file must remain.
+        var dest = Path.Combine(root, "swap-publish.jsonl");
+        var attackerPath = Path.Combine(root, "attacker-content.jsonl");
+        string? observedTemp = null;
+        var seam = new PrivateCorpusPublishFaultSeam
+        {
+            AfterWriteBeforeValidate = cp =>
+            {
+                observedTemp = cp.TemporaryPath;
+                // Move our temp aside and put attacker bytes at the temp pathname.
+                var hidden = cp.TemporaryPath + ".hidden-original";
+                File.Move(cp.TemporaryPath, hidden);
+                File.WriteAllText(cp.TemporaryPath, "ATTACKER-SUBSTITUTED-BYTES\n");
+                File.SetUnixFileMode(cp.TemporaryPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+                File.WriteAllText(attackerPath, "ATTACKER-SUBSTITUTED-BYTES\n");
+            }
+        };
+        var w = new PrivateCorpusWriter(reader, seam);
+        var result = await w.PublishAsync(dest, [Row(0, "tx-swap")], CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.NotNull(observedTemp);
+        // Destination is our real corpus (reader-compatible), not attacker text.
+        var text = await File.ReadAllTextAsync(dest);
+        Assert.DoesNotContain("ATTACKER-SUBSTITUTED-BYTES", text, StringComparison.Ordinal);
+        Assert.Contains("tx-swap", text, StringComparison.Ordinal);
+        // Substituted pathname content must not have been unlinked as "our" temp.
+        Assert.True(
+            File.Exists(observedTemp!) || File.Exists(observedTemp! + ".hidden-original"),
+            "either substituted name or relocated original may remain; unknown attacker file must not vanish if identity mismatch");
+        // If the substituted name still exists, it still holds attacker bytes (not deleted).
+        if (File.Exists(observedTemp!))
+        {
+            Assert.Contains(
+                "ATTACKER",
+                await File.ReadAllTextAsync(observedTemp!),
+                StringComparison.Ordinal);
+        }
+    }
+
+    [Fact]
+    public async Task Path_substitution_before_cleanup_never_deletes_unknown_replacement()
+    {
+        var dest = Path.Combine(root, "swap-cleanup.jsonl");
+        string? substitutedPath = null;
+        var seam = new PrivateCorpusPublishFaultSeam
+        {
+            AfterPublishBeforeCleanup = cp =>
+            {
+                substitutedPath = cp.TemporaryPath;
+                // After linkat published our inode to dest, replace remaining temp name with unknown file.
+                if (File.Exists(cp.TemporaryPath))
+                {
+                    File.Delete(cp.TemporaryPath);
+                }
+
+                File.WriteAllText(cp.TemporaryPath, "UNKNOWN-REPLACEMENT-MUST-SURVIVE\n");
+                File.SetUnixFileMode(cp.TemporaryPath, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+            }
+        };
+        var w = new PrivateCorpusWriter(reader, seam);
+        var result = await w.PublishAsync(dest, [Row(0, "tx-clean")], CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.NotNull(substitutedPath);
+        // Unknown replacement at the temp name must survive identity-bound cleanup.
+        Assert.True(File.Exists(substitutedPath!));
+        Assert.Equal(
+            "UNKNOWN-REPLACEMENT-MUST-SURVIVE\n",
+            await File.ReadAllTextAsync(substitutedPath!));
+        // Destination is complete real publication.
+        var read = await reader.ReadAsync(dest, CancellationToken.None);
+        Assert.True(read.IsSuccess, read.ErrorCode);
+        Assert.Equal("tx-clean", read.Rows![0].TransactionId);
     }
 
     [Fact]
