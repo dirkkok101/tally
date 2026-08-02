@@ -3,6 +3,7 @@ using Tally.Contracts.Classify.Evidence;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Classify.Rules;
 using Tally.Contracts.Common;
+using Tally.Contracts.Ledger.Actuals;
 using Tally.Infrastructure.Classify.Corpus;
 
 namespace Tally.Contracts.Classify;
@@ -64,7 +65,7 @@ namespace Tally.Contracts.Classify;
 [JsonSerializable(typeof(ClassifyFeedbackDecision))]
 [JsonSerializable(typeof(ClassifyOutcomeKind))]
 [JsonSerializable(typeof(ClassifyApplyItemResultKind))]
-// Operator ergonomics additive contracts (bd-1gly) — types only; no descriptors yet.
+// Operator ergonomics additive contracts (bd-1gly) — types + validation only; no descriptors.
 [JsonSerializable(typeof(ClassifyOutcomeListRequest))]
 [JsonSerializable(typeof(ClassifyOutcomeListResult))]
 [JsonSerializable(typeof(ClassifyOutcomeListItem))]
@@ -82,8 +83,10 @@ namespace Tally.Contracts.Classify;
 [JsonSerializable(typeof(ClassifyCorpusBuildLabel))]
 [JsonSerializable(typeof(ClassifyCorpusBuildLabel[]))]
 [JsonSerializable(typeof(ClassifyCorpusBuildProjectionEnvelope))]
-[JsonSerializable(typeof(ClassifyCorpusBuildProjectionItem))]
-[JsonSerializable(typeof(ClassifyCorpusBuildProjectionItem[]))]
+[JsonSerializable(typeof(ClassificationProjectionItem))]
+[JsonSerializable(typeof(ClassificationProjectionItem[]))]
+[JsonSerializable(typeof(ClassificationAmountDirection))]
+[JsonSerializable(typeof(CategoryMutationState))]
 [JsonSerializable(typeof(ClassifyUnresolvedReportRequest))]
 [JsonSerializable(typeof(ClassifyUnresolvedReportResult))]
 [JsonSerializable(typeof(ClassifyUnresolvedPatternGroup))]
@@ -92,6 +95,8 @@ namespace Tally.Contracts.Classify;
 [JsonSerializable(typeof(ClassifyRuleLifecycleFilter))]
 [JsonSerializable(typeof(ClassifyRuleProvenanceKind))]
 [JsonSerializable(typeof(ClassifyCategoryLifecycleState))]
+[JsonSerializable(typeof(ClassifyActiveRuleSetLifecycleStatus))]
+[JsonSerializable(typeof(ClassifyCorpusBuildTerminalState))]
 [JsonSerializable(typeof(OperationLimits))]
 [JsonSerializable(typeof(VerifiedOwnerRulebookGateReceipt))]
 [JsonSerializable(typeof(OwnerRulebookGateInputManifest))]

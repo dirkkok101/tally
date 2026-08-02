@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Tally.Contracts.Classify.Rules;
+using Tally.Contracts.Ledger.Actuals;
 
 namespace Tally.Contracts.Classify.Operations;
 
@@ -450,7 +451,7 @@ public sealed record ClassifyRuleSetActiveGetResult(
     string? TrustedGateReceiptFingerprint,
     [property: JsonRequired] string NormalizationVersion,
     [property: JsonRequired] string ActivationEpoch,
-    [property: JsonRequired] string LifecycleStatus,
+    [property: JsonRequired] ClassifyActiveRuleSetLifecycleStatus LifecycleStatus,
     [property: JsonRequired] string ActivatedAt,
     string? RetiredAt,
     [property: JsonRequired] IReadOnlyList<string> RuleVersionIds,
@@ -466,32 +467,36 @@ public sealed record ClassifyCorpusBuildResult(
     [property: JsonRequired] string IdempotencyFingerprint,
     [property: JsonRequired] string ProjectionFingerprint,
     [property: JsonRequired] string StoreGenerationFingerprint,
-    [property: JsonRequired] string CategoryLifecycleFingerprint,
+    [property: JsonRequired] string CatalogueFingerprint,
     [property: JsonRequired] string NormalizationVersion,
     [property: JsonRequired] int LabelCount,
     [property: JsonRequired] int WrittenRowCount,
     [property: JsonRequired] long WrittenByteCount,
     [property: JsonRequired] string CorpusFingerprint,
-    [property: JsonRequired] string TerminalState,
+    [property: JsonRequired] ClassifyCorpusBuildTerminalState TerminalState,
     [property: JsonRequired] bool Replayed);
 
 /// <summary>
 /// One unresolved pattern group. Carries representative normalized description only —
 /// never raw source description, transaction IDs, or rule proposals.
+/// Amount direction uses released Ledger classification_v1 vocabulary.
 /// </summary>
 public sealed record ClassifyUnresolvedPatternGroup(
     [property: JsonRequired] int Rank,
     [property: JsonRequired] string RepresentativeNormalizedDescription,
     [property: JsonRequired] string AccountId,
-    [property: JsonRequired] ClassificationAmountDirectionValue AmountDirection,
+    [property: JsonRequired] ClassificationAmountDirection AmountDirection,
     [property: JsonRequired] int TransactionCount,
     [property: JsonRequired] long CheckedSignedAmountMinorTotal,
     [property: JsonRequired] long CheckedAbsoluteAmountMinorTotal,
     [property: JsonRequired] string GroupFingerprint);
 
 /// <summary>
-/// Ephemeral classify.unresolved.report result. No durable report, continuation, paths,
-/// or authority (DM-CLASSIFY-UNRESOLVED-REPORT).
+/// Ephemeral classify.unresolved.report result (FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT).
+/// Accounting identity:
+/// noSuggestionOutcomeCount == joinedRowCount == candidateRowCount + belowMinimumRowCount.
+/// Totals also expose distinct groups, returned/omitted candidates, and bounded request params.
+/// No durable report, continuation, paths, or authority.
 /// </summary>
 public sealed record ClassifyUnresolvedReportResult(
     [property: JsonRequired] string ContractVersion,
@@ -501,11 +506,23 @@ public sealed record ClassifyUnresolvedReportResult(
     [property: JsonRequired] string CategoryLifecycleFingerprint,
     [property: JsonRequired] string RuleSetFingerprint,
     [property: JsonRequired] string NormalizationVersion,
-    [property: JsonRequired] int EligibleNoSuggestionCount,
-    [property: JsonRequired] int MatchedFreshRowCount,
-    [property: JsonRequired] int GroupCount,
-    [property: JsonRequired] int ReturnedGroupCount,
-    [property: JsonRequired] int BelowMinimumRowCount,
+    /// <summary>Retained no_suggestion outcomes in the evaluation.</summary>
+    [property: JsonRequired] int NoSuggestionOutcomeCount,
+    /// <summary>Rows successfully joined to the fresh classification_v1 projection.</summary>
+    [property: JsonRequired] int JoinedRowCount,
+    /// <summary>Joined rows whose group meets minimumCount (before topN truncation).</summary>
     [property: JsonRequired] int CandidateRowCount,
+    /// <summary>Joined rows whose group is below minimumCount.</summary>
+    [property: JsonRequired] int BelowMinimumRowCount,
+    /// <summary>Distinct groups after minimumCount filter (before topN).</summary>
+    [property: JsonRequired] int DistinctGroupCount,
+    /// <summary>Groups returned after topN bound (equals Groups.Count).</summary>
+    [property: JsonRequired] int ReturnedGroupCount,
+    /// <summary>Candidate groups omitted by the topN bound.</summary>
+    [property: JsonRequired] int OmittedGroupCount,
+    /// <summary>Request topN bound (1..500).</summary>
+    [property: JsonRequired] int BoundedRequestTopN,
+    /// <summary>Request minimumCount bound (2..500).</summary>
+    [property: JsonRequired] int BoundedRequestMinimumCount,
     [property: JsonRequired] string ReportFingerprint,
     [property: JsonRequired] IReadOnlyList<ClassifyUnresolvedPatternGroup> Groups);

@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using Tally.Contracts.Classify.Rules;
+using Tally.Contracts.Ledger.Actuals;
 
 namespace Tally.Contracts.Classify.Operations;
 
@@ -159,8 +160,7 @@ public sealed record ClassifyCleanupRequest(
     [property: JsonRequired] string PolicyVersion);
 
 // ── Operator ergonomics additive contracts (PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1) ──
-// Contract-only shapes for outcome.list, rule.list, rule-set.active.get, corpus.build,
-// and unresolved.report. Descriptors/handlers are owned by later beads; inventory remains C12.
+// Contract-only shapes + pure boundary validation. Descriptors/handlers: later beads.
 
 /// <summary>Closed stale filter for classify.outcome.list (DM-CLASSIFY-OUTCOME-PAGE).</summary>
 [JsonConverter(typeof(JsonStringEnumConverter<ClassifyOutcomeStaleFilter>))]
@@ -176,7 +176,7 @@ public enum ClassifyOutcomeStaleFilter
     Stale
 }
 
-/// <summary>Closed rule lifecycle filter for classify.rule.list (DM-CLASSIFY-RULE-DISCOVERY).</summary>
+/// <summary>Closed rule lifecycle filter/item state for classify.rule.list.</summary>
 [JsonConverter(typeof(JsonStringEnumConverter<ClassifyRuleLifecycleFilter>))]
 public enum ClassifyRuleLifecycleFilter
 {
@@ -204,7 +204,7 @@ public enum ClassifyRuleProvenanceKind
     FeedbackDerived
 }
 
-/// <summary>Closed category lifecycle enum for discovery surfaces (no free-text).</summary>
+/// <summary>Closed category lifecycle for discovery surfaces (aligns with public category states).</summary>
 [JsonConverter(typeof(JsonStringEnumConverter<ClassifyCategoryLifecycleState>))]
 public enum ClassifyCategoryLifecycleState
 {
@@ -213,6 +213,22 @@ public enum ClassifyCategoryLifecycleState
 
     [JsonStringEnumMemberName("archived")]
     Archived
+}
+
+/// <summary>Closed lifecycle status for the active rule-set authority summary.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<ClassifyActiveRuleSetLifecycleStatus>))]
+public enum ClassifyActiveRuleSetLifecycleStatus
+{
+    [JsonStringEnumMemberName("active")]
+    Active
+}
+
+/// <summary>Closed terminal publication state for corpus.build aggregate receipts.</summary>
+[JsonConverter(typeof(JsonStringEnumConverter<ClassifyCorpusBuildTerminalState>))]
+public enum ClassifyCorpusBuildTerminalState
+{
+    [JsonStringEnumMemberName("completed")]
+    Completed
 }
 
 /// <summary>
@@ -260,21 +276,9 @@ public sealed record ClassifyCorpusBuildLabel(
     string? ExpectedCategoryId = null);
 
 /// <summary>
-/// One projection member required to bind a corpus row. Owner supplies a fresh complete
-/// classification_v1 evaluation projection; never invents labels or rows.
-/// </summary>
-public sealed record ClassifyCorpusBuildProjectionItem(
-    [property: JsonRequired] string TransactionId,
-    [property: JsonRequired] int Ordinal,
-    [property: JsonRequired] string AccountId,
-    [property: JsonRequired] string SourceDescription,
-    string? AmountDirection,
-    [property: JsonRequired] long AmountAbsoluteMinor,
-    [property: JsonRequired] string ItemLifecycleFingerprint);
-
-/// <summary>
 /// Complete fresh classification_v1 projection envelope for corpus.build.
-/// Bound into the request for exact matching; never returned on the public receipt.
+/// Items are released Ledger <see cref="ClassificationProjectionItem"/> rows — no invented dialect.
+/// Never returned on the public aggregate receipt.
 /// </summary>
 public sealed record ClassifyCorpusBuildProjectionEnvelope(
     [property: JsonRequired] string LedgerContractVersion,
@@ -282,9 +286,9 @@ public sealed record ClassifyCorpusBuildProjectionEnvelope(
     [property: JsonRequired] string StoreGenerationFingerprint,
     [property: JsonRequired] string SnapshotId,
     [property: JsonRequired] string SnapshotExpiresAt,
-    [property: JsonRequired] string CategoryLifecycleFingerprint,
+    [property: JsonRequired] string CatalogueFingerprint,
     [property: JsonRequired] string NormalizationVersion,
-    [property: JsonRequired] IReadOnlyList<ClassifyCorpusBuildProjectionItem> Items);
+    [property: JsonRequired] IReadOnlyList<ClassificationProjectionItem> Items);
 
 /// <summary>
 /// classify.corpus.build request. Idempotent; labels 1..10000; absolute outputPath required.
@@ -298,8 +302,9 @@ public sealed record ClassifyCorpusBuildRequest(
     [property: JsonRequired] IReadOnlyList<ClassifyCorpusBuildLabel> Labels);
 
 /// <summary>
-/// classify.unresolved.report request (DM-CLASSIFY-UNRESOLVED-REPORT).
-/// topN 1..500; minimumCount 2..500; optional account/direction filters.
+/// classify.unresolved.report request (DM-CLASSIFY-UNRESOLVED-REPORT / FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT).
+/// topN 1..500; minimumCount 2..500 (FR-required); optional account/direction filters use
+/// released Ledger classification amount-direction vocabulary.
 /// </summary>
 public sealed record ClassifyUnresolvedReportRequest(
     [property: JsonRequired] string ContractVersion,
@@ -307,4 +312,214 @@ public sealed record ClassifyUnresolvedReportRequest(
     [property: JsonRequired] int TopN,
     [property: JsonRequired] int MinimumCount,
     string? AccountId = null,
-    ClassificationAmountDirectionValue? AmountDirection = null);
+    ClassificationAmountDirection? AmountDirection = null);
+
+/// <summary>
+/// Pure boundary validation for operator-ergonomics request shapes (bd-1gly).
+/// Mirrors the established TryValidate pattern used by feature validators, without
+/// publishing descriptors or handlers. Bounds match DM/FR contracts exactly.
+/// </summary>
+public static class ClassifyOperatorErgonomicsContracts
+{
+    /// <summary>Contract version for additive ergonomics operations (same family as C12: 1.0).</summary>
+    public const string ContractVersion = "1.0";
+
+    public const int MinPageSize = 1;
+    public const int MaxPageSize = 500;
+    public const int MinTopN = 1;
+    public const int MaxTopN = 500;
+    public const int MinMinimumCount = 2;
+    public const int MaxMinimumCount = 500;
+    public const int MinLabelCount = 1;
+    public const int MaxLabelCount = 10_000;
+
+    /// <summary>Released apply selected_outcomes upper bound — unchanged by this bead.</summary>
+    public const int SelectedOutcomesMax = 200;
+
+    public static bool IsSupportedContractVersion(string? version) =>
+        string.Equals(version, ContractVersion, StringComparison.Ordinal);
+
+    public static bool IsValidPageSize(int pageSize) =>
+        pageSize is >= MinPageSize and <= MaxPageSize;
+
+    public static bool IsValidTopN(int topN) =>
+        topN is >= MinTopN and <= MaxTopN;
+
+    public static bool IsValidMinimumCount(int minimumCount) =>
+        minimumCount is >= MinMinimumCount and <= MaxMinimumCount;
+
+    public static bool IsValidLabelCount(int labelCount) =>
+        labelCount is >= MinLabelCount and <= MaxLabelCount;
+
+    public static bool TryValidate(ClassifyOutcomeListRequest? request, out string? errorCode)
+    {
+        errorCode = null;
+        if (request is null)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!IsSupportedContractVersion(request.ContractVersion))
+        {
+            errorCode = ClassifyErrors.UnsupportedVersion;
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(request.EvaluationId))
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!IsValidPageSize(request.PageSize))
+        {
+            errorCode = ClassifyErrors.ResourceLimit;
+            return false;
+        }
+
+        return true;
+    }
+
+    public static bool TryValidate(ClassifyRuleListRequest? request, out string? errorCode)
+    {
+        errorCode = null;
+        if (request is null)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!IsSupportedContractVersion(request.ContractVersion))
+        {
+            errorCode = ClassifyErrors.UnsupportedVersion;
+            return false;
+        }
+
+        if (!IsValidPageSize(request.PageSize))
+        {
+            errorCode = ClassifyErrors.ResourceLimit;
+            return false;
+        }
+
+        return true;
+    }
+
+    public static bool TryValidate(ClassifyRuleSetActiveGetRequest? request, out string? errorCode)
+    {
+        errorCode = null;
+        if (request is null)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!IsSupportedContractVersion(request.ContractVersion))
+        {
+            errorCode = ClassifyErrors.UnsupportedVersion;
+            return false;
+        }
+
+        return true;
+    }
+
+    public static bool TryValidate(ClassifyCorpusBuildRequest? request, out string? errorCode)
+    {
+        errorCode = null;
+        if (request is null)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!IsSupportedContractVersion(request.ContractVersion))
+        {
+            errorCode = ClassifyErrors.UnsupportedVersion;
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(request.IdempotencyKey)
+            || string.IsNullOrWhiteSpace(request.OutputPath)
+            || request.Projection is null
+            || request.Labels is null)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!string.Equals(
+                request.Projection.ProjectionVersion,
+                ClassificationProjectionVersions.ClassificationV1,
+                StringComparison.Ordinal))
+        {
+            errorCode = ClassifyErrors.LedgerIncompatible;
+            return false;
+        }
+
+        if (request.Projection.Items is null
+            || string.IsNullOrWhiteSpace(request.Projection.LedgerContractVersion)
+            || string.IsNullOrWhiteSpace(request.Projection.StoreGenerationFingerprint)
+            || string.IsNullOrWhiteSpace(request.Projection.SnapshotId)
+            || string.IsNullOrWhiteSpace(request.Projection.CatalogueFingerprint)
+            || string.IsNullOrWhiteSpace(request.Projection.NormalizationVersion))
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!IsValidLabelCount(request.Labels.Count))
+        {
+            errorCode = ClassifyErrors.ResourceLimit;
+            return false;
+        }
+
+        var seen = new HashSet<string>(StringComparer.Ordinal);
+        foreach (var label in request.Labels)
+        {
+            if (string.IsNullOrWhiteSpace(label.TransactionId) || !seen.Add(label.TransactionId))
+            {
+                errorCode = ClassifyErrors.LabelInvalid;
+                return false;
+            }
+
+            if (label.ExpectedOutcome is ClassifyOutcomeKind.Suggestion
+                && string.IsNullOrWhiteSpace(label.ExpectedCategoryId))
+            {
+                errorCode = ClassifyErrors.LabelInvalid;
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public static bool TryValidate(ClassifyUnresolvedReportRequest? request, out string? errorCode)
+    {
+        errorCode = null;
+        if (request is null)
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!IsSupportedContractVersion(request.ContractVersion))
+        {
+            errorCode = ClassifyErrors.UnsupportedVersion;
+            return false;
+        }
+
+        if (string.IsNullOrWhiteSpace(request.EvaluationId))
+        {
+            errorCode = ClassifyErrors.InvalidInput;
+            return false;
+        }
+
+        if (!IsValidTopN(request.TopN) || !IsValidMinimumCount(request.MinimumCount))
+        {
+            errorCode = ClassifyErrors.ResourceLimit;
+            return false;
+        }
+
+        return true;
+    }
+}
