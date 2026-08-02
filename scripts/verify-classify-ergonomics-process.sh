@@ -9,7 +9,7 @@ repository_root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 publish_root="$(mktemp -d "${TMPDIR:-/tmp}/tally-erg-process.XXXXXX")"
 test_project="tests/Tally.Tests/Tally.Tests.csproj"
 filter='FullyQualifiedName~ClassifyOperatorErgonomicsProcessTests'
-min_tests=10
+min_tests=13
 
 cleanup() {
     rm -rf -- "$publish_root"
@@ -94,6 +94,9 @@ for needle in \
     TC_ERGONOMICS_PROCESS_typed_cursor_invalid_exit_mapping_and_private_safe_stderr \
     TC_ERGONOMICS_PROCESS_typed_lifecycle_missing_eval_exit_mapping \
     TC_ERGONOMICS_PROCESS_typed_unsupported_version_exit_mapping \
+    TC_ERGONOMICS_PROCESS_typed_privacy_rejected_exit_mapping \
+    TC_ERGONOMICS_PROCESS_typed_resource_limit_exit_mapping \
+    TC_ERGONOMICS_PROCESS_typed_integrity_exit_mapping \
     TC_ERGONOMICS_PROCESS_outcome_ids_compose_selected_outcomes_preview_without_outcome_get \
     TC_ERGONOMICS_PROCESS_zero_child_per_row_and_live_root_isolation
 do

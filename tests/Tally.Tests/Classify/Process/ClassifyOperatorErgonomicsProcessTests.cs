@@ -246,7 +246,11 @@ public sealed class ClassifyOperatorErgonomicsProcessTests
             var measured = await RunPublishedMeasuredAsync(
                 args,
                 ClassifyEnvelope(input, needsKey ? NextKey() : null));
-            Assert.True(measured.ExitCode is 0 or >= 3, $"exit={measured.ExitCode} args={string.Join(' ', args)}");
+            // Path smoke only — partition-specific exit proofs live in typed_* tests.
+            // Allow success or structured host/domain failure; do not treat this as partition coverage.
+            Assert.True(
+                measured.ExitCode is 0 or >= 3,
+                $"exit={measured.ExitCode} args={string.Join(' ', args)}");
             using var doc = JsonDocument.Parse(measured.Stdout);
             Assert.Equal("1.0", doc.RootElement.GetProperty("contract_version").GetString());
             Assert.StartsWith("classify.", doc.RootElement.GetProperty("operation_id").GetString(), StringComparison.Ordinal);
@@ -327,6 +331,118 @@ public sealed class ClassifyOperatorErgonomicsProcessTests
         using var doc = JsonDocument.Parse(measured.Stdout);
         Assert.Equal(ClassifyErrors.UnsupportedVersion, doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
         AssertNoPrivateDiagnostics(measured.Stderr, measured.Stdout);
+    }
+
+    [Fact]
+    public async Task TC_ERGONOMICS_PROCESS_typed_privacy_rejected_exit_mapping()
+    {
+        // Deterministic privacy partition: schema-valid corpus.build with a non-absolute
+        // destination fails closed in the production handler (CLASSIFY-PRIVACY-REJECTED → exit 3).
+        // Field names must match ClassifyCorpusBuildRequest wire shape so preflight does not
+        // short-circuit as generic validation.invalid_input before the privacy partition.
+        RequirePublishedBinary();
+        const string pathCanary = "CANARY_PROC_PRIVACY_REL_PATH.jsonl";
+        var input = $$"""
+            {
+              "contractVersion":"1.0",
+              "idempotencyKey":"ignored-use-envelope",
+              "outputPath":"{{pathCanary}}",
+              "projection":{
+                "ledgerContractVersion":"{{ActualsContractVersions.Current}}",
+                "projectionVersion":"{{ClassificationProjectionVersions.ClassificationV1}}",
+                "storeGenerationFingerprint":"aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+                "snapshotId":"snap-privacy",
+                "snapshotExpiresAt":"2026-08-02T12:00:00.0000000Z",
+                "catalogueFingerprint":"bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+                "normalizationVersion":"{{NormalizationDescriptor.V1.Version}}",
+                "items":[{
+                  "ordinal":0,
+                  "transactionId":"tx-privacy-1",
+                  "accountId":"acct-1",
+                  "effectiveDate":"2026-07-15",
+                  "signedAmount":"-12.34",
+                  "sourceDescription":"CANARY_PROC_PRIVACY_DESC",
+                  "amountDirection":"expense",
+                  "categoryMutationState":"assignable",
+                  "transactionRevision":"tr-0",
+                  "relationshipRevision":"rr-0",
+                  "allocationRevision":"ar-0"
+                }]
+              },
+              "labels":[{"transactionId":"tx-privacy-1","expectedOutcome":"no_suggestion"}]
+            }
+            """;
+        var measured = await RunPublishedMeasuredAsync(
+            ["classify", "corpus", "build", "--input", "-"],
+            ClassifyEnvelope(input, NextKey()));
+        Assert.Equal(3, measured.ExitCode);
+        using var doc = JsonDocument.Parse(measured.Stdout);
+        Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
+        Assert.Equal("classify.corpus.build", doc.RootElement.GetProperty("operation_id").GetString());
+        Assert.Equal(
+            ClassifyErrors.PrivacyRejected,
+            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        Assert.False(doc.RootElement.GetProperty("result_or_error").TryGetProperty("buildId", out _));
+        Assert.StartsWith("tally: ", measured.Stderr, StringComparison.Ordinal);
+        Assert.DoesNotContain(pathCanary, measured.Stderr, StringComparison.Ordinal);
+        Assert.DoesNotContain("CANARY_PROC_PRIVACY_DESC", measured.Stderr, StringComparison.Ordinal);
+        Assert.DoesNotContain(pathCanary, measured.Stdout, StringComparison.Ordinal);
+        Assert.DoesNotContain("CANARY_PROC_PRIVACY_DESC", measured.Stdout, StringComparison.Ordinal);
+        AssertNoPrivateDiagnostics(measured.Stderr, measured.Stdout);
+        AssertSingleJsonObject(measured.Stdout);
+        Assert.Equal(0, measured.MaxChildCount);
+    }
+
+    [Fact]
+    public async Task TC_ERGONOMICS_PROCESS_typed_resource_limit_exit_mapping()
+    {
+        // Deterministic resource partition: unresolved.report topN above published bound
+        // (1..500) → CLASSIFY-RESOURCE-LIMIT → host exit 9 (not generic invalid-input).
+        RequirePublishedBinary();
+        var measured = await RunPublishedMeasuredAsync(
+            ["classify", "unresolved", "report", "--input", "-"],
+            ClassifyEnvelope(
+                $"{{\"contractVersion\":\"1.0\",\"evaluationId\":{JsonSerializer.Serialize(fx.UnresolvedEvaluationId)},\"topN\":501,\"minimumCount\":2}}",
+                null));
+        Assert.Equal(9, measured.ExitCode);
+        using var doc = JsonDocument.Parse(measured.Stdout);
+        Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
+        Assert.Equal("classify.unresolved.report", doc.RootElement.GetProperty("operation_id").GetString());
+        Assert.Equal(
+            ClassifyErrors.ResourceLimit,
+            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        Assert.False(doc.RootElement.GetProperty("result_or_error").TryGetProperty("groups", out _));
+        Assert.StartsWith("tally: ", measured.Stderr, StringComparison.Ordinal);
+        AssertNoPrivateDiagnostics(measured.Stderr, measured.Stdout);
+        AssertSingleJsonObject(measured.Stdout);
+        Assert.Equal(0, measured.MaxChildCount);
+    }
+
+    [Fact]
+    public async Task TC_ERGONOMICS_PROCESS_typed_integrity_exit_mapping()
+    {
+        // Deterministic integrity partition: retained evaluation envelope claims
+        // no_suggestion_count that does not match durable outcome rows → CLASSIFY-INTEGRITY exit 8.
+        RequirePublishedBinary();
+        Assert.False(string.IsNullOrWhiteSpace(fx.IntegrityEvaluationId));
+        var measured = await RunPublishedMeasuredAsync(
+            ["classify", "unresolved", "report", "--input", "-"],
+            ClassifyEnvelope(
+                $"{{\"contractVersion\":\"1.0\",\"evaluationId\":{JsonSerializer.Serialize(fx.IntegrityEvaluationId)},\"topN\":10,\"minimumCount\":2}}",
+                null));
+        Assert.Equal(8, measured.ExitCode);
+        using var doc = JsonDocument.Parse(measured.Stdout);
+        Assert.Equal("error", doc.RootElement.GetProperty("outcome").GetString());
+        Assert.Equal("classify.unresolved.report", doc.RootElement.GetProperty("operation_id").GetString());
+        Assert.Equal(
+            ClassifyErrors.Integrity,
+            doc.RootElement.GetProperty("result_or_error").GetProperty("code").GetString());
+        Assert.False(doc.RootElement.GetProperty("result_or_error").TryGetProperty("groups", out _));
+        Assert.False(doc.RootElement.GetProperty("result_or_error").TryGetProperty("reportFingerprint", out _));
+        Assert.StartsWith("tally: ", measured.Stderr, StringComparison.Ordinal);
+        AssertNoPrivateDiagnostics(measured.Stderr, measured.Stdout);
+        AssertSingleJsonObject(measured.Stdout);
+        Assert.Equal(0, measured.MaxChildCount);
     }
 
     // ── Composition ──────────────────────────────────────────────────────────
@@ -563,7 +679,8 @@ public sealed class ClassifyOperatorErgonomicsProcessTests
 
     private static string BuildMinimalCorpusInput(string dest)
     {
-        // Valid shape; may fail closed on projection binding — still exercises CLI envelope.
+        // Wire-valid minimal shape for CLI envelope smoke (typed privacy/resource/integrity
+        // partitions use dedicated fixtures). catalogueFingerprint is the published field name.
         return JsonSerializer.Serialize(new
         {
             contractVersion = "1.0",
@@ -576,11 +693,14 @@ public sealed class ClassifyOperatorErgonomicsProcessTests
                 storeGenerationFingerprint = new string('a', 64),
                 snapshotId = "snap-1",
                 snapshotExpiresAt = "2026-08-02T12:00:00.0000000Z",
-                categoryIdentityLifecycleFingerprint = new string('b', 64),
+                catalogueFingerprint = new string('b', 64),
                 normalizationVersion = NormalizationDescriptor.V1.Version,
                 items = Array.Empty<object>()
             },
-            labels = Array.Empty<object>()
+            labels = new[]
+            {
+                new { transactionId = "tx-smoke-1", expectedOutcome = "no_suggestion" }
+            }
         });
     }
 
@@ -620,6 +740,8 @@ public sealed class ErgonomicsProcessFixture : IAsyncLifetime
     public string BulkEvaluationId { get; private set; } = null!;
     public string MultiPageEvaluationId { get; private set; } = null!;
     public string UnresolvedEvaluationId { get; private set; } = null!;
+    /// <summary>Completed evaluation with retention-gap counters for integrity partition proof.</summary>
+    public string IntegrityEvaluationId { get; private set; } = null!;
     public int MultiPageCount { get; } = 7;
     public int MultiPageSize { get; } = 3;
 
@@ -655,7 +777,74 @@ public sealed class ErgonomicsProcessFixture : IAsyncLifetime
         // without depending on a fixed total across later bulk seeding.
         MultiPageEvaluationId = await SeedSuggestionEvaluationAsync("multipage merchant", count: MultiPageCount);
         UnresolvedEvaluationId = await SeedNoSuggestionEvaluationAsync("unresolved coffee shop", count: 3);
+        // Retention gap: completed envelope claims no_suggestion_count=3 with zero outcome rows.
+        IntegrityEvaluationId = await InsertSyntheticIntegrityGapRunAsync(UnresolvedEvaluationId, noSuggestionCount: 3);
         BulkEvaluationId = await SeedSuggestionEvaluationAsync("bulk list merchant", count: 146);
+    }
+
+    /// <summary>
+    /// Clone a completed evaluation envelope into a synthetic run with mismatched
+    /// no_suggestion_count (retention gap) for published-process integrity proofs.
+    /// </summary>
+    private async Task<string> InsertSyntheticIntegrityGapRunAsync(string templateEvaluationId, int noSuggestionCount)
+    {
+        await using var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None);
+        await using var read = connection.CreateCommand();
+        read.CommandText = """
+            SELECT rule_set_version_id, normalization_version, ledger_contract_version, projection_version,
+                   store_generation_fingerprint, snapshot_id, snapshot_expires_at,
+                   category_lifecycle_fingerprint, ordered_items_fingerprint, actor
+            FROM evaluation_run WHERE evaluation_id = $id;
+            """;
+        read.Parameters.AddWithValue("$id", templateEvaluationId);
+        await using var reader = await read.ExecuteReaderAsync(CancellationToken.None);
+        Assert.True(await reader.ReadAsync(CancellationToken.None));
+        var ruleSet = reader.GetString(0);
+        var norm = reader.GetString(1);
+        var ledgerCv = reader.GetString(2);
+        var proj = reader.GetString(3);
+        var gen = reader.GetString(4);
+        var snap = reader.GetString(5);
+        var exp = reader.GetString(6);
+        var cat = reader.GetString(7);
+        var ordered = reader.GetString(8);
+        var act = reader.GetString(9);
+        await reader.DisposeAsync();
+
+        var synthId = "synth-integrity-" + Guid.NewGuid().ToString("N");
+        // input_count must equal sum of outcome counters for envelope integrity of those fields;
+        // no_suggestion_count is intentionally non-zero with zero durable no_suggestion rows.
+        await using var insert = connection.CreateCommand();
+        insert.CommandText = """
+            INSERT INTO evaluation_run (
+                evaluation_id, operation_idempotency_key, rule_set_version_id, normalization_version,
+                ledger_contract_version, projection_version, store_generation_fingerprint, snapshot_id,
+                snapshot_expires_at, category_lifecycle_fingerprint, ordered_items_fingerprint,
+                input_count, suggestion_count, no_suggestion_count, conflict_count, stale_count,
+                lifecycle_state, actor, created_at
+            ) VALUES (
+                $id, NULL, $rs, $norm, $ledger, $proj, $gen, $snap, $exp, $cat, $ord,
+                $input, 0, $ns, 0, 0, 'completed', $actor, $created
+            );
+            """;
+        insert.Parameters.AddWithValue("$id", synthId);
+        insert.Parameters.AddWithValue("$rs", ruleSet);
+        insert.Parameters.AddWithValue("$norm", norm);
+        insert.Parameters.AddWithValue("$ledger", ledgerCv);
+        insert.Parameters.AddWithValue("$proj", proj);
+        insert.Parameters.AddWithValue("$gen", gen);
+        insert.Parameters.AddWithValue("$snap", snap);
+        insert.Parameters.AddWithValue("$exp", exp);
+        insert.Parameters.AddWithValue("$cat", cat);
+        insert.Parameters.AddWithValue("$ord", ordered);
+        insert.Parameters.AddWithValue("$input", noSuggestionCount);
+        insert.Parameters.AddWithValue("$ns", noSuggestionCount);
+        insert.Parameters.AddWithValue("$actor", act);
+        insert.Parameters.AddWithValue(
+            "$created",
+            DateTimeOffset.UtcNow.ToString("O", CultureInfo.InvariantCulture));
+        Assert.Equal(1, await insert.ExecuteNonQueryAsync(CancellationToken.None));
+        return synthId;
     }
 
     public Task DisposeAsync()
