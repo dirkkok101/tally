@@ -56,6 +56,7 @@ Return an ephemeral bounded owner-review report over retained no_suggestion outc
 ### Constraints
 
 - Ledger is read-only through LedgerContractClient and the complete report is built before stdout serialization.
+- The shipped classification_v1 contract is authoritative. A projection, query, lifecycle, or mutation-precondition gap blocks this CLASSIFY slice until an audited LEDGER-owned change and dependency exist.
 
 ### Notes
 

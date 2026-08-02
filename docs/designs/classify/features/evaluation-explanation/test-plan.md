@@ -18,8 +18,9 @@
 **Ref Code:** TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT
 **Surface:** service
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Evaluation/ClassificationEngineTests.cs
 
 ##### Preconditions
 
@@ -38,8 +39,9 @@ FR-CLASSIFY-DETERMINISTIC-EVALUATION holds: every item has exactly one correct o
 **Ref Code:** TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX
 **Surface:** service
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Evaluation/ClassificationDeterminismPropertyTests.cs
 
 ##### Preconditions
 
@@ -58,8 +60,9 @@ NFR-CLASSIFY-DETERMINISTIC-INTEGRITY reaches its target with zero unaccounted ro
 **Ref Code:** TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT
 **Surface:** contract
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Evaluation/OutcomeExplanationTests.cs
 
 ##### Preconditions
 
@@ -78,8 +81,9 @@ FR-CLASSIFY-OUTCOME-EXPLANATION holds and no historical explanation is reconstru
 **Ref Code:** TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT
 **Surface:** service
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Evaluation/OutcomeInvalidationTests.cs
 
 ##### Preconditions
 
@@ -100,8 +104,9 @@ FR-CLASSIFY-OUTCOME-INVALIDATION holds: each semantic change names its fingerpri
 **Ref Code:** TC-CLASSIFY-EVALUATION-LIMITS
 **Surface:** service
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Evaluation/EvaluationLimitTests.cs
 
 ##### Preconditions
 

@@ -2,9 +2,9 @@
   "id": "01KYVME6XX1TGDV950SWEX9K9Z",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "metric": "Owner-rulebook coverage",
-  "current": "Not measured; candidate values remain owner-only and untracked.",
+  "current": "Private validation reported 146 suggestions and 471 no-suggestions across 617 eligible transactions, for 23.66 percent coverage, with zero conflicts or stale outcomes.",
   "target": "Report exact aggregate suggestion, no-suggestion, conflict, stale, and total counts plus coverage percentage; no minimum coverage is invented before private validation.",
   "by_when": "At the owner-rulebook pre-authority gate",
-  "measured": 0,
+  "measured": 1,
   "created_at": "2026-07-31T08:25:18.5263343+00:00"
 }

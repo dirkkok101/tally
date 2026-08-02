@@ -16,10 +16,10 @@
     "Rejected compiling the existing plan because it would manufacture implementation work after the viability thresholds failed. Rejected weakening the recurrence, time, reduction, or zero-incorrect thresholds. Rejected broader prefix or token-sequence rules because held-out incorrect outcomes violate the apply canary. Rejected cloud, model, regex, fuzzy, or private-storage alternatives because locality and determinism remain hard boundaries."
   ],
   "consequences": [
-    "CLASSIFY remains unbuilt; its design and plan remain historical evidence, its plan is archived, and no CLASSIFY beads are created. The installed INGEST and LEDGER workflows remain authoritative. A future reconsideration requires a new spike and an explicit plan reactivation or replacement."
+    "At the July 2026 automatic-discovery spike disposition, CLASSIFY was unbuilt, PLAN-CLASSIFY-V1 was archived without bead compilation, and INGEST plus LEDGER remained the available workflow. That at-the-time implementation-state statement was later superseded for the owner-authored path by DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT and for shipped reality by DD-CLASSIFY-SHIPPED-BASELINE. The failed inferred-rule evidence, unchanged recurrence, timing, decision-reduction, zero-incorrect, conflict, and locality thresholds, and archived PLAN-CLASSIFY-V1 disposition remain binding historical authority for any future automatic-discovery experiment."
   ],
   "status_notes": [
-    "Superseded for the owner-authored rulebook path by DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT. The decision, evidence, and thresholds remain binding historical authority against automatic inferred-rule discovery and were not weakened or erased."
+    "Historical automatic-discovery disposition. Superseded for the owner-authored rulebook path by DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT and for current shipped-state claims by DD-CLASSIFY-SHIPPED-BASELINE; its spike evidence and automatic-discovery thresholds remain binding and were not weakened or erased."
   ],
   "status": "accepted",
   "created_at": "2026-07-30T16:56:51.3516848+00:00",

@@ -2,9 +2,9 @@
   "id": "01KXV9NH4QEMZFF1X0C0NCYCYJ",
   "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
   "metric": "Agent contract conformance",
-  "current": "Not measured; CLASSIFY is not implemented.",
+  "current": "Tally 0.3.3 publishes all twelve CLASSIFY operations inside the 100-operation Native-AOT CLI; the final CLASSIFY gate passed 5,609 tests and the installed executable was exercised against the real local Ledger.",
   "target": "100% of public operations publish deterministic versioned schemas, one structured result, stable expected errors and exits, metadata-only diagnostics, and pre-mutation compatibility checks.",
   "by_when": "Before CLASSIFY v1 acceptance",
-  "measured": 0,
+  "measured": 1,
   "created_at": "2026-07-18T19:01:22.2008817+00:00"
 }

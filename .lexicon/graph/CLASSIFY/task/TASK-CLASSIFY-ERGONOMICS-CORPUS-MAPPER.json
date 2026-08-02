@@ -157,14 +157,24 @@
       "created_at": "2026-08-02T07:24:17.4262856+00:00"
     },
     {
-      "id": "01KZ0NQXMK7B059HYWDJB5WMN3",
+      "id": "01KZ0V4Y9QZBGB9SWGR6M7EVEM",
       "kind": "constraint",
       "text": [
         "The mapper is concrete and pure; no new interface or corpus schema version is introduced."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-02T07:24:17.4262856+00:00"
+      "created_at": "2026-08-02T08:58:46.9665253+00:00"
+    },
+    {
+      "id": "01KZ0V4Y9S5B6CDPCE56PJA6XH",
+      "kind": "constraint",
+      "text": [
+        "Consume the released classification_v1 envelope as supplied. If required projection data or lifecycle evidence is absent, stop and route the contract change through an audited LEDGER plan and task before modifying CLASSIFY."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T08:58:46.9665253+00:00"
     },
     {
       "id": "01KZ0NQXMK7RD3S4TKPGASRPES",

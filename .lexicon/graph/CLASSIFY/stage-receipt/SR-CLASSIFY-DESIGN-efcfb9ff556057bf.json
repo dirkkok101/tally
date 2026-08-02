@@ -1,0 +1,806 @@
+{
+  "id": "01KZ0V6A90V1YD1BQ2K3DW5QHK",
+  "ref_code": "SR-CLASSIFY-DESIGN-efcfb9ff556057bf",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "receipt_kind": "authoring",
+  "stage_id": "design",
+  "stage_result": "authoring_complete",
+  "manifest_version": "v1",
+  "manifest_sha256": "8e60d10f41198a8b89851255d136373c298289d0df54a65e28ec602c6a7cc9d6",
+  "skill_id": "$lex:design",
+  "skill_version": "0.5.12",
+  "skill_sha256": "12e3cce2e5806da2c5fbfccd514916156f46d51a00c890de2dde31fb60d2173c",
+  "producer_provider": "codex",
+  "repository_sha256": "cff6e777643abe35b32b09154c48410052503a78a7c06422f7ff2ae3c046b7b6",
+  "membership_sha256": "ff2e7dad38af723c68ffb1512eda0c4c9cc82b7f632f2d5a73a8408a53b5bdef",
+  "content_sha256": "24c9490b0c1c23d291083af9b867d2c9b5797a6b8c023a42ee8577f0bbd71072",
+  "audit_sha256": "0995d858bd56584e7b5833dec4a23d97a01ab2d99396e14bc4890b2cfb10e95b",
+  "input_sha256": "4e4c98c441c4fde253f3b57f81ee50ed23c16f4f568d1d975257654cf12a3d17",
+  "idempotency_sha256": "efcfb9ff556057bf60aa6dfe04e08aeddfc21a2cfe3a2492d38faaf34a0b051f",
+  "created_at": "2026-08-02T08:59:32.0006039+00:00",
+  "inputs": [
+    {
+      "source_entity_type": "kill_criterion",
+      "source_entity_id": "01KXV5M9XWRQGW8RATSM9G93NB",
+      "source_ref_code": "01KXV5M9XWRQGW8RATSM9G93NB",
+      "role": "content",
+      "sort_order": 0,
+      "content_sha256": "2f9eda3e4ceec8ac1f99c73f621ffdad8f962762be7ecc0b36966a6768960889",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "kill_criterion",
+      "source_entity_id": "01KXV5MA8B6MMYSRPHSQ07FDR0",
+      "source_ref_code": "01KXV5MA8B6MMYSRPHSQ07FDR0",
+      "role": "content",
+      "sort_order": 1,
+      "content_sha256": "f32cc2addaed1a43ddfccf2aebf3d4e7cf711174e8af01386e4f27781ee6f251",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "kill_criterion",
+      "source_entity_id": "01KXV5MAKA79V0ZG099TWWD5FE",
+      "source_ref_code": "01KXV5MAKA79V0ZG099TWWD5FE",
+      "role": "content",
+      "sort_order": 2,
+      "content_sha256": "22c9d88ccb846356a9ca7ad40dca9d0ed233ded7d46c49a2f33e1bb4a058fc8f",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "kill_criterion",
+      "source_entity_id": "01KXV5MAXN2TPCA3BCGP6W6AJM",
+      "source_ref_code": "01KXV5MAXN2TPCA3BCGP6W6AJM",
+      "role": "content",
+      "sort_order": 3,
+      "content_sha256": "59508afd6729925b7729a3b7cdc8315834c00a2c4287c8617e96955331e1d3e0",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "kill_criterion",
+      "source_entity_id": "01KYVME50DZPAMGR2G3XVS8C5W",
+      "source_ref_code": "01KYVME50DZPAMGR2G3XVS8C5W",
+      "role": "content",
+      "sort_order": 4,
+      "content_sha256": "8194d9a64e28379742f41dcb82dbe171c0839ec97e018f2a446902f0aea2f1b5",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "external_dependency",
+      "source_entity_id": "01KXV9NE74JRFZSHKCFEMP6HFV",
+      "source_ref_code": "EXT-CLASSIFY-AI-AGENT-HOST",
+      "role": "content",
+      "sort_order": 5,
+      "content_sha256": "b8f02e079a209fa1be76862713d030db38fb13988d9f0b6326c8bce360d858b7",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "external_dependency",
+      "source_entity_id": "01KXV9NEHRVZF8EQJPYNVMGXGT",
+      "source_ref_code": "EXT-CLASSIFY-HOST-OS-SECURITY",
+      "role": "content",
+      "sort_order": 6,
+      "content_sha256": "d919bc951188a176de6170e26443065dae535b0d2a08ab73c3ea7a30c57cde1f",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "external_dependency",
+      "source_entity_id": "01KXV9NDVD5M9YZS2N5XGJNXJN",
+      "source_ref_code": "EXT-CLASSIFY-LEDGER-PUBLIC-CONTRACT",
+      "role": "content",
+      "sort_order": 7,
+      "content_sha256": "939b5320a4105f7cb2cee7e104f4397cc22b4dd4fa58ce1436f0af3342dee1ac",
+      "audit_head_sha256": "b02e123dd25bad2f4caccc89152f1fd8171358c42d83b6256650426bbe1d5ffe"
+    },
+    {
+      "source_entity_type": "external_dependency",
+      "source_entity_id": "01KXV9NEWB6MN2V4KMJ12KD5QA",
+      "source_ref_code": "EXT-CLASSIFY-PRIVATE-EVALUATION-CORPUS",
+      "role": "content",
+      "sort_order": 8,
+      "content_sha256": "2a3d77fcee18bc645983a956e78f84de0c8b9e62bbab6b7dab77da0f26b44cbe",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "module_design",
+      "source_entity_id": "01KXWCDTQDMENSWY3RZADDZF6Q",
+      "source_ref_code": "MD-CLASSIFY-MASTER",
+      "role": "content",
+      "sort_order": 9,
+      "content_sha256": "104e94cacc3d7cade74258a902fc01474b63bc369624890ddd94fd047b732326",
+      "audit_head_sha256": "8113bc9cdf8801dcd26ec4302142ece64ada3f86f7bcd002bbc14c2cc44923e0"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCG9MW0T5G5AN8W0H3EAR3",
+      "source_ref_code": "DD-CLASSIFY-APPLICATION-ARCHITECTURE",
+      "role": "content",
+      "sort_order": 10,
+      "content_sha256": "ac1e5f7d28e9cb282c016ab5d91db20456a7fbadd79453887cbf4d7a998455f6",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCGC3N5XX1JQQ49WFAJTRS",
+      "source_ref_code": "DD-CLASSIFY-APPLY-SAGA",
+      "role": "content",
+      "sort_order": 11,
+      "content_sha256": "e6669cf3256352667183c342ed3569ee4871e14e719a8b8fae20f1ce2ab85200",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCGCEJAMGD1686WT6WVQWM",
+      "source_ref_code": "DD-CLASSIFY-ARTIFACT-RETENTION",
+      "role": "content",
+      "sort_order": 12,
+      "content_sha256": "6cf7c000d3ffde61403f3d28dab64b00cac9bfc04241b5e2cef1d06f15d8b86b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCG9ZF36JCVEYTX20E414B",
+      "source_ref_code": "DD-CLASSIFY-CLI-OPERATION-CONTRACT",
+      "role": "content",
+      "sort_order": 13,
+      "content_sha256": "361d0f1e4c646dcd9fae6deb46fd985fe3d922276d77a8a42c6f87f7c0e616fc",
+      "audit_head_sha256": "76a3401e33c96840feda495983cc91349a6eeab1af914f29e556d27855289445"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCGB26EAQZKA4ZZDSMQ7V2",
+      "source_ref_code": "DD-CLASSIFY-DETERMINISTIC-EVALUATION",
+      "role": "content",
+      "sort_order": 14,
+      "content_sha256": "b465d228fd1d17fa93f671b2b15c521b7eb4f1c018687efd6e8d5cb3bf4698bd",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCGABBFD4436XW6FKY5AF7",
+      "source_ref_code": "DD-CLASSIFY-LEDGER-PUBLIC-PROJECTION",
+      "role": "content",
+      "sort_order": 15,
+      "content_sha256": "4d6c1878a65e83abc6f7d038098f63359b0798eea50bcd775829ab0f34613e06",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KZ0N585ANYEGNB0VH2KM0WX5",
+      "source_ref_code": "DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT",
+      "role": "content",
+      "sort_order": 16,
+      "content_sha256": "a3bf0d026cf3264055d5c55ec064174a7625f506bb04255c7c43a5deac383760",
+      "audit_head_sha256": "5b64d419026b05f54975754804ee3aa88c0eddd253671294ed77f45f921151fd"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KYVMAMYS1A9R3M2JS53MYFRG",
+      "source_ref_code": "DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT",
+      "role": "content",
+      "sort_order": 17,
+      "content_sha256": "4351d9c23967ec1d54478505c30c7def4e63dbc844f4ad0655ad728aae05f36b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KZ0N58V6EV7MSY1S9CQFTTEQ",
+      "source_ref_code": "DD-CLASSIFY-PAGINATED-DISCOVERY",
+      "role": "content",
+      "sort_order": 18,
+      "content_sha256": "b1470b30ce44dd4dd801c0a0f9b86c16c043277390ffe32d2e9b44daa5712d73",
+      "audit_head_sha256": "c255eb5e1cb08b55a90de6ba1756dbc29a6c0cfb56339576c03afad4d5b87559"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KZ0N59GRRQMM0D5TMSCGA8BP",
+      "source_ref_code": "DD-CLASSIFY-PRIVATE-CORPUS-PUBLICATION",
+      "role": "content",
+      "sort_order": 19,
+      "content_sha256": "44241b9158bb43667ffb589f25811ac7d0c73154608937954a968b16591ed6fe",
+      "audit_head_sha256": "b9e903b7519c551d63fb278c13ca3362c7b3b571e82f88c6e7eebde5a967dc7a"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCGBRABFTQEM2ABFJ7CZ6M",
+      "source_ref_code": "DD-CLASSIFY-PRIVATE-VALIDATION",
+      "role": "content",
+      "sort_order": 20,
+      "content_sha256": "2d4d52a4e676b658d71392414e6a023bf062942f697c84450b74a96c462293c8",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KYVMANQV4ME25Y1G6H6X95Q8",
+      "source_ref_code": "DD-CLASSIFY-RULE-AUTHORITY-PROVENANCE",
+      "role": "content",
+      "sort_order": 21,
+      "content_sha256": "27e767fd0af504dad52dbf6ff4afb38a548dff2a5630eae2377b604a53575199",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCGAPC0FKK1RST3FG0WHHM",
+      "source_ref_code": "DD-CLASSIFY-RULE-VOCABULARY",
+      "role": "content",
+      "sort_order": 22,
+      "content_sha256": "70366ae859c38826a5da930e8762d00bb34992992dde28a57b9a75aa39b2ba68",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KZ0N57DKA8VDVK7RV7CF3BSV",
+      "source_ref_code": "DD-CLASSIFY-SHIPPED-BASELINE",
+      "role": "content",
+      "sort_order": 23,
+      "content_sha256": "20ee77b183893c6c55c6ff4335a07441f6aa33029b559dcf41721382c0940773",
+      "audit_head_sha256": "45b249a4030ce8af9cc287e0beaec25b70102623a814070f6d1674be4399d415"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KXWCGBD9GSJ1AZJCRFDFJBDN",
+      "source_ref_code": "DD-CLASSIFY-STATE-STORE",
+      "role": "content",
+      "sort_order": 24,
+      "content_sha256": "6cf1533d92117f1da4e3044226b91a1b43cc023f93507029d7f8678a4cae914b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KZ0N5A6S4DXXDXDQW391S4Q8",
+      "source_ref_code": "DD-CLASSIFY-UNRESOLVED-REPORT-BOUNDARY",
+      "role": "content",
+      "sort_order": 25,
+      "content_sha256": "b657bdf3ecd638388cbe1224c19998d43a8c3fdaa0bee23d20ac3e553209a45e",
+      "audit_head_sha256": "761c94b5bea1a60657da9b621fd3ba9522194dffe34b5a0e57fe1e2e235308b5"
+    },
+    {
+      "source_entity_type": "design_decision",
+      "source_entity_id": "01KYSZA5CPCSZG05TRZCXDJW1W",
+      "source_ref_code": "DD-CLASSIFY-VIABILITY-DISPOSITION",
+      "role": "content",
+      "sort_order": 26,
+      "content_sha256": "a6f954fb1cb00ea52d42f9e96ddd2de5300db56760538087ed8f3ba0439dceb3",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJFXE8B1Q7ZRY82MXCYKQ",
+      "source_ref_code": "DM-CLASSIFY-APPLY-RUN",
+      "role": "content",
+      "sort_order": 27,
+      "content_sha256": "e3c525b0cfc4b8483911ea62eb532d349d11fa09b4852591514fc96c46896fad",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJFJKQ05X63ZSNR5NGY8V",
+      "source_ref_code": "DM-CLASSIFY-EVALUATION-OUTCOME",
+      "role": "content",
+      "sort_order": 28,
+      "content_sha256": "5f35fed8deb1d1be0043d166d110d145a1e1d696fee91ba6c8d8d958deb307d7",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJG7QYZJQH5YQ55RA7ABK",
+      "source_ref_code": "DM-CLASSIFY-FEEDBACK-PROPOSAL",
+      "role": "content",
+      "sort_order": 29,
+      "content_sha256": "d9e02811060719c22401c4ae1337dd422d9455e26aefcc3ce03ab4a4686a7a9e",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJDBZJ4735YSR5NKDRAWK",
+      "source_ref_code": "DM-CLASSIFY-LEDGER-PROJECTION-CONTRACT",
+      "role": "content",
+      "sort_order": 30,
+      "content_sha256": "2f2eb0c27d24f3cf96717d911630ae99c7bffa99401cfd54fc23f928ae8c140a",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJCQXQ5BBRC27KWC2BHB9",
+      "source_ref_code": "DM-CLASSIFY-OPERATION-CONTRACTS",
+      "role": "content",
+      "sort_order": 31,
+      "content_sha256": "8881ffa53749edc2d12506a71fa4df1b5acab07983b2d0eae0b0cd824cecef45",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KZ0N5B0KKK856NMFD0DM2V2P",
+      "source_ref_code": "DM-CLASSIFY-OUTCOME-PAGE",
+      "role": "content",
+      "sort_order": 32,
+      "content_sha256": "40ad408b44e41f0d8b70df597bda3778da9ff02bc365524948ee7c68a35d0a6a",
+      "audit_head_sha256": "7020c9926d9cae3953514a372561d5db1e940eab47e1bd4d77629f6b95d8e461"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KZ0N5CCHHV64PW64C2CFKCSH",
+      "source_ref_code": "DM-CLASSIFY-PRIVATE-CORPUS-BUILD",
+      "role": "content",
+      "sort_order": 33,
+      "content_sha256": "3c0140412022b56ff8c7f4d4061577e73e2861977dcf5c36717dc3387577723b",
+      "audit_head_sha256": "a1e19e5fafdd9b8121af202d320c950cffaa8166bd1a9c00dd6f3d50193e158f"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KZ0N5BQBPVCFEJ4EFNJ9D0DR",
+      "source_ref_code": "DM-CLASSIFY-RULE-DISCOVERY",
+      "role": "content",
+      "sort_order": 34,
+      "content_sha256": "5458778f43c7488710b6e435d1c63897a6b0260f5e247d4975120bbd2d7b3098",
+      "audit_head_sha256": "20409871266724a97a9826572b6b6237e09ba0efb2dcd345ef55858352654cfd"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJEMC0Y34ANP6YWT0TED7",
+      "source_ref_code": "DM-CLASSIFY-RULE-LIFECYCLE",
+      "role": "content",
+      "sort_order": 35,
+      "content_sha256": "afc2d5ed849e7b31ac746132b00a17b58ea2b64190e137207d9afb162111ebd1",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJDZ6HCM3V4JF7QERQHN0",
+      "source_ref_code": "DM-CLASSIFY-RULE-VOCABULARY",
+      "role": "content",
+      "sort_order": 36,
+      "content_sha256": "dc8d4a68af20808e6da4453849c825a27e03a7f9ea40ba90a47596c6de45c840",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJGM514904QHQZEJD3SEG",
+      "source_ref_code": "DM-CLASSIFY-STATE-STORE",
+      "role": "content",
+      "sort_order": 37,
+      "content_sha256": "4a1f543cb0d4d439f1d06c63c66015f58e7b090181a1331ac5c1c3cf69e6145b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KZ0N5D4VA8ECGMJM2B1D7Z7F",
+      "source_ref_code": "DM-CLASSIFY-UNRESOLVED-REPORT",
+      "role": "content",
+      "sort_order": 38,
+      "content_sha256": "ee651b3987785b19acf34d2b12c30080a066c6c767c239da70ec431ff2044bb9",
+      "audit_head_sha256": "60a5ec0500792592edcbca16fa608025e7bb795757f1aa935d55336b38c7be6a"
+    },
+    {
+      "source_entity_type": "data_model",
+      "source_entity_id": "01KXWCJF6P3ET4FT3NW91YQ53P",
+      "source_ref_code": "DM-CLASSIFY-VALIDATION-RUN",
+      "role": "content",
+      "sort_order": 39,
+      "content_sha256": "42154571198e7345da0851525419e2ba52e635ee965357b866e977eb45bd591c",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXWCJYK99D3KN0R2JP5F8ANF",
+      "source_ref_code": "FA-CLASSIFY-APPLY-FEEDBACK",
+      "role": "content",
+      "sort_order": 40,
+      "content_sha256": "d70fc913116f6edb3d0fa003e9389aec569576b9ac6f3a0f7e29c93b9389abf8",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXWCJXG6W9BK2PME4QW0QSC3",
+      "source_ref_code": "FA-CLASSIFY-CONTRACT-VOCABULARY",
+      "role": "content",
+      "sort_order": 41,
+      "content_sha256": "a21b1de36bdceeb32e7b63e5047e9a6c65830360e5a126adcbb96764440b262f",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXWCJY7M7NVWJBVG35SRNS3Q",
+      "source_ref_code": "FA-CLASSIFY-EVALUATION-EXPLANATION",
+      "role": "content",
+      "sort_order": 42,
+      "content_sha256": "937345c0b5e8b59abe4d0921b2dedf67fa9b7dfd212d0630945d8809acaa2b98",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXWCJXW02KRTJM8N9XJPP03K",
+      "source_ref_code": "FA-CLASSIFY-RULES-VALIDATION",
+      "role": "content",
+      "sort_order": 43,
+      "content_sha256": "f7d95fab74d08791956c35536fc6f5ff5c2547e334c9ce383f40a1a40a990e17",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "feature_area",
+      "source_entity_id": "01KXWCJYZ7SYSPAJMAFTTBE12Z",
+      "source_ref_code": "FA-CLASSIFY-STATE-RECOVERY",
+      "role": "content",
+      "sort_order": 44,
+      "content_sha256": "897afecb0fa7e0f737da642419600e236a274ae09d11f3d684a194461e8bd88b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXWCN2MDWGAHF7F8GEA2DCED",
+      "source_ref_code": "DIAG-CLASSIFY-APPLY-SAGA",
+      "role": "content",
+      "sort_order": 45,
+      "content_sha256": "ab4759006cc67af997e4a788582ec98388d8b7018704c4914073e377b1de4d1e",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXWCN1516CDZ4HE19JTCFH01",
+      "source_ref_code": "DIAG-CLASSIFY-COMPONENTS",
+      "role": "content",
+      "sort_order": 46,
+      "content_sha256": "68a556e9fa745a5c8a1b109edff2a1c0f711de2cbef63946a09ec7b91cd2b99b",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXWCN1T41HW370W69SBF8WQH",
+      "source_ref_code": "DIAG-CLASSIFY-EVALUATION-SEQUENCE",
+      "role": "content",
+      "sort_order": 47,
+      "content_sha256": "dc3d6ef39d10d1d7eb0bc4a0d4f33d318a21f9d4102ed0a03877ba5ca8114ef9",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXWCN33MA2F8PXK7RNC1W01H",
+      "source_ref_code": "DIAG-CLASSIFY-RULE-LIFECYCLE",
+      "role": "content",
+      "sort_order": 48,
+      "content_sha256": "af6a265d54f68cc3dfc1aa4cbb1d8601bebd081f9b773ebbf672e77c35d214a1",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "design_diagram",
+      "source_entity_id": "01KXWCN3J9X1HT7C4ESVGG5EMX",
+      "source_ref_code": "DIAG-CLASSIFY-STATE-ER",
+      "role": "content",
+      "sort_order": 49,
+      "content_sha256": "bcf3c6e6f1e39899f5878a029a7371e7bd41d7767acf25834f88badefc9d166a",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PHNA1FBJ5DP2M02MW6JH",
+      "source_ref_code": "TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT",
+      "role": "content",
+      "sort_order": 50,
+      "content_sha256": "2c00b21513f21fddf7899ec514119e99e6cda0a2e52cf307a1ad1c4ec8787ee5",
+      "audit_head_sha256": "c11183cf65c937859e8389e3949aa7151fcf2ce190888507628139e44c963886"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9QX0VMV7TG67WG63CSVT6",
+      "source_ref_code": "TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX",
+      "role": "content",
+      "sort_order": 51,
+      "content_sha256": "b736a2ce5c950dcb78dd268964706cda22e754983ed1c98e332efd921e33d49d",
+      "audit_head_sha256": "8e07c148ed59c4164eb0ffd8c960b3223f420b3ac67709a7b35789f43df36408"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PHZRHWHZVT06Y60C9X0D",
+      "source_ref_code": "TC-CLASSIFY-APPLY-EXECUTION-CONTRACT",
+      "role": "content",
+      "sort_order": 52,
+      "content_sha256": "6e08bf5f02434f8364c821bf7372d66c3e4ac6dcd0e64fa69c925f74da2fd3a0",
+      "audit_head_sha256": "8862bfb66fdda832809e6a45c4f19a741b56a6c8598867a29b4a6f0505392620"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9QXEDYZPQR3HVG4FEGSFF",
+      "source_ref_code": "TC-CLASSIFY-ATTRIBUTABLE-HISTORY-INVARIANTS",
+      "role": "content",
+      "sort_order": 53,
+      "content_sha256": "5bada01499daff1ae9292c62b1e2e2d78f4ef2bd95dfff67125705539263d982",
+      "audit_head_sha256": "5f8062a512d7963f6b68bbfe6e687cb105dc9b89a0379714b59fca41f737cf58"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KZ0MT9RW445PSR2GJ7A0XKQS",
+      "source_ref_code": "TC-CLASSIFY-BULK-PREVIEW-COMPOSITION",
+      "role": "content",
+      "sort_order": 54,
+      "content_sha256": "7227dfb47e91a77174c52d5da2012bea1a805f75b4b290b36d496efb81a335d0",
+      "audit_head_sha256": "1c0545e37568d1a8cb60fdcae2593501890ff46f9f6a12aa3a86ef0a1faa1e28"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PK0NZQKB2XVB2EQ5Q6W3",
+      "source_ref_code": "TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT",
+      "role": "content",
+      "sort_order": 55,
+      "content_sha256": "178bd27c819478aa86ef23d2e944701d947bd7fea2a54e46d8b4351c309c8dc0",
+      "audit_head_sha256": "a3b11efb6a720cb7861bedf43e649b209d4276a7f20cf6e32fa2595f71c71fc7"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PJA9CY0QXJMHR7WK9RES",
+      "source_ref_code": "TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT",
+      "role": "content",
+      "sort_order": 56,
+      "content_sha256": "4e69516bc8155a75ad3db0be0557b57a8e13339a060b5e9011afc51625d15360",
+      "audit_head_sha256": "a58babcb5db31d5d0bc4293e69882b8465ba71a67b37790f32a1fcbabb9e6fc0"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PG82DBH03F23HK78ET6K",
+      "source_ref_code": "TC-CLASSIFY-DETERMINISTIC-EVALUATION-CONTRACT",
+      "role": "content",
+      "sort_order": 57,
+      "content_sha256": "7ceed01670f597da49ab1c438869a2017df7426b5608e31d45dfd4de99e56776",
+      "audit_head_sha256": "400496195201addcbb1648ba9703cf9f37f2bf2a8ef39de00ecf72b98608fd9a"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PN17CNKRYQ9BRTYQHYQB",
+      "source_ref_code": "TC-CLASSIFY-DETERMINISTIC-PROPERTY-MATRIX",
+      "role": "content",
+      "sort_order": 58,
+      "content_sha256": "9ba0a9c0997b98e1924ff5ca31e3782b5d36eaa27508e843474f96041c914c95",
+      "audit_head_sha256": "ff2553a4ae8b59feaf0eb882adb257cff797d318b51386a9af0d4a81ef50d890"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PFW0MG2MY9JFJDMKSHMV",
+      "source_ref_code": "TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT",
+      "role": "content",
+      "sort_order": 59,
+      "content_sha256": "1df20a207316afe579db8c80c599f1e55bafc08fea6b3c2977e0580a897f1c37",
+      "audit_head_sha256": "6bd796e1a25969fe2d7a29b30f38fab57e8657c7df514dfd6e7535403b18a9fb"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KZ0MTCNEH570SCT8DVCW8FGP",
+      "source_ref_code": "TC-CLASSIFY-ERGONOMICS-PUBLISHED-CONTRACT",
+      "role": "content",
+      "sort_order": 60,
+      "content_sha256": "da65842284fe0966fbedf4c08db6b6308d52cd43ba309492057b6acc3af4a655",
+      "audit_head_sha256": "e8e5fb8049c4ebdedb9029a7daedf2dc3cdcf22a08b49e07777a58e4b9e699b8"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9QWKX44CYBSQ3W83YRHM1",
+      "source_ref_code": "TC-CLASSIFY-EVALUATION-LIMITS",
+      "role": "content",
+      "sort_order": 61,
+      "content_sha256": "6672acd3a7f853597076d6f494f5f398e9ca683dee70a324333bc695068f8970",
+      "audit_head_sha256": "3514f8d7965e3741951833b4907b3ee567506fabaa109ecb871b3edbae4db489"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PNE1GTWFPDB2EWQZYW69",
+      "source_ref_code": "TC-CLASSIFY-LOCAL-ARTIFACT-PROTECTION",
+      "role": "content",
+      "sort_order": 62,
+      "content_sha256": "f375520aed897d6a71b8c1db3e9f20d98a5be190ee37dbcdb3fe3f4d997ac813",
+      "audit_head_sha256": "3425dac769291e9a08f8544e0ed6eb3a106557441cf6bef0ff4b5dcced373b03"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9QXT0SF89207E74SZF9H0",
+      "source_ref_code": "TC-CLASSIFY-OFFLINE-PROCESS-ISOLATION",
+      "role": "content",
+      "sort_order": 63,
+      "content_sha256": "03c774bf280dde7f7c90cdcc36b1f53244010b71166b731d041dcbe31a14e5c7",
+      "audit_head_sha256": "a23864356e181ed5a95be86f0148fa035caf1bcd8d97c20e5baa2241b053f0e4"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KZ0MTBXZ4T1EW3DVGTJA5MSH",
+      "source_ref_code": "TC-CLASSIFY-OPERATOR-THROUGHPUT-PROCESS",
+      "role": "content",
+      "sort_order": 64,
+      "content_sha256": "bcc6e2cd811b54eb82333aa81510b600c4667f2a52a1280ece4482e0d93bdbe4",
+      "audit_head_sha256": "dda494a3ad8314704c5bd401480996f3c846a227fd9a1b3b45f88fa90e448063"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KZ0MT8997F8SV06RERMRGRYR",
+      "source_ref_code": "TC-CLASSIFY-OUTCOME-CURSOR-STALE-MATRIX",
+      "role": "content",
+      "sort_order": 65,
+      "content_sha256": "1853ef4481f155281ad3b4c0e1148a5ad35f7083a588385184393829f8826728",
+      "audit_head_sha256": "07b5dcad96e5ae4ceb0a92a5d06c328821bd47d68d08464229f166ac83207f14"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PGKC1HZB1S5D48PYJPP1",
+      "source_ref_code": "TC-CLASSIFY-OUTCOME-EXPLANATION-CONTRACT",
+      "role": "content",
+      "sort_order": 66,
+      "content_sha256": "55cb99b6846df02975855924b525ce32f78f3c184538621b89750908ee38d74a",
+      "audit_head_sha256": "accfcdf5caaf898ba682346ada892c6938e0c5bb1c6d0c770abc5fc24a786864"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PJNH4T6JJF9GTA1GXZ9S",
+      "source_ref_code": "TC-CLASSIFY-OUTCOME-INVALIDATION-CONTRACT",
+      "role": "content",
+      "sort_order": 67,
+      "content_sha256": "a7fdef1f270983fbb72995c5fdc04dfd7ab5074aaeb32bdc6eb160387ec96126",
+      "audit_head_sha256": "ea614d3453d8b9e9065eaa41ff46d91fdd3094750e4bcf4e8437c726129cde58"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KZ0MT7H5BW0CG74294VHZV82",
+      "source_ref_code": "TC-CLASSIFY-OUTCOME-LIST-CONTRACT",
+      "role": "content",
+      "sort_order": 68,
+      "content_sha256": "71ecc9e58701b9e0776a3167e71e676a5bb5385a5f44c9e7d31342fa8f819d38",
+      "audit_head_sha256": "0ca987a1118ec102560c1f5f3b895542d5830caa44f1bab17748e37918809601"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KYVMEAJSCRQJGA918ZTWXVAE",
+      "source_ref_code": "TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE",
+      "role": "content",
+      "sort_order": 69,
+      "content_sha256": "f50e73b647ef16bc72565e3206b6bad311c49b429a809068e6a57ef70600f018",
+      "audit_head_sha256": "afcf92b43b08f7128dcf0d96759c9524fe26f96f274dfc5b6aa9a7462d725f7b"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KZ0MTAG5XSGJA1P960GQ8NBD",
+      "source_ref_code": "TC-CLASSIFY-PRIVATE-CORPUS-BUILDER-CONTRACT",
+      "role": "content",
+      "sort_order": 70,
+      "content_sha256": "37773dd1bed3ef92e1191b0e7a3ae0c4c9b223bde9d9284a0935044b009b15d4",
+      "audit_head_sha256": "ad070b3bcb72067bd365280da31fc8cde6612e0b400315714f28124ae4de7c5f"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PNS080ASMFY77FFYEZ3J",
+      "source_ref_code": "TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX",
+      "role": "content",
+      "sort_order": 71,
+      "content_sha256": "c10d008089454a20c13705033784463b4ceb7661a7671f039e5a4c2bde738230",
+      "audit_head_sha256": "734123fbc56aed5372b12ae8c0eb41f8b1a0834445aa7c4efb7bfc7bd32beb7d"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PGYNCKBXD6J1CWS57GFP",
+      "source_ref_code": "TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT",
+      "role": "content",
+      "sort_order": 72,
+      "content_sha256": "2aac38b3a5faf8177384ff6a6240eeba832688ec5ee28f3ebc8297a48490d81a",
+      "audit_head_sha256": "612b7add989ed0a9a694431b6bee3345669a137e6d27de06041942e95e2489c5"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PHA63TDD87QZADSB5RDP",
+      "source_ref_code": "TC-CLASSIFY-RULE-VALIDATION-CONTRACT",
+      "role": "content",
+      "sort_order": 73,
+      "content_sha256": "5f1db3cd8920cc5ff2e856e070ff5b5a7656c697e0a349f053575c26d2e1a1f4",
+      "audit_head_sha256": "4ba7be5b3789616da17b16fe083721a9b28522c8eedc0d10240d861c7f70b74f"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KZ0MT92M0MX1KW1KHN1QB3AS",
+      "source_ref_code": "TC-CLASSIFY-RULEBOOK-DISCOVERY-CONTRACT",
+      "role": "content",
+      "sort_order": 74,
+      "content_sha256": "09ce86820e0404404f5b065e0d59220b45280110af95a7aab6de83b21be3bbd2",
+      "audit_head_sha256": "b560ab1535ba283664f3409b5b6124d89188011ebb2f7d5fa46af99fd1d372a1"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PM251WSNBB9QFS1QWNSC",
+      "source_ref_code": "TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT",
+      "role": "content",
+      "sort_order": 75,
+      "content_sha256": "991c14d97e4b6e94ff6430596aeb7fdae1726cc42bfb2cf56c3139423cff0a9b",
+      "audit_head_sha256": "26538444c6a1d930fc002c0b5c21124a72a15badbeb58be5250bb83aff1abcd3"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PKQ7PG6NZGF45F0X0BCD",
+      "source_ref_code": "TC-CLASSIFY-STATUS-HISTORY-CONTRACT",
+      "role": "content",
+      "sort_order": 76,
+      "content_sha256": "c0b96414317784a2198c6a7789d82518d2f79f3b0621cd188859d0b0d8411fbe",
+      "audit_head_sha256": "8e43271ec2fb9e461e30027ccd58590a1c82c69014f602ce81389b25293eec2a"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KXW9PKBRVZBM7HXDGEGV11W4",
+      "source_ref_code": "TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT",
+      "role": "content",
+      "sort_order": 77,
+      "content_sha256": "fbe35832dae9ba9848c8cf297a211db7bc40264219081de71fb2ab7cb0e02e03",
+      "audit_head_sha256": "05691eebfc64a77b4732a736aba90350918eca1ecbeda00a719ac22a03485bf3"
+    },
+    {
+      "source_entity_type": "test_case",
+      "source_entity_id": "01KZ0MTB6H67SG8ZRPXDBDTHGW",
+      "source_ref_code": "TC-CLASSIFY-UNRESOLVED-PATTERN-REPORT-CONTRACT",
+      "role": "content",
+      "sort_order": 78,
+      "content_sha256": "4e3fafe73da5e1b5f56d7f65d8a97f8e90207d27832a19b78d008d052d8621ea",
+      "audit_head_sha256": "ca6c97966c914bd5dea793cf970b622276a23971152345c64d1f49f8195aec68"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3Y3HMG3XPZHM0SNNAEZ",
+      "source_ref_code": "ADR-CORE-0004",
+      "role": "content",
+      "sort_order": 79,
+      "content_sha256": "ef9741f731cb467c06cbdc5f07ac962a399b8d0da723c3b8dbd5dcd1bf0174b1",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3Y7DB71F8178QX5C3FA",
+      "source_ref_code": "ADR-CORE-0010",
+      "role": "content",
+      "sort_order": 80,
+      "content_sha256": "07c064876c1150bc301051fbb18de92e9531d28896e225946b67ea097a9eb986",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YGXF1B0J0MC6S0EPAH",
+      "source_ref_code": "ADR-CORE-0020",
+      "role": "content",
+      "sort_order": 81,
+      "content_sha256": "4bb43ffcad99829ac48d128c846e2cf826c912bcaba67f79f2f52bdcd1a76dd6",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YHHJX75J3BATYF9GWQ",
+      "source_ref_code": "ADR-CORE-0021",
+      "role": "content",
+      "sort_order": 82,
+      "content_sha256": "af8af0ce1f0edb4a6262384f38d4e7f9352261438c174cb712431d85a8154756",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YKCP5BKYH14H09RFQ7",
+      "source_ref_code": "ADR-CORE-0024",
+      "role": "content",
+      "sort_order": 83,
+      "content_sha256": "a155b9716601460a265e6e2db2a78d4aeba10066b408137fd93bf6ee0c321464",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "adr",
+      "source_entity_id": "01KXR2E3YMRWHJF2BNS9MBBY1C",
+      "source_ref_code": "ADR-CORE-0025",
+      "role": "content",
+      "sort_order": 84,
+      "content_sha256": "63aa48f27f0ecb3a2052ca6cac967e52d80eeecc344b3e632d0842f8132c174d",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKM1XVWPKAM919E4BCHD",
+      "source_ref_code": "PAT-CORE-API-SERVICE-REGISTRATION",
+      "role": "content",
+      "sort_order": 85,
+      "content_sha256": "283972d62ddc8a1a9822a009e54b34bbb176a5cd7f79e4951a2c69e3f927a1ff",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "source_entity_type": "pattern",
+      "source_entity_id": "01KXR2EKM6AWQ5BP8X42YRSA8J",
+      "source_ref_code": "PAT-CORE-API-VERTICAL-SLICE",
+      "role": "content",
+      "sort_order": 86,
+      "content_sha256": "26aa8b3dcce097a186e0396d9a4e0e602d59b3527e9fef9ff98c6a9f9c3149fa",
+      "audit_head_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

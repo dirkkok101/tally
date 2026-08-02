@@ -19,8 +19,9 @@
 **Ref Code:** TC-CLASSIFY-OFFLINE-PROCESS-ISOLATION
 **Surface:** service
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Acceptance/ClassifyUc006AgentContractTests.cs
 
 ##### Preconditions
 
@@ -41,8 +42,9 @@ NFR-CLASSIFY-SELF-CONTAINED-LOCAL-OPERATION reaches complete offline non-interac
 **Ref Code:** TC-CLASSIFY-STATUS-HISTORY-CONTRACT
 **Surface:** contract
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Recovery/ClassificationStatusTests.cs
 
 ##### Preconditions
 
@@ -63,8 +65,9 @@ FR-CLASSIFY-STATUS-HISTORY holds: durable states and frontiers remain inspectabl
 **Ref Code:** TC-CLASSIFY-LOCAL-ARTIFACT-PROTECTION
 **Surface:** persistence
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Security/ClassifyArtifactProtectionTests.cs
 
 ##### Preconditions
 
@@ -76,15 +79,16 @@ Run success, failure, interruption, abandon, cleanup, and startup recovery; insp
 
 ##### Expected
 
-NFR-CLASSIFY-LOCAL-DATA-PROTECTION reaches zero disclosures, owner-only permissions, no raw corpus copies, and no orphan temporary artifacts.
+NFR-CLASSIFY-LOCAL-DATA-PROTECTION reaches zero disclosures, owner-only permissions, no CLASSIFY-managed duplicate raw corpus copies, and no orphan temporary artifacts. An explicitly requested owner-private corpus destination may remain only as the authorized 0600 output accepted by the private-corpus reader.
 
 #### Verify retention, abandonment, and cleanup
 
 **Ref Code:** TC-CLASSIFY-STATE-RETENTION-CLEANUP-CONTRACT
 **Surface:** persistence
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Recovery/AbandonCleanupTests.cs
 
 ##### Preconditions
 
@@ -107,8 +111,9 @@ FR-CLASSIFY-STATE-RETENTION-CLEANUP holds: required history remains, removable d
 **Ref Code:** TC-CLASSIFY-ATTRIBUTABLE-HISTORY-INVARIANTS
 **Surface:** persistence
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Storage/ClassifyHistoryInvariantTests.cs
 
 ##### Preconditions
 

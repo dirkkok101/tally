@@ -58,6 +58,7 @@ Return a complete bounded selectable outcome page for one retained evaluation wi
 ### Constraints
 
 - Ledger access is read-only through LedgerContractClient; live Tally data is never used by tests.
+- The shipped classification_v1 contract is authoritative. A projection, query, lifecycle, or mutation-precondition gap blocks this CLASSIFY slice until an audited LEDGER-owned change and dependency exist.
 
 ### Notes
 

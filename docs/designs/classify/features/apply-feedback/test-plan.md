@@ -19,8 +19,9 @@
 **Ref Code:** TC-CLASSIFY-APPLY-CRASH-RECOVERY-MATRIX
 **Surface:** persistence
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/ApplyRecovery/ClassificationApplyCrashRecoveryTests.cs
 
 ##### Preconditions
 
@@ -39,8 +40,9 @@ NFR-CLASSIFY-APPLY-RECOVERY reaches exact item resolution with no second categor
 **Ref Code:** TC-CLASSIFY-APPLY-EXECUTION-CONTRACT
 **Surface:** persistence
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Apply/ClassificationApplySagaTests.cs
 
 ##### Preconditions
 
@@ -63,8 +65,9 @@ FR-CLASSIFY-APPLY-EXECUTION holds: preflight is all-or-none, each item reaches o
 **Ref Code:** TC-CLASSIFY-APPLY-AUTHORIZATION-CONTRACT
 **Surface:** contract
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Apply/ApplyAuthorizationTests.cs
 
 ##### Preconditions
 
@@ -85,8 +88,9 @@ FR-CLASSIFY-APPLY-AUTHORIZATION holds: preview is read-only and exact, only curr
 **Ref Code:** TC-CLASSIFY-CORRECTION-FEEDBACK-CONTRACT
 **Surface:** persistence
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Feedback/ClassificationFeedbackTests.cs
 
 ##### Preconditions
 

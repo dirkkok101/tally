@@ -61,6 +61,7 @@ Converge completed handlers into one discoverable 105-operation Native-AOT contr
 ### Constraints
 
 - All feature tasks and composition tests must pass before the inventory target is asserted.
+- This slice extends the existing shared registry, process envelope, source-generated schema inventory, and CLASSIFY handler composition only; it must not create a module, parallel registry, generic dispatcher, or new product boundary.
 
 ### Notes
 

@@ -29,7 +29,7 @@
     "Given either rule discovery operation succeeds or fails, when durable state and diagnostics are inspected, then no corpus path, raw validation row, source description, secret, owner free-text reason, or predicate token beyond the public rule predicate contract has been persisted or logged."
   ],
   "security_criteria": [
-    "Rule predicates are disclosed only through the existing closed owner-local predicate contract; corpus rows, descriptions, private paths, and authority claims are never accepted or returned."
+    "Rule predicates are disclosed only through the existing closed owner-local predicate contract; corpus rows, descriptions, private paths, and secrets are never accepted or returned. Caller-supplied authority claims are rejected. The active summary may return only the trusted persisted rule-set authority facts explicitly listed in this requirement."
   ],
   "status": "active",
   "created_at": "2026-08-02T07:05:15.5294791+00:00",

@@ -19,9 +19,9 @@
 **Ref Code:** TC-CLASSIFY-OWNER-RULEBOOK-PRE-AUTHORITY-GATE
 **Surface:** contract
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** Personal Finance Owner
-**Implementation Ref:** DD-CLASSIFY-OWNER-RULEBOOK-REPLACEMENT
+**Implementation Ref:** tests/Tally.Tests/Classify/Evidence/OwnerRulebookGateTests.cs
 
 ##### Preconditions
 
@@ -48,8 +48,9 @@ Remove only recognized disposable gate artifacts; retain aggregate receipt and i
 **Ref Code:** TC-CLASSIFY-RULE-LIFECYCLE-CONTRACT
 **Surface:** persistence
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Rules/RuleActivationTests.cs
 
 ##### Preconditions
 
@@ -70,8 +71,9 @@ Draft save records immutable owner_authored or feedback_derived provenance witho
 **Ref Code:** TC-CLASSIFY-RULE-VALIDATION-CONTRACT
 **Surface:** service
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Validation/ClassificationRuleValidationTests.cs
 
 ##### Preconditions
 

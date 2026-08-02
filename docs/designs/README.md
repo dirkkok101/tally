@@ -91,6 +91,9 @@ Generated from the lex graph.
 | classify | [Feature — State and Recovery](classify/features/state-recovery/feature.md) |
 | classify | [State and Recovery — Test Plan](classify/features/state-recovery/test-plan.md) |
 | classify | [State and Recovery — UI Mockups](classify/features/state-recovery/ui-mockup.md) |
+| classify | [Ungrouped — API Surface](classify/features/_ungrouped/api-surface.md) |
+| classify | [Feature — Ungrouped](classify/features/_ungrouped/feature.md) |
+| classify | [Ungrouped — Test Plan](classify/features/_ungrouped/test-plan.md) |
 | classify | [Transaction Classification — Glossary](classify/glossary.md) |
 | classify | [Transaction Classification — Design Workspace](classify/README.md) |
 | core | [Design — Platform Core](core/design.md) |

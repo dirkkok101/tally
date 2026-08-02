@@ -54,6 +54,7 @@ No task dependencies recorded.
 ### Constraints
 
 - The mapper is concrete and pure; no new interface or corpus schema version is introduced.
+- Consume the released classification_v1 envelope as supplied. If required projection data or lifecycle evidence is absent, stop and route the contract change through an audited LEDGER plan and task before modifying CLASSIFY.
 
 ### Notes
 

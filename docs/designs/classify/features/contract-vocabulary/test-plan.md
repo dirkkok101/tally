@@ -19,8 +19,9 @@
 **Ref Code:** TC-CLASSIFY-CONTRACT-DISCOVERY-CONTRACT
 **Surface:** contract
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Contract/ClassifyOperationContractTests.cs
 
 ##### Preconditions
 
@@ -41,8 +42,9 @@ FR-CLASSIFY-CONTRACT-DISCOVERY holds: the complete deterministic descriptor set 
 **Ref Code:** TC-CLASSIFY-STRUCTURED-INVOCATION-CONTRACT
 **Surface:** contract
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Process/ClassifyProcessContractTests.cs
 
 ##### Preconditions
 
@@ -63,8 +65,9 @@ FR-CLASSIFY-STRUCTURED-INVOCATION holds: one business envelope and stable exit a
 **Ref Code:** TC-CLASSIFY-PUBLISHED-CONTRACT-MATRIX
 **Surface:** contract
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/Contract/ClassifyPublishedContractTests.cs
 
 ##### Preconditions
 
@@ -87,8 +90,9 @@ NFR-CLASSIFY-PUBLIC-CONTRACT-COMPATIBILITY reaches complete descriptor coverage,
 **Ref Code:** TC-CLASSIFY-ELIGIBLE-PROJECTION-CONTRACT
 **Surface:** contract
 **Automation:** automated
-**Status:** planned
+**Status:** implemented
 **Owner:** CLASSIFY implementation
+**Implementation Ref:** tests/Tally.Tests/Classify/LedgerContract/LedgerClassificationProjectionTests.cs
 
 ##### Preconditions
 

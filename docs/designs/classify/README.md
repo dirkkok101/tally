@@ -12,7 +12,7 @@ Generated from the lex graph. Root narratives are the readable workspace view; c
 |---|---|
 | [design.md](design.md) | Canonical module design narrative (MD-CLASSIFY-MASTER) |
 | [architecture.md](architecture.md) | Generated architecture view from 0 architecture doc(s) and 5 diagram(s) |
-| [data-model.md](data-model.md) | Generated data model view from 9 data model(s) |
+| [data-model.md](data-model.md) | Generated data model view from 13 data model(s) |
 | [glossary.md](glossary.md) | Generated glossary view from 12 term(s) |
 
 ## Features
@@ -24,10 +24,11 @@ Generated from the lex graph. Root narratives are the readable workspace view; c
 | [features/evaluation-explanation/feature.md](features/evaluation-explanation/feature.md) | 0 | 0 | 5 |
 | [features/rules-validation/feature.md](features/rules-validation/feature.md) | 0 | 0 | 3 |
 | [features/state-recovery/feature.md](features/state-recovery/feature.md) | 0 | 0 | 5 |
+| [features/_ungrouped/feature.md](features/_ungrouped/feature.md) | 0 | 0 | 8 |
 
 ## Structured Sets
 
 | Set | Count |
 |---|---:|
-| [decisions/](decisions) | 12 |
+| [decisions/](decisions) | 17 |
 | [diagrams/](diagrams) | 5 |

@@ -1,0 +1,9 @@
+{
+  "id": "01KZ0XF27EM00MG8ZTV09X38QE",
+  "module_id": "01KXR4WNB6B0QHJHBFV45NYJTT",
+  "version": "0.9",
+  "changes": [
+    "Reconciled shipped 0.3.3 success evidence and the owner-rulebook gate; clarified that operator ergonomics expands existing CLASSIFY, routes any new Ledger-owned contract through LEDGER, and creates no parallel module boundary."
+  ],
+  "created_at": "2026-08-02T09:39:15.8235322+00:00"
+}

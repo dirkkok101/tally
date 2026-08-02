@@ -218,14 +218,24 @@
       "created_at": "2026-08-02T07:25:39.5817537+00:00"
     },
     {
-      "id": "01KZ0NTDVZYX3EJZTWPWNZW1FK",
+      "id": "01KZ0V4XH5CQNMKDRJ8N13ZNZD",
       "kind": "constraint",
       "text": [
         "All feature tasks and composition tests must pass before the inventory target is asserted."
       ],
       "required": 1,
       "sort_order": 0,
-      "created_at": "2026-08-02T07:25:39.5817537+00:00"
+      "created_at": "2026-08-02T08:58:46.1809724+00:00"
+    },
+    {
+      "id": "01KZ0V4XH680VGPKA10E3PD1S3",
+      "kind": "constraint",
+      "text": [
+        "This slice extends the existing shared registry, process envelope, source-generated schema inventory, and CLASSIFY handler composition only; it must not create a module, parallel registry, generic dispatcher, or new product boundary."
+      ],
+      "required": 1,
+      "sort_order": 1,
+      "created_at": "2026-08-02T08:58:46.1809724+00:00"
     },
     {
       "id": "01KZ0NTDVZ8K2BFPQ24BTW99DR",

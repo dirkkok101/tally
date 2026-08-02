@@ -18,11 +18,11 @@
 - **Ref:** `PLAN-CLASSIFY-OPERATOR-ERGONOMICS-V1`
 - **Status:** `active`
 - **Created:** `2026-08-02T07:19:11.0264004+00:00`
-- **Updated:** `2026-08-02T07:19:11.0264004+00:00`
+- **Updated:** `2026-08-02T08:58:30.1980513+00:00`
 
 ### Description
 
-Post-0.3.3 additive implementation plan for paginated outcome/rule discovery, active rule-set summary, explicit selected-outcome preview composition, protected private corpus construction, and ephemeral unresolved-pattern reporting. Preserves the twelve released CLASSIFY schemas, Ledger authority, broadApplyAllowed=false, deterministic engine behavior, owner-local privacy, and the completed PLAN-CLASSIFY-RULEBOOK-V1 baseline. No task may mutate live data, add autonomous intelligence, or release/deploy.
+Post-0.3.3 additive CLASSIFY sub-plan for paginated outcome and rule discovery, active rule-set summary, explicit selected-outcome preview composition, protected private corpus construction, and ephemeral unresolved-pattern reporting. This work expands the existing CLASSIFY module; it must not create an operator-ergonomics module, duplicate CLASSIFY boundary, or parallel registry/process/schema boundary. The plan consumes the released Ledger classification_v1 contract read-only. Any genuinely new Ledger projection, query, lifecycle, or mutation-precondition requirement stops the affected CLASSIFY task and must be represented by an audited entity and implementation task under the existing LEDGER module before consumption. Shared operation-registry, process-envelope, source-generated-schema, and handler-composition edits extend their existing artifacts solely to publish CLASSIFY-owned operations. Preserves the twelve released CLASSIFY schemas, Ledger authority, broadApplyAllowed=false, deterministic engine behavior, owner-local privacy, and the completed PLAN-CLASSIFY-RULEBOOK-V1 baseline. No task may mutate live data, add autonomous intelligence, release, or deploy.
 
 ### Sub-Plans
 
