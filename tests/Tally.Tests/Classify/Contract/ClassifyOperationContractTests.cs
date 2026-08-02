@@ -17,12 +17,14 @@ namespace Tally.Tests.Classify.Contract;
 public sealed class ClassifyOperationContractTests
 {
     [Fact]
-    public void Inventory_contains_exactly_twelve_c12_operations_in_canonical_order()
+    public void Inventory_contains_exactly_seventeen_operations_in_canonical_order()
     {
         var descriptors = Module().Descriptors;
-        Assert.Equal(12, descriptors.Count);
+        Assert.Equal(17, descriptors.Count);
         Assert.Equal(ClassifyOperationIds.All, descriptors.Select(d => d.OperationId));
-        Assert.Equal(12, Module().Operations.Count);
+        Assert.Equal(17, Module().Operations.Count);
+        Assert.Equal(12, ClassifyOperationIds.ReleasedC12.Count);
+        Assert.Equal(ClassifyOperationIds.ReleasedC12, ClassifyOperationIds.All.Take(12));
     }
 
     [Fact]
@@ -46,6 +48,11 @@ public sealed class ClassifyOperationContractTests
     [InlineData(ClassifyOperationIds.Status, false, "query")]
     [InlineData(ClassifyOperationIds.Abandon, true, "mutation")]
     [InlineData(ClassifyOperationIds.Cleanup, true, "mutation")]
+    [InlineData(ClassifyOperationIds.OutcomeList, false, "query")]
+    [InlineData(ClassifyOperationIds.RuleList, false, "query")]
+    [InlineData(ClassifyOperationIds.RuleSetActiveGet, false, "query")]
+    [InlineData(ClassifyOperationIds.CorpusBuild, true, "mutation")]
+    [InlineData(ClassifyOperationIds.UnresolvedReport, false, "query")]
     public void Mutability_and_idempotency_metadata_match_operation_kind(
         string operationId,
         bool requiresIdempotency,
@@ -346,7 +353,7 @@ public sealed class ClassifyOperationContractTests
     public void Descriptor_templates_are_constructible_without_services()
     {
         var templates = ClassifyOperationModule.CreateDescriptorTemplates().Descriptors;
-        Assert.Equal(12, templates.Count);
+        Assert.Equal(17, templates.Count);
         Assert.All(templates, d => Assert.StartsWith("classify.", d.OperationId, StringComparison.Ordinal));
     }
 
@@ -362,7 +369,7 @@ public sealed class ClassifyOperationContractTests
     }
 
     [Fact]
-    public void Only_status_and_outcome_get_are_non_mutating_queries()
+    public void Non_mutating_queries_include_released_reads_and_four_ergonomics_queries()
     {
         var readOnly = Module().Descriptors
             .Where(d => !d.RequiresIdempotencyKey)
@@ -370,11 +377,60 @@ public sealed class ClassifyOperationContractTests
             .Order(StringComparer.Ordinal)
             .ToArray();
         Assert.Equal(
-            new[] { ClassifyOperationIds.OutcomeGet, ClassifyOperationIds.Status }.Order(StringComparer.Ordinal),
+            new[]
+            {
+                ClassifyOperationIds.OutcomeGet,
+                ClassifyOperationIds.OutcomeList,
+                ClassifyOperationIds.RuleList,
+                ClassifyOperationIds.RuleSetActiveGet,
+                ClassifyOperationIds.Status,
+                ClassifyOperationIds.UnresolvedReport
+            }.Order(StringComparer.Ordinal),
             readOnly);
         Assert.All(
             Module().Descriptors.Where(d => !d.RequiresIdempotencyKey),
             d => Assert.Equal("query", d.Kind));
+        Assert.True(
+            Module().Descriptors.Single(d => d.OperationId == ClassifyOperationIds.CorpusBuild)
+                .RequiresIdempotencyKey);
+    }
+
+    [Fact]
+    public void Five_additive_ergonomics_operations_publish_expected_cli_paths_and_limits()
+    {
+        var module = Module();
+        Assert.Equal(
+            "tally classify outcome list",
+            module.Descriptors.Single(d => d.OperationId == ClassifyOperationIds.OutcomeList).CliPath);
+        Assert.Equal(
+            "tally classify rule list",
+            module.Descriptors.Single(d => d.OperationId == ClassifyOperationIds.RuleList).CliPath);
+        Assert.Equal(
+            "tally classify rule-set active get",
+            module.Descriptors.Single(d => d.OperationId == ClassifyOperationIds.RuleSetActiveGet).CliPath);
+        Assert.Equal(
+            "tally classify corpus build",
+            module.Descriptors.Single(d => d.OperationId == ClassifyOperationIds.CorpusBuild).CliPath);
+        Assert.Equal(
+            "tally classify unresolved report",
+            module.Descriptors.Single(d => d.OperationId == ClassifyOperationIds.UnresolvedReport).CliPath);
+
+        Assert.Equal(
+            ClassifyOperationModule.V1Limits.Discovery,
+            module.LimitsFor(ClassifyOperationIds.OutcomeList));
+        Assert.Equal(
+            ClassifyOperationModule.V1Limits.Discovery,
+            module.LimitsFor(ClassifyOperationIds.RuleList));
+        Assert.Equal(
+            ClassifyOperationModule.V1Limits.Read,
+            module.LimitsFor(ClassifyOperationIds.RuleSetActiveGet));
+        Assert.Equal(
+            ClassifyOperationModule.V1Limits.CorpusBuild,
+            module.LimitsFor(ClassifyOperationIds.CorpusBuild));
+        Assert.Equal(
+            ClassifyOperationModule.V1Limits.UnresolvedReport,
+            module.LimitsFor(ClassifyOperationIds.UnresolvedReport));
+        Assert.Equal(10_000, module.LimitsFor(ClassifyOperationIds.CorpusBuild).MaxCorpusRowCount);
     }
 
     [Fact]

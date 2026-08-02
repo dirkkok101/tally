@@ -11,10 +11,11 @@ using Tally.Infrastructure.Classify.Corpus;
 namespace Tally.Features.Classify.Contract;
 
 /// <summary>
-/// Feature-local descriptor inventory for the twelve Public CLASSIFY Operations (C12).
-/// Handlers are pure contract stubs: no classify.db, corpus, or Ledger reads
+/// Feature-local descriptor inventory for seventeen Public CLASSIFY Operations
+/// (twelve released 0.3.3 C12 + five additive operator-ergonomics operations).
+/// Descriptor-template handlers are pure contract stubs: no classify.db, corpus, or Ledger reads
 /// (FR-CLASSIFY-CONTRACT-DISCOVERY — discovery and unknown ops must not open data).
-/// Limits are attached here; shared registry/schema wiring is owned by bd-3g6y.
+/// Limits are attached here; shared registry/schema wiring remains OperationRegistry-owned.
 /// </summary>
 public sealed class ClassifyOperationModule
 {
@@ -75,6 +76,27 @@ public sealed class ClassifyOperationModule
             MaxCorpusRowCount: OperationLimits.NotApplicable,
             MaxMemoryBytes,
             MaxProcessingTimeMs);
+
+        /// <summary>Paginated outcome/rule discovery (page size ≤ 500; evaluation-bound membership).</summary>
+        public static OperationLimits Discovery { get; } = new(
+            MaxTransactionCount,
+            MaxRuleCount,
+            MaxEvidenceRowCount: OperationLimits.NotApplicable,
+            MaxCorpusRowCount: OperationLimits.NotApplicable,
+            MaxMemoryBytes,
+            MaxProcessingTimeMs);
+
+        /// <summary>Unresolved pattern report over retained no_suggestion membership.</summary>
+        public static OperationLimits UnresolvedReport { get; } = new(
+            MaxTransactionCount,
+            MaxRuleCount: OperationLimits.NotApplicable,
+            MaxEvidenceRowCount: OperationLimits.NotApplicable,
+            MaxCorpusRowCount: OperationLimits.NotApplicable,
+            MaxMemoryBytes,
+            MaxProcessingTimeMs);
+
+        /// <summary>Private corpus builder — same corpus row bound as rule validation.</summary>
+        public static OperationLimits CorpusBuild { get; } = RuleValidation;
     }
 
     public IReadOnlyList<ClassifyPublishedOperation> Operations { get; } =
@@ -198,7 +220,57 @@ public sealed class ClassifyOperationModule
             ClassifyJsonContext.Default.ClassifyCleanupResult,
             "Cleanup",
             V1Limits.Maintenance,
-            CommonMutationErrors)
+            CommonMutationErrors),
+        Publish(
+            ClassifyOperationIds.OutcomeList,
+            "tally classify outcome list",
+            "query",
+            requiresIdempotency: false,
+            ClassifyJsonContext.Default.ClassifyOutcomeListRequest,
+            ClassifyJsonContext.Default.ClassifyOutcomeListResult,
+            "OutcomeList",
+            V1Limits.Discovery,
+            OutcomeListErrors),
+        Publish(
+            ClassifyOperationIds.RuleList,
+            "tally classify rule list",
+            "query",
+            requiresIdempotency: false,
+            ClassifyJsonContext.Default.ClassifyRuleListRequest,
+            ClassifyJsonContext.Default.ClassifyRuleListResult,
+            "RuleList",
+            V1Limits.Discovery,
+            RuleListErrors),
+        Publish(
+            ClassifyOperationIds.RuleSetActiveGet,
+            "tally classify rule-set active get",
+            "query",
+            requiresIdempotency: false,
+            ClassifyJsonContext.Default.ClassifyRuleSetActiveGetRequest,
+            ClassifyJsonContext.Default.ClassifyRuleSetActiveGetResult,
+            "RuleSetActiveGet",
+            V1Limits.Read,
+            RuleSetActiveGetErrors),
+        Publish(
+            ClassifyOperationIds.CorpusBuild,
+            "tally classify corpus build",
+            "mutation",
+            requiresIdempotency: true,
+            ClassifyJsonContext.Default.ClassifyCorpusBuildRequest,
+            ClassifyJsonContext.Default.ClassifyCorpusBuildResult,
+            "CorpusBuild",
+            V1Limits.CorpusBuild,
+            CorpusBuildErrors),
+        Publish(
+            ClassifyOperationIds.UnresolvedReport,
+            "tally classify unresolved report",
+            "query",
+            requiresIdempotency: false,
+            ClassifyJsonContext.Default.ClassifyUnresolvedReportRequest,
+            ClassifyJsonContext.Default.ClassifyUnresolvedReportResult,
+            "UnresolvedReport",
+            V1Limits.UnresolvedReport,
+            UnresolvedReportErrors)
     ];
 
     public IReadOnlyList<OperationDescriptor> Descriptors =>
@@ -314,6 +386,91 @@ public sealed class ClassifyOperationModule
         new(ClassifyErrors.UnsupportedVersion, "compatibility", 7),
         new(ClassifyErrors.Unexpected, "host", 10)
     ];
+
+    private static readonly IReadOnlyList<ErrorSchema> OutcomeListErrors =
+    [
+        new(ClassifyErrors.InvalidInput, "validation", 3),
+        new(ClassifyErrors.ActorRequired, "validation", 3),
+        new(ClassifyErrors.EvaluationNotFound, "not_found", 4),
+        new(ClassifyErrors.ActiveRuleSetNotFound, "not_found", 4),
+        new(ClassifyErrors.CursorInvalid, "compatibility", 7),
+        new(ClassifyErrors.CursorStale, "compatibility", 7),
+        new(ClassifyErrors.Stale, "conflict", 5),
+        new(ClassifyErrors.Lifecycle, "lifecycle", 6),
+        new(ClassifyErrors.ResourceLimit, "host", 9),
+        new(ClassifyErrors.UnsupportedVersion, "compatibility", 7),
+        new(ClassifyErrors.LedgerUnavailable, "host", 9),
+        new(ClassifyErrors.LedgerIncompatible, "compatibility", 7),
+        new(ClassifyErrors.Integrity, "integrity", 8),
+        new(ClassifyErrors.Unexpected, "host", 10)
+    ];
+
+    private static readonly IReadOnlyList<ErrorSchema> RuleListErrors =
+    [
+        new(ClassifyErrors.InvalidInput, "validation", 3),
+        new(ClassifyErrors.ActorRequired, "validation", 3),
+        new(ClassifyErrors.NotFound, "not_found", 4),
+        new(ClassifyErrors.ActiveRuleSetNotFound, "not_found", 4),
+        new(ClassifyErrors.CursorInvalid, "compatibility", 7),
+        new(ClassifyErrors.CursorStale, "compatibility", 7),
+        new(ClassifyErrors.Stale, "conflict", 5),
+        new(ClassifyErrors.Lifecycle, "lifecycle", 6),
+        new(ClassifyErrors.ResourceLimit, "host", 9),
+        new(ClassifyErrors.UnsupportedVersion, "compatibility", 7),
+        new(ClassifyErrors.LedgerUnavailable, "host", 9),
+        new(ClassifyErrors.LedgerIncompatible, "compatibility", 7),
+        new(ClassifyErrors.Integrity, "integrity", 8),
+        new(ClassifyErrors.Unexpected, "host", 10)
+    ];
+
+    private static readonly IReadOnlyList<ErrorSchema> RuleSetActiveGetErrors =
+    [
+        new(ClassifyErrors.InvalidInput, "validation", 3),
+        new(ClassifyErrors.ActorRequired, "validation", 3),
+        new(ClassifyErrors.ActiveRuleSetNotFound, "not_found", 4),
+        new(ClassifyErrors.NotFound, "not_found", 4),
+        new(ClassifyErrors.UnsupportedVersion, "compatibility", 7),
+        new(ClassifyErrors.LedgerUnavailable, "host", 9),
+        new(ClassifyErrors.LedgerIncompatible, "compatibility", 7),
+        new(ClassifyErrors.Unexpected, "host", 10)
+    ];
+
+    private static readonly IReadOnlyList<ErrorSchema> CorpusBuildErrors =
+    [
+        ..CommonMutationErrors,
+        new(ClassifyErrors.PrivacyRejected, "validation", 3),
+        new(ClassifyErrors.DestinationExists, "conflict", 5),
+        new(ClassifyErrors.LabelInvalid, "validation", 3),
+        new(PrivateCorpusErrors.PathRequired, "validation", 3),
+        new(PrivateCorpusErrors.NotFound, "not_found", 4),
+        new(PrivateCorpusErrors.SymlinkRejected, "validation", 3),
+        new(PrivateCorpusErrors.OwnerRejected, "validation", 3),
+        new(PrivateCorpusErrors.PermissionsRejected, "validation", 3),
+        new(PrivateCorpusErrors.NotRegularFile, "validation", 3),
+        new(PrivateCorpusErrors.Malformed, "validation", 3),
+        new(PrivateCorpusErrors.DuplicateOrdinal, "validation", 3),
+        new(PrivateCorpusErrors.FieldInvalid, "validation", 3),
+        new(PrivateCorpusErrors.LimitExceeded, "host", 9),
+        new(PrivateCorpusErrors.Timeout, "host", 9),
+        new(PrivateCorpusErrors.Cancelled, "lifecycle", 6),
+        new(PrivateCorpusErrors.ReadFailed, "host", 9)
+    ];
+
+    private static readonly IReadOnlyList<ErrorSchema> UnresolvedReportErrors =
+    [
+        new(ClassifyErrors.InvalidInput, "validation", 3),
+        new(ClassifyErrors.ActorRequired, "validation", 3),
+        new(ClassifyErrors.EvaluationNotFound, "not_found", 4),
+        new(ClassifyErrors.ActiveRuleSetNotFound, "not_found", 4),
+        new(ClassifyErrors.Stale, "conflict", 5),
+        new(ClassifyErrors.Lifecycle, "lifecycle", 6),
+        new(ClassifyErrors.ResourceLimit, "host", 9),
+        new(ClassifyErrors.UnsupportedVersion, "compatibility", 7),
+        new(ClassifyErrors.LedgerUnavailable, "host", 9),
+        new(ClassifyErrors.LedgerIncompatible, "compatibility", 7),
+        new(ClassifyErrors.Integrity, "integrity", 8),
+        new(ClassifyErrors.Unexpected, "host", 10)
+    ];
 }
 
 /// <summary>
@@ -384,6 +541,11 @@ internal sealed class ClassifyStubOperationHandler(string operationId, bool muta
             ClassifyOperationIds.Status => JsonSerializer.Deserialize(input, ClassifyJsonContext.Default.ClassifyStatusRequest),
             ClassifyOperationIds.Abandon => JsonSerializer.Deserialize(input, ClassifyJsonContext.Default.ClassifyAbandonRequest),
             ClassifyOperationIds.Cleanup => JsonSerializer.Deserialize(input, ClassifyJsonContext.Default.ClassifyCleanupRequest),
+            ClassifyOperationIds.OutcomeList => JsonSerializer.Deserialize(input, ClassifyJsonContext.Default.ClassifyOutcomeListRequest),
+            ClassifyOperationIds.RuleList => JsonSerializer.Deserialize(input, ClassifyJsonContext.Default.ClassifyRuleListRequest),
+            ClassifyOperationIds.RuleSetActiveGet => JsonSerializer.Deserialize(input, ClassifyJsonContext.Default.ClassifyRuleSetActiveGetRequest),
+            ClassifyOperationIds.CorpusBuild => JsonSerializer.Deserialize(input, ClassifyJsonContext.Default.ClassifyCorpusBuildRequest),
+            ClassifyOperationIds.UnresolvedReport => JsonSerializer.Deserialize(input, ClassifyJsonContext.Default.ClassifyUnresolvedReportRequest),
             _ => null
         };
 

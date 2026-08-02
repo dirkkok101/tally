@@ -446,7 +446,7 @@ public sealed class OperationRegistry
 
         if (descriptor.OperationId.StartsWith("classify.", StringComparison.Ordinal))
         {
-            // Prefer complete twelve-handler bundle; fall back to provisional validation-only bridge.
+            // Prefer complete seventeen-handler bundle; fall back to provisional validation-only bridge.
             var classifyDescriptor = services.Classify?.Descriptors
                 .SingleOrDefault(candidate => candidate.OperationId == descriptor.OperationId)
                 ?? services.ClassifyValidation?.Descriptors
@@ -536,6 +536,7 @@ public sealed class OperationRegistry
         "ingest.preview","ingest.inspect","ingest.approve","ingest.commit","ingest.resume","ingest.status","ingest.abandon","ingest.cleanup",
         "budget.plan.draft.create","budget.plan.revision.get","budget.plan.revision.list","budget.plan.revision.activate","budget.position.get","budget.insights.evidence.get",
         "classify.evaluate","classify.outcome.get","classify.apply.preview","classify.apply.run","classify.rule.save","classify.rule.validate","classify.rule.activate","classify.rule.retire","classify.feedback.record","classify.status","classify.abandon","classify.cleanup",
+        "classify.outcome.list","classify.rule.list","classify.rule-set.active.get","classify.corpus.build","classify.unresolved.report",
         "system.schema.list","system.schema.show","system.version","system.guidance.list","system.guidance.check","system.guidance.install"
     ];
 }

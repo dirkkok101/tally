@@ -1,7 +1,8 @@
 namespace Tally.Features.Classify.Contract;
 
 /// <summary>
-/// Twelve public CLASSIFY operations (DD-CLASSIFY-CLI-OPERATION-CONTRACT / C12).
+/// Seventeen public CLASSIFY operations: twelve released 0.3.3 C12 operations plus five
+/// additive operator-ergonomics operations (DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT).
 /// No generic action discriminator — each transition is its own named operation.
 /// </summary>
 public static class ClassifyOperationIds
@@ -21,8 +22,37 @@ public static class ClassifyOperationIds
     public const string Abandon = "classify.abandon";
     public const string Cleanup = "classify.cleanup";
 
-    /// <summary>Canonical C12 order for discovery and inventory proofs.</summary>
+    // ── Additive operator ergonomics (DD-CLASSIFY-OPERATOR-ERGONOMICS-CONTRACT) ──
+    public const string OutcomeList = "classify.outcome.list";
+    public const string RuleList = "classify.rule.list";
+    public const string RuleSetActiveGet = "classify.rule-set.active.get";
+    public const string CorpusBuild = "classify.corpus.build";
+    public const string UnresolvedReport = "classify.unresolved.report";
+
+    /// <summary>Canonical inventory order for discovery and inventory proofs (C12 then five additive).</summary>
     public static readonly IReadOnlyList<string> All =
+    [
+        Evaluate,
+        OutcomeGet,
+        ApplyPreview,
+        ApplyRun,
+        RuleSave,
+        RuleValidate,
+        RuleActivate,
+        RuleRetire,
+        FeedbackRecord,
+        Status,
+        Abandon,
+        Cleanup,
+        OutcomeList,
+        RuleList,
+        RuleSetActiveGet,
+        CorpusBuild,
+        UnresolvedReport
+    ];
+
+    /// <summary>The twelve released 0.3.3 operation IDs (compatibility fingerprint surface).</summary>
+    public static readonly IReadOnlyList<string> ReleasedC12 =
     [
         Evaluate,
         OutcomeGet,

@@ -8,6 +8,7 @@ using Tally.Contracts.Common;
 using Tally.Features.Classify.Apply.Preview;
 using Tally.Features.Classify.Apply.Run;
 using Tally.Features.Classify.Contract;
+using Tally.Features.Classify.Corpus.Build;
 using Tally.Features.Classify.Evaluation.Evaluate;
 using Tally.Features.Classify.Evaluation.Outcome;
 using Tally.Features.Classify.Feedback.Record;
@@ -15,9 +16,11 @@ using Tally.Features.Classify.Recovery.Abandon;
 using Tally.Features.Classify.Recovery.Cleanup;
 using Tally.Features.Classify.Recovery.Status;
 using Tally.Features.Classify.Rules.Activate;
+using Tally.Features.Classify.Rules.Discovery;
 using Tally.Features.Classify.Rules.Retire;
 using Tally.Features.Classify.Rules.Save;
 using Tally.Features.Classify.Rules.Validate;
+using Tally.Features.Classify.Unresolved.Report;
 using Tally.Infrastructure.Classify.Corpus;
 using Tally.Infrastructure.Classify.Storage;
 using Tally.Infrastructure.Classify.Storage.Apply;
@@ -31,9 +34,9 @@ namespace Tally.Bootstrap.Features;
 
 /// <summary>
 /// Complete explicit CLASSIFY composition root (no reflection / plugin scan).
-/// Converges the twelve C12 operations for registry inventory and data-root runtime
-/// (TASK-CLASSIFY-RULEBOOK-GATE-INT-PUBLIC-CONTRACT / bd-3g6y).
-/// Consumes the approved bd-56yx validation bridge patterns without duplicating them.
+/// Converges seventeen CLASSIFY operations (twelve released C12 + five ergonomics)
+/// for registry inventory and data-root runtime
+/// (TASK-CLASSIFY-ERGONOMICS-RUNTIME-CONVERGENCE / bd-rly1).
 /// Descriptor-only discovery never opens classify.db, corpus, or Ledger.
 /// </summary>
 [SupportedOSPlatform("linux")]
@@ -67,7 +70,8 @@ public sealed class ClassifyOperationBundle
     }
 
     /// <summary>
-    /// Full runtime composition: owner-only CLASSIFY state and explicit adapters for all twelve operations.
+    /// Full runtime composition: owner-only CLASSIFY state and explicit adapters for all
+    /// seventeen operations (source-generated JSON handlers; CancellationToken threaded).
     /// </summary>
     public static async Task<ClassifyServices> CreateServicesAsync(
         string dataRoot,
@@ -84,6 +88,9 @@ public sealed class ClassifyOperationBundle
         var receiptStore = new OwnerRulebookGateReceiptStore();
         var ruleSetStore = new RuleSetStore();
         var evaluationStore = new ClassificationEvaluationStore();
+        var outcomeDiscoveryStore = new ClassificationOutcomeDiscoveryStore();
+        var ruleDiscoveryStore = new ClassificationRuleDiscoveryStore();
+        var unresolvedStore = new ClassificationUnresolvedStore();
         var previewStore = new ClassificationApplyPreviewStore();
         var runStore = new ClassificationApplyRunStore();
         var feedbackStore = new ClassificationFeedbackStore();
@@ -131,6 +138,16 @@ public sealed class ClassifyOperationBundle
             state.Store, recoveryStore, artifacts, state.Idempotency, clock);
         var cleanup = new CleanupClassificationStateCommand(
             state.Store, recoveryStore, artifacts, state.Idempotency, clock);
+        var outcomeList = new ListClassificationOutcomesQuery(
+            state.Store, evaluationStore, outcomeDiscoveryStore, ruleStore, ruleSetStore, ledgerClient, clock);
+        var ruleList = new ListClassificationRulesQuery(
+            state.Store, ruleStore, ruleDiscoveryStore, ruleSetStore, ledgerClient, clock);
+        var ruleSetActiveGet = new GetActiveClassificationRuleSetQuery(
+            state.Store, ruleStore, ruleDiscoveryStore, ruleSetStore, ledgerClient);
+        var corpusBuild = new BuildPrivateClassificationCorpusCommand(
+            state.Store, state.Idempotency, timeProvider: clock);
+        var unresolvedReport = new GetUnresolvedPatternReportQuery(
+            state.Store, evaluationStore, unresolvedStore, ruleSetStore, ledgerClient, clock);
 
         var module = ClassifyOperationModule.CreateDescriptorTemplates();
         var handlers = new Dictionary<string, IOperationHandler>(StringComparer.Ordinal)
@@ -182,7 +199,27 @@ public sealed class ClassifyOperationBundle
             [ClassifyOperationIds.Cleanup] = new ClassifyJsonHandler<ClassifyCleanupRequest, ClassifyCleanupResult>(
                 ClassifyJsonContext.Default.ClassifyCleanupRequest,
                 ClassifyJsonContext.Default.ClassifyCleanupResult,
-                (input, actor, key, ct) => cleanup.HandleAsync(input, actor, key, ct))
+                (input, actor, key, ct) => cleanup.HandleAsync(input, actor, key, ct)),
+            [ClassifyOperationIds.OutcomeList] = new ClassifyJsonHandler<ClassifyOutcomeListRequest, ClassifyOutcomeListResult>(
+                ClassifyJsonContext.Default.ClassifyOutcomeListRequest,
+                ClassifyJsonContext.Default.ClassifyOutcomeListResult,
+                (input, actor, _, ct) => outcomeList.HandleAsync(input, actor, ct)),
+            [ClassifyOperationIds.RuleList] = new ClassifyJsonHandler<ClassifyRuleListRequest, ClassifyRuleListResult>(
+                ClassifyJsonContext.Default.ClassifyRuleListRequest,
+                ClassifyJsonContext.Default.ClassifyRuleListResult,
+                (input, actor, _, ct) => ruleList.HandleAsync(input, actor, ct)),
+            [ClassifyOperationIds.RuleSetActiveGet] = new ClassifyJsonHandler<ClassifyRuleSetActiveGetRequest, ClassifyRuleSetActiveGetResult>(
+                ClassifyJsonContext.Default.ClassifyRuleSetActiveGetRequest,
+                ClassifyJsonContext.Default.ClassifyRuleSetActiveGetResult,
+                (input, actor, _, ct) => ruleSetActiveGet.HandleAsync(input, actor, ct)),
+            [ClassifyOperationIds.CorpusBuild] = new ClassifyJsonHandler<ClassifyCorpusBuildRequest, ClassifyCorpusBuildResult>(
+                ClassifyJsonContext.Default.ClassifyCorpusBuildRequest,
+                ClassifyJsonContext.Default.ClassifyCorpusBuildResult,
+                (input, actor, key, ct) => corpusBuild.HandleAsync(input, actor, ct)),
+            [ClassifyOperationIds.UnresolvedReport] = new ClassifyJsonHandler<ClassifyUnresolvedReportRequest, ClassifyUnresolvedReportResult>(
+                ClassifyJsonContext.Default.ClassifyUnresolvedReportRequest,
+                ClassifyJsonContext.Default.ClassifyUnresolvedReportResult,
+                (input, actor, _, ct) => unresolvedReport.HandleAsync(input, actor, ct))
         };
 
         var descriptors = module.Operations
@@ -214,11 +251,16 @@ public sealed class ClassifyOperationBundle
             status,
             abandon,
             cleanup,
+            outcomeList,
+            ruleList,
+            ruleSetActiveGet,
+            corpusBuild,
+            unresolvedReport,
             ledgerClient);
     }
 }
 
-/// <summary>Complete CLASSIFY runtime composition (all twelve operations).</summary>
+/// <summary>Complete CLASSIFY runtime composition (seventeen operations).</summary>
 [SupportedOSPlatform("linux")]
 public sealed record ClassifyServices(
     ClassifyOperationBundle Operations,
@@ -235,6 +277,11 @@ public sealed record ClassifyServices(
     GetClassificationStatusQuery Status,
     AbandonClassificationStateCommand Abandon,
     CleanupClassificationStateCommand Cleanup,
+    ListClassificationOutcomesQuery OutcomeList,
+    ListClassificationRulesQuery RuleList,
+    GetActiveClassificationRuleSetQuery RuleSetActiveGet,
+    BuildPrivateClassificationCorpusCommand CorpusBuild,
+    GetUnresolvedPatternReportQuery UnresolvedReport,
     LedgerContractClient LedgerClient);
 
 /// <summary>
