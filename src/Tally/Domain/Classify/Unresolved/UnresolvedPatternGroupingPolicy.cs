@@ -126,7 +126,9 @@ public static class UnresolvedPatternGroupingPolicy
                 return false;
             }
 
-            var normalization = row.NormalizationVersion.Trim();
+            // Preserve raw nonblank NormalizationVersion/AccountId bytes for ordinal key
+            // identity, owner-visible output, ordering, and fingerprints (no trim/canonicalize).
+            var normalization = row.NormalizationVersion;
             if (sharedNormalization is null)
             {
                 sharedNormalization = normalization;
@@ -141,7 +143,7 @@ public static class UnresolvedPatternGroupingPolicy
             var key = new GroupKey(
                 normalization,
                 row.NormalizedDescription,
-                row.AccountId.Trim(),
+                row.AccountId,
                 row.AmountDirection);
 
             if (!buckets.TryGetValue(key, out var acc))
@@ -156,10 +158,8 @@ public static class UnresolvedPatternGroupingPolicy
                 {
                     acc.Count++;
                     acc.SignedTotal += row.SignedAmountMinor;
-                    var abs = row.SignedAmountMinor == long.MinValue
-                        ? long.MaxValue
-                        : Math.Abs(row.SignedAmountMinor);
-                    acc.AbsoluteTotal += abs;
+                    // Math.Abs(long.MinValue) throws OverflowException — never approximate.
+                    acc.AbsoluteTotal += Math.Abs(row.SignedAmountMinor);
                 }
             }
             catch (OverflowException)

@@ -72,6 +72,110 @@ public sealed class UnresolvedPatternGroupingPolicyTests
         Assert.All(result.Groups, g => Assert.Equal(2, g.TransactionCount));
     }
 
+    [Fact]
+    public void Leading_trailing_whitespace_on_account_id_preserves_distinct_ordinal_keys()
+    {
+        // Contract: group key uses ordinal equality on raw accountId (no trim/canonicalize).
+        var rows = new[]
+        {
+            new UnresolvedPatternGroupingPolicy.JoinedRow(
+                Norm, "coffee", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -10),
+            new UnresolvedPatternGroupingPolicy.JoinedRow(
+                Norm, "coffee", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -20),
+            new UnresolvedPatternGroupingPolicy.JoinedRow(
+                Norm, "coffee", "acct ", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -30),
+            new UnresolvedPatternGroupingPolicy.JoinedRow(
+                Norm, "coffee", "acct ", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -40),
+            new UnresolvedPatternGroupingPolicy.JoinedRow(
+                Norm, "coffee", " acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -50),
+            new UnresolvedPatternGroupingPolicy.JoinedRow(
+                Norm, "coffee", " acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -60)
+        };
+        Assert.True(UnresolvedPatternGroupingPolicy.TryGroup(rows, 10, 2, out var result, out var error));
+        Assert.Null(error);
+        Assert.Equal(3, result!.DistinctGroupCount);
+        Assert.Equal(3, result.ReturnedGroupCount);
+        Assert.Equal(6, result.CandidateRowCount);
+
+        var byAccount = result.Groups.ToDictionary(g => g.AccountId, StringComparer.Ordinal);
+        Assert.True(byAccount.ContainsKey("acct"));
+        Assert.True(byAccount.ContainsKey("acct "));
+        Assert.True(byAccount.ContainsKey(" acct"));
+        Assert.Equal("acct", byAccount["acct"].AccountId);
+        Assert.Equal("acct ", byAccount["acct "].AccountId);
+        Assert.Equal(" acct", byAccount[" acct"].AccountId);
+        Assert.Equal(-30, byAccount["acct"].CheckedSignedAmountMinorTotal);
+        Assert.Equal(-70, byAccount["acct "].CheckedSignedAmountMinorTotal);
+        Assert.Equal(-110, byAccount[" acct"].CheckedSignedAmountMinorTotal);
+
+        // Fingerprints differ because raw accountId is part of the canonical hash input.
+        Assert.Equal(3, result.Groups.Select(g => g.GroupFingerprint).Distinct(StringComparer.Ordinal).Count());
+    }
+
+    [Fact]
+    public void Leading_trailing_whitespace_on_normalization_version_is_ordinal_distinct()
+    {
+        // Different raw normalizationVersion values cannot share one evaluation accounting batch.
+        Assert.False(UnresolvedPatternGroupingPolicy.TryGroup(
+            [
+                new UnresolvedPatternGroupingPolicy.JoinedRow(
+                    "norm", "x", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -1),
+                new UnresolvedPatternGroupingPolicy.JoinedRow(
+                    " norm ", "x", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -1)
+            ],
+            10,
+            2,
+            out var mixedResult,
+            out var mixedError));
+        Assert.Equal(UnresolvedPatternGroupingPolicy.ErrorCodes.Integrity, mixedError);
+        Assert.Null(mixedResult);
+
+        // Identical raw (including embedded whitespace) values form one group and retain exact bytes.
+        var padded = " norm ";
+        Assert.True(UnresolvedPatternGroupingPolicy.TryGroup(
+            [
+                new UnresolvedPatternGroupingPolicy.JoinedRow(
+                    padded, "x", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -1),
+                new UnresolvedPatternGroupingPolicy.JoinedRow(
+                    padded, "x", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -2)
+            ],
+            10,
+            2,
+            out var result,
+            out var error));
+        Assert.Null(error);
+        Assert.NotNull(result);
+        Assert.Equal(padded, result!.NormalizationVersion);
+        Assert.Equal(padded, result.Groups[0].NormalizationVersion);
+        Assert.Equal(
+            UnresolvedPatternFingerprint.ForGroup(
+                padded, "x", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, 2, -3, 3),
+            result.Groups[0].GroupFingerprint);
+    }
+
+    [Fact]
+    public void Output_and_fingerprint_retain_exact_key_bytes_without_trim()
+    {
+        const string account = "acct\t";
+        const string description = " shop ";
+        var rows = new[]
+        {
+            new UnresolvedPatternGroupingPolicy.JoinedRow(
+                Norm, description, account, UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -5),
+            new UnresolvedPatternGroupingPolicy.JoinedRow(
+                Norm, description, account, UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -7)
+        };
+        Assert.True(UnresolvedPatternGroupingPolicy.TryGroup(rows, 10, 2, out var result, out _));
+        var g = result!.Groups[0];
+        Assert.Equal(description, g.NormalizedDescription);
+        Assert.Equal(account, g.AccountId);
+        Assert.Equal(Norm, g.NormalizationVersion);
+        Assert.Equal(
+            UnresolvedPatternFingerprint.ForGroup(
+                Norm, description, account, UnresolvedPatternGroupingPolicy.AmountDirections.Expense, 2, -12, 12),
+            g.GroupFingerprint);
+    }
+
     // ── Ordering ─────────────────────────────────────────────────────────────
 
     [Fact]
@@ -409,9 +513,25 @@ public sealed class UnresolvedPatternGroupingPolicyTests
     }
 
     [Fact]
-    public void Checked_absolute_total_handles_long_min_value_without_throw()
+    public void Checked_absolute_total_of_long_min_value_fails_with_no_partial_groups()
     {
-        // Abs(long.MinValue) is replaced by long.MaxValue in policy; two MinValue would overflow abs sum.
+        // Math.Abs(long.MinValue) is not representable; never approximate as long.MaxValue.
+        Assert.False(UnresolvedPatternGroupingPolicy.TryGroup(
+            [
+                Row("x", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, long.MinValue),
+                Row("x", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, -1)
+            ],
+            10,
+            2,
+            out var result,
+            out var error));
+        Assert.Equal(UnresolvedPatternGroupingPolicy.ErrorCodes.ResourceLimit, error);
+        Assert.Null(result);
+    }
+
+    [Fact]
+    public void Checked_absolute_total_two_long_min_values_fails_with_no_partial_groups()
+    {
         Assert.False(UnresolvedPatternGroupingPolicy.TryGroup(
             [
                 Row("x", "acct", UnresolvedPatternGroupingPolicy.AmountDirections.Expense, long.MinValue),
