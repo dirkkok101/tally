@@ -25,9 +25,20 @@ public static class ClassifyCursorCodec
     public const string OutcomeListOperationId = "classify.outcome.list";
     public const string RuleListOperationId = "classify.rule.list";
 
+    /// <summary>
+    /// CLASSIFY wire UTC timestamp form used by ClassifyContractMapper.FormatUtc
+    /// (yyyy-MM-ddTHH:mm:ss.fffffffZ).
+    /// </summary>
+    public const string CanonicalUtcTimestampFormat = "yyyy-MM-dd'T'HH:mm:ss.fffffff'Z'";
+
     private const string FormatMarker = "CLASSIFY-CURSOR-V1";
     private const string KindOutcome = "outcome";
     private const string KindRule = "rule";
+
+    /// <summary>Strict UTF-8: invalid sequences throw rather than replace.</summary>
+    private static readonly Encoding StrictUtf8 = new UTF8Encoding(
+        encoderShouldEmitUTF8Identifier: false,
+        throwOnInvalidBytes: true);
 
     /// <summary>Snapshot binding for an outcome.list continuation (no keyset position).</summary>
     public sealed record OutcomeSnapshotBinding(
@@ -82,7 +93,7 @@ public static class ClassifyCursorCodec
     /// <summary>
     /// Decode and fully validate an outcome continuation against the expected request/snapshot
     /// binding and current time. On any failure returns a typed error and null position
-    /// (never an empty-page stand-in).
+    /// (never an empty-page stand-in). Checksum is verified before field interpretation.
     /// </summary>
     public static bool TryDecodeOutcome(
         string? encoded,
@@ -113,6 +124,16 @@ public static class ClassifyCursorCodec
             return false;
         }
 
+        // Reject control characters in every decoded field before semantic use.
+        for (var i = 0; i < lines.Length; i++)
+        {
+            if (!IsSafeCursorField(lines[i], allowEmpty: false))
+            {
+                errorCode = ClassifyErrors.CursorInvalid;
+                return false;
+            }
+        }
+
         if (!string.Equals(lines[0], FormatMarker, StringComparison.Ordinal)
             || !string.Equals(lines[1], KindOutcome, StringComparison.Ordinal)
             || !string.Equals(lines[2], OutcomeListOperationId, StringComparison.Ordinal))
@@ -129,8 +150,7 @@ public static class ClassifyCursorCodec
         }
 
         if (!int.TryParse(lines[12], NumberStyles.Integer, CultureInfo.InvariantCulture, out var lastOrdinal)
-            || lastOrdinal < 0
-            || string.IsNullOrWhiteSpace(lines[13]))
+            || lastOrdinal < 0)
         {
             errorCode = ClassifyErrors.CursorInvalid;
             return false;
@@ -141,7 +161,8 @@ public static class ClassifyCursorCodec
                 "O",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.RoundtripKind,
-                out var expiresAt))
+                out var expiresAt)
+            || !string.Equals(lines[11], FormatExpires(expiresAt), StringComparison.Ordinal))
         {
             errorCode = ClassifyErrors.CursorInvalid;
             return false;
@@ -184,7 +205,7 @@ public static class ClassifyCursorCodec
         errorCode = null;
 
         if (!TryValidateRuleBinding(binding, out errorCode)
-            || !TryValidateRulePosition(position, out errorCode))
+            || !TryValidateRulePosition(binding, position, out errorCode))
         {
             return false;
         }
@@ -195,6 +216,7 @@ public static class ClassifyCursorCodec
 
     /// <summary>
     /// Decode and fully validate a rule continuation. Any failure yields typed error and null position.
+    /// Checksum is verified before field interpretation.
     /// </summary>
     public static bool TryDecodeRule(
         string? encoded,
@@ -225,6 +247,15 @@ public static class ClassifyCursorCodec
             return false;
         }
 
+        for (var i = 0; i < lines.Length; i++)
+        {
+            if (!IsSafeCursorField(lines[i], allowEmpty: false))
+            {
+                errorCode = ClassifyErrors.CursorInvalid;
+                return false;
+            }
+        }
+
         if (!string.Equals(lines[0], FormatMarker, StringComparison.Ordinal)
             || !string.Equals(lines[1], KindRule, StringComparison.Ordinal)
             || !string.Equals(lines[2], RuleListOperationId, StringComparison.Ordinal))
@@ -240,10 +271,10 @@ public static class ClassifyCursorCodec
             return false;
         }
 
-        if (string.IsNullOrWhiteSpace(lines[5])
-            || string.IsNullOrWhiteSpace(lines[6])
-            || string.IsNullOrWhiteSpace(lines[10])
-            || string.IsNullOrWhiteSpace(lines[11]))
+        if (!IsCanonicalUtcTimestamp(lines[5])
+            || !IsCanonicalUtcTimestamp(lines[10])
+            || !IsSafeCursorField(lines[6], allowEmpty: false)
+            || !IsSafeCursorField(lines[11], allowEmpty: false))
         {
             errorCode = ClassifyErrors.CursorInvalid;
             return false;
@@ -254,7 +285,15 @@ public static class ClassifyCursorCodec
                 "O",
                 CultureInfo.InvariantCulture,
                 DateTimeStyles.RoundtripKind,
-                out var expiresAt))
+                out var expiresAt)
+            || !string.Equals(lines[9], FormatExpires(expiresAt), StringComparison.Ordinal))
+        {
+            errorCode = ClassifyErrors.CursorInvalid;
+            return false;
+        }
+
+        // Resume must not strictly exceed the frozen first-page high-water tuple.
+        if (CompareRuleKeyset(lines[10], lines[11], lines[5], lines[6]) > 0)
         {
             errorCode = ClassifyErrors.CursorInvalid;
             return false;
@@ -285,6 +324,82 @@ public static class ClassifyCursorCodec
     /// <summary>True when encoded UTF-8 length is within the hard cursor size bound.</summary>
     public static bool IsWithinEncodedSizeLimit(string encoded) =>
         Encoding.UTF8.GetByteCount(encoded) <= MaxEncodedUtf8Bytes;
+
+    /// <summary>
+    /// Canonical field safety for newline-delimited cursor payloads: nonblank and free of
+    /// CR/LF/NUL and every other C0/C1-style control (including TAB and DEL).
+    /// </summary>
+    public static bool IsSafeCursorField(string? value, bool allowEmpty = false)
+    {
+        if (value is null)
+        {
+            return false;
+        }
+
+        if (value.Length == 0)
+        {
+            return allowEmpty;
+        }
+
+        if (!allowEmpty && string.IsNullOrWhiteSpace(value))
+        {
+            return false;
+        }
+
+        for (var i = 0; i < value.Length; i++)
+        {
+            var c = value[i];
+            // Reject all C0 controls (0x00-0x1F) and DEL (0x7F). Format uses LF only as
+            // the external line delimiter, never inside a field.
+            if (c <= 0x1F || c == 0x7F)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// True when <paramref name="value"/> is exactly CLASSIFY canonical UTC
+    /// (<c>yyyy-MM-ddTHH:mm:ss.fffffffZ</c>) including round-trip equality.
+    /// </summary>
+    public static bool IsCanonicalUtcTimestamp(string? value)
+    {
+        if (!IsSafeCursorField(value, allowEmpty: false))
+        {
+            return false;
+        }
+
+        if (!DateTimeOffset.TryParseExact(
+                value,
+                CanonicalUtcTimestampFormat,
+                CultureInfo.InvariantCulture,
+                DateTimeStyles.RoundtripKind | DateTimeStyles.AssumeUniversal,
+                out var parsed))
+        {
+            return false;
+        }
+
+        var reformatted = parsed.UtcDateTime.ToString(CanonicalUtcTimestampFormat, CultureInfo.InvariantCulture);
+        return string.Equals(value, reformatted, StringComparison.Ordinal);
+    }
+
+    /// <summary>
+    /// Ordinal keyset compare for rule pages: createdAt then ruleVersionId.
+    /// Negative when left &lt; right; zero when equal; positive when left &gt; right.
+    /// </summary>
+    public static int CompareRuleKeyset(
+        string leftCreatedAt,
+        string leftRuleVersionId,
+        string rightCreatedAt,
+        string rightRuleVersionId)
+    {
+        var cmp = string.CompareOrdinal(leftCreatedAt, rightCreatedAt);
+        return cmp != 0
+            ? cmp
+            : string.CompareOrdinal(leftRuleVersionId, rightRuleVersionId);
+    }
 
     // ── Builders ─────────────────────────────────────────────────────────────
 
@@ -381,7 +496,8 @@ public static class ClassifyCursorCodec
         string text;
         try
         {
-            text = Encoding.UTF8.GetString(raw);
+            // Strict UTF-8: invalid sequences throw DecoderFallbackException (no replacement).
+            text = StrictUtf8.GetString(raw);
         }
         catch (DecoderFallbackException)
         {
@@ -389,7 +505,7 @@ public static class ClassifyCursorCodec
             return false;
         }
 
-        // Reject embedded CR or non-LF control that would alias field boundaries.
+        // Reject CR/NUL anywhere in the sealed payload (format uses LF delimiters only).
         if (text.Contains('\r', StringComparison.Ordinal) || text.Contains('\0', StringComparison.Ordinal))
         {
             errorCode = ClassifyErrors.CursorInvalid;
@@ -419,6 +535,7 @@ public static class ClassifyCursorCodec
             return false;
         }
 
+        // Checksum verification BEFORE field validation / semantic interpretation.
         var bodyBuilder = new StringBuilder();
         for (var i = 0; i < lines.Length - 1; i++)
         {
@@ -441,15 +558,26 @@ public static class ClassifyCursorCodec
     private static bool TryValidateOutcomeBinding(OutcomeSnapshotBinding binding, out string? errorCode)
     {
         errorCode = null;
-        if (binding is null
-            || string.IsNullOrWhiteSpace(binding.EvaluationId)
-            || string.IsNullOrWhiteSpace(binding.FilterFingerprint)
-            || string.IsNullOrWhiteSpace(binding.EvaluationFingerprint)
-            || string.IsNullOrWhiteSpace(binding.ResultFingerprint)
-            || string.IsNullOrWhiteSpace(binding.RuleSetFingerprint)
-            || string.IsNullOrWhiteSpace(binding.CategoryLifecycleFingerprint)
-            || string.IsNullOrWhiteSpace(binding.LedgerGeneration)
-            || binding.PageSize is < MinPageSize or > MaxPageSize)
+        if (binding is null || binding.PageSize is < MinPageSize or > MaxPageSize)
+        {
+            errorCode = ClassifyErrors.CursorInvalid;
+            return false;
+        }
+
+        if (!IsSafeCursorField(binding.EvaluationId)
+            || !IsSafeCursorField(binding.FilterFingerprint)
+            || !IsSafeCursorField(binding.EvaluationFingerprint)
+            || !IsSafeCursorField(binding.ResultFingerprint)
+            || !IsSafeCursorField(binding.RuleSetFingerprint)
+            || !IsSafeCursorField(binding.CategoryLifecycleFingerprint)
+            || !IsSafeCursorField(binding.LedgerGeneration))
+        {
+            errorCode = ClassifyErrors.CursorInvalid;
+            return false;
+        }
+
+        // Expires is typed; ensure its serialized form is also field-safe.
+        if (!IsSafeCursorField(FormatExpires(binding.ExpiresAtUtc)))
         {
             errorCode = ClassifyErrors.CursorInvalid;
             return false;
@@ -463,9 +591,7 @@ public static class ClassifyCursorCodec
         errorCode = null;
         if (position is null
             || position.LastOrdinal < 0
-            || string.IsNullOrWhiteSpace(position.LastTransactionId)
-            || position.LastTransactionId.Contains('\n', StringComparison.Ordinal)
-            || position.LastTransactionId.Contains('\r', StringComparison.Ordinal))
+            || !IsSafeCursorField(position.LastTransactionId))
         {
             errorCode = ClassifyErrors.CursorInvalid;
             return false;
@@ -477,15 +603,18 @@ public static class ClassifyCursorCodec
     private static bool TryValidateRuleBinding(RuleSnapshotBinding binding, out string? errorCode)
     {
         errorCode = null;
-        if (binding is null
-            || string.IsNullOrWhiteSpace(binding.FilterFingerprint)
-            || string.IsNullOrWhiteSpace(binding.HighWaterCreatedAt)
-            || string.IsNullOrWhiteSpace(binding.HighWaterRuleVersionId)
-            || string.IsNullOrWhiteSpace(binding.AuthorityFingerprint)
-            || string.IsNullOrWhiteSpace(binding.CategoryLifecycleFingerprint)
-            || binding.PageSize is < MinPageSize or > MaxPageSize
-            || binding.HighWaterCreatedAt.Contains('\n', StringComparison.Ordinal)
-            || binding.HighWaterRuleVersionId.Contains('\n', StringComparison.Ordinal))
+        if (binding is null || binding.PageSize is < MinPageSize or > MaxPageSize)
+        {
+            errorCode = ClassifyErrors.CursorInvalid;
+            return false;
+        }
+
+        if (!IsSafeCursorField(binding.FilterFingerprint)
+            || !IsSafeCursorField(binding.HighWaterRuleVersionId)
+            || !IsSafeCursorField(binding.AuthorityFingerprint)
+            || !IsSafeCursorField(binding.CategoryLifecycleFingerprint)
+            || !IsCanonicalUtcTimestamp(binding.HighWaterCreatedAt)
+            || !IsSafeCursorField(FormatExpires(binding.ExpiresAtUtc)))
         {
             errorCode = ClassifyErrors.CursorInvalid;
             return false;
@@ -494,16 +623,26 @@ public static class ClassifyCursorCodec
         return true;
     }
 
-    private static bool TryValidateRulePosition(RuleKeysetPosition position, out string? errorCode)
+    private static bool TryValidateRulePosition(
+        RuleSnapshotBinding binding,
+        RuleKeysetPosition position,
+        out string? errorCode)
     {
         errorCode = null;
         if (position is null
-            || string.IsNullOrWhiteSpace(position.LastCreatedAt)
-            || string.IsNullOrWhiteSpace(position.LastRuleVersionId)
-            || position.LastCreatedAt.Contains('\n', StringComparison.Ordinal)
-            || position.LastRuleVersionId.Contains('\n', StringComparison.Ordinal)
-            || position.LastCreatedAt.Contains('\r', StringComparison.Ordinal)
-            || position.LastRuleVersionId.Contains('\r', StringComparison.Ordinal))
+            || !IsCanonicalUtcTimestamp(position.LastCreatedAt)
+            || !IsSafeCursorField(position.LastRuleVersionId))
+        {
+            errorCode = ClassifyErrors.CursorInvalid;
+            return false;
+        }
+
+        // Resume must not strictly exceed the first-page high-water (createdAt, ruleVersionId).
+        if (CompareRuleKeyset(
+                position.LastCreatedAt,
+                position.LastRuleVersionId,
+                binding.HighWaterCreatedAt,
+                binding.HighWaterRuleVersionId) > 0)
         {
             errorCode = ClassifyErrors.CursorInvalid;
             return false;

@@ -334,7 +334,7 @@ public sealed class ClassifyCursorCodecTests
     {
         Assert.True(ClassifyCursorCodec.TryEncodeRule(
             SampleRuleBinding(),
-            new ClassifyCursorCodec.RuleKeysetPosition("t", "rv"),
+            new ClassifyCursorCodec.RuleKeysetPosition("2026-01-01T00:00:00.0000000Z", "rv"),
             out var ruleCursor,
             out _));
         Assert.False(ClassifyCursorCodec.TryDecodeOutcome(
@@ -447,7 +447,7 @@ public sealed class ClassifyCursorCodecTests
         var binding = SampleRuleBinding();
         Assert.True(ClassifyCursorCodec.TryEncodeRule(
             binding,
-            new ClassifyCursorCodec.RuleKeysetPosition("t", "rv"),
+            new ClassifyCursorCodec.RuleKeysetPosition(binding.HighWaterCreatedAt, "rv"),
             out var encoded,
             out _));
         var other = binding with { HighWaterRuleVersionId = "rv-new" };
@@ -638,6 +638,243 @@ public sealed class ClassifyCursorCodecTests
         Assert.Equal("active", ClassifyDiscoveryFilterFingerprint.LifecycleWire(ClassifyRuleLifecycleFilter.Active));
     }
 
+    // ── Field safety / control characters ────────────────────────────────────
+
+    [Theory]
+    [InlineData("eval\nid")]
+    [InlineData("eval\rid")]
+    [InlineData("eval\0id")]
+    [InlineData("eval\tid")]
+    public void Outcome_binding_rejects_control_characters_in_every_serialized_field(string bad)
+    {
+        var baseBinding = SampleOutcomeBinding();
+        Assert.False(ClassifyCursorCodec.TryEncodeOutcome(
+            baseBinding with { EvaluationId = bad },
+            new ClassifyCursorCodec.OutcomeKeysetPosition(1, "tx"),
+            out var e1,
+            out var err1));
+        Assert.Null(e1);
+        Assert.Equal(ClassifyErrors.CursorInvalid, err1);
+
+        Assert.False(ClassifyCursorCodec.TryEncodeOutcome(
+            baseBinding with { FilterFingerprint = bad },
+            new ClassifyCursorCodec.OutcomeKeysetPosition(1, "tx"),
+            out var e2,
+            out var err2));
+        Assert.Null(e2);
+        Assert.Equal(ClassifyErrors.CursorInvalid, err2);
+
+        Assert.False(ClassifyCursorCodec.TryEncodeOutcome(
+            baseBinding with { LedgerGeneration = bad },
+            new ClassifyCursorCodec.OutcomeKeysetPosition(1, "tx"),
+            out var e3,
+            out var err3));
+        Assert.Null(e3);
+        Assert.Equal(ClassifyErrors.CursorInvalid, err3);
+
+        Assert.False(ClassifyCursorCodec.TryEncodeOutcome(
+            baseBinding,
+            new ClassifyCursorCodec.OutcomeKeysetPosition(1, bad),
+            out var e4,
+            out var err4));
+        Assert.Null(e4);
+        Assert.Equal(ClassifyErrors.CursorInvalid, err4);
+    }
+
+    [Theory]
+    [InlineData("fp\n")]
+    [InlineData("fp\r")]
+    [InlineData("fp\0")]
+    [InlineData("rv\trule")]
+    public void Rule_binding_rejects_control_characters_in_serialized_fields(string bad)
+    {
+        var baseBinding = SampleRuleBinding();
+        Assert.False(ClassifyCursorCodec.TryEncodeRule(
+            baseBinding with { FilterFingerprint = bad },
+            new ClassifyCursorCodec.RuleKeysetPosition(baseBinding.HighWaterCreatedAt, "rv-ok"),
+            out var e1,
+            out var err1));
+        Assert.Null(e1);
+        Assert.Equal(ClassifyErrors.CursorInvalid, err1);
+
+        Assert.False(ClassifyCursorCodec.TryEncodeRule(
+            baseBinding with { HighWaterRuleVersionId = bad },
+            new ClassifyCursorCodec.RuleKeysetPosition(baseBinding.HighWaterCreatedAt, "rv-ok"),
+            out var e2,
+            out var err2));
+        Assert.Null(e2);
+        Assert.Equal(ClassifyErrors.CursorInvalid, err2);
+
+        Assert.False(ClassifyCursorCodec.TryEncodeRule(
+            baseBinding with { AuthorityFingerprint = bad },
+            new ClassifyCursorCodec.RuleKeysetPosition(baseBinding.HighWaterCreatedAt, "rv-ok"),
+            out var e3,
+            out var err3));
+        Assert.Null(e3);
+        Assert.Equal(ClassifyErrors.CursorInvalid, err3);
+
+        Assert.False(ClassifyCursorCodec.TryEncodeRule(
+            baseBinding,
+            new ClassifyCursorCodec.RuleKeysetPosition(baseBinding.HighWaterCreatedAt, bad),
+            out var e4,
+            out var err4));
+        Assert.Null(e4);
+        Assert.Equal(ClassifyErrors.CursorInvalid, err4);
+    }
+
+    [Fact]
+    public void Safe_cursor_field_rejects_cr_lf_nul_and_other_controls()
+    {
+        Assert.True(ClassifyCursorCodec.IsSafeCursorField("plain-id"));
+        Assert.False(ClassifyCursorCodec.IsSafeCursorField("a\nb"));
+        Assert.False(ClassifyCursorCodec.IsSafeCursorField("a\rb"));
+        Assert.False(ClassifyCursorCodec.IsSafeCursorField("a\0b"));
+        Assert.False(ClassifyCursorCodec.IsSafeCursorField("a\tb"));
+        Assert.False(ClassifyCursorCodec.IsSafeCursorField("a\u007fb"));
+        Assert.False(ClassifyCursorCodec.IsSafeCursorField("   "));
+        Assert.False(ClassifyCursorCodec.IsSafeCursorField(""));
+        Assert.False(ClassifyCursorCodec.IsSafeCursorField(null));
+    }
+
+    // ── Rule high-water / canonical timestamps ───────────────────────────────
+
+    [Fact]
+    public void Canonical_utc_timestamp_accepts_classify_format_only()
+    {
+        Assert.True(ClassifyCursorCodec.IsCanonicalUtcTimestamp("2026-01-01T00:00:00.0000000Z"));
+        Assert.False(ClassifyCursorCodec.IsCanonicalUtcTimestamp("2026-01-01T00:00:00Z")); // missing fractional
+        Assert.False(ClassifyCursorCodec.IsCanonicalUtcTimestamp("2026-01-01T00:00:00.0000000+00:00"));
+        Assert.False(ClassifyCursorCodec.IsCanonicalUtcTimestamp("2026-01-01 00:00:00.0000000Z"));
+        Assert.False(ClassifyCursorCodec.IsCanonicalUtcTimestamp("not-a-timestamp"));
+        Assert.False(ClassifyCursorCodec.IsCanonicalUtcTimestamp("2026-01-01T00:00:00.0000000Z\n"));
+    }
+
+    [Fact]
+    public void Rule_encode_rejects_noncanonical_high_water_created_at()
+    {
+        var binding = SampleRuleBinding() with { HighWaterCreatedAt = "2026-01-01T00:00:00Z" };
+        Assert.False(ClassifyCursorCodec.TryEncodeRule(
+            binding,
+            new ClassifyCursorCodec.RuleKeysetPosition("2026-01-01T00:00:00.0000000Z", "rv-a"),
+            out var encoded,
+            out var error));
+        Assert.Null(encoded);
+        Assert.Equal(ClassifyErrors.CursorInvalid, error);
+    }
+
+    [Fact]
+    public void Rule_encode_rejects_noncanonical_resume_created_at()
+    {
+        Assert.False(ClassifyCursorCodec.TryEncodeRule(
+            SampleRuleBinding(),
+            new ClassifyCursorCodec.RuleKeysetPosition("2026-01-01T00:00:00Z", "rv-a"),
+            out var encoded,
+            out var error));
+        Assert.Null(encoded);
+        Assert.Equal(ClassifyErrors.CursorInvalid, error);
+    }
+
+    [Fact]
+    public void Rule_resume_equal_to_high_water_is_accepted()
+    {
+        var binding = SampleRuleBinding();
+        var position = new ClassifyCursorCodec.RuleKeysetPosition(
+            binding.HighWaterCreatedAt,
+            binding.HighWaterRuleVersionId);
+        Assert.True(ClassifyCursorCodec.TryEncodeRule(binding, position, out var encoded, out var error));
+        Assert.Null(error);
+        Assert.True(ClassifyCursorCodec.TryDecodeRule(encoded, binding, Now, out var decoded, out _));
+        Assert.Equal(position, decoded);
+        Assert.Equal(0, ClassifyCursorCodec.CompareRuleKeyset(
+            position.LastCreatedAt,
+            position.LastRuleVersionId,
+            binding.HighWaterCreatedAt,
+            binding.HighWaterRuleVersionId));
+    }
+
+    [Fact]
+    public void Rule_resume_strictly_before_high_water_is_accepted()
+    {
+        // Same createdAt, ruleVersionId ordinally less than high-water rule id.
+        var binding = SampleRuleBinding() with
+        {
+            HighWaterCreatedAt = "2026-06-01T12:00:00.0000000Z",
+            HighWaterRuleVersionId = "rv-b"
+        };
+        var position = new ClassifyCursorCodec.RuleKeysetPosition(
+            "2026-06-01T12:00:00.0000000Z",
+            "rv-a");
+        Assert.True(string.CompareOrdinal("rv-a", "rv-b") < 0);
+        Assert.True(ClassifyCursorCodec.TryEncodeRule(binding, position, out var encoded, out _));
+        Assert.True(ClassifyCursorCodec.TryDecodeRule(encoded, binding, Now, out var decoded, out _));
+        Assert.Equal(position, decoded);
+    }
+
+    [Fact]
+    public void Rule_resume_beyond_high_water_by_created_at_is_rejected()
+    {
+        var binding = SampleRuleBinding() with
+        {
+            HighWaterCreatedAt = "2026-06-01T12:00:00.0000000Z",
+            HighWaterRuleVersionId = "rv-z"
+        };
+        var position = new ClassifyCursorCodec.RuleKeysetPosition(
+            "2026-06-01T12:00:00.0000001Z",
+            "rv-a");
+        Assert.True(ClassifyCursorCodec.CompareRuleKeyset(
+            position.LastCreatedAt,
+            position.LastRuleVersionId,
+            binding.HighWaterCreatedAt,
+            binding.HighWaterRuleVersionId) > 0);
+        Assert.False(ClassifyCursorCodec.TryEncodeRule(binding, position, out var encoded, out var error));
+        Assert.Null(encoded);
+        Assert.Equal(ClassifyErrors.CursorInvalid, error);
+    }
+
+    [Fact]
+    public void Rule_resume_beyond_high_water_by_rule_version_id_is_rejected()
+    {
+        var binding = SampleRuleBinding() with
+        {
+            HighWaterCreatedAt = "2026-06-01T12:00:00.0000000Z",
+            HighWaterRuleVersionId = "rv-a"
+        };
+        var position = new ClassifyCursorCodec.RuleKeysetPosition(
+            "2026-06-01T12:00:00.0000000Z",
+            "rv-b");
+        Assert.True(string.CompareOrdinal("rv-b", "rv-a") > 0);
+        Assert.False(ClassifyCursorCodec.TryEncodeRule(binding, position, out var encoded, out var error));
+        Assert.Null(encoded);
+        Assert.Equal(ClassifyErrors.CursorInvalid, error);
+    }
+
+    // ── Strict UTF-8 ─────────────────────────────────────────────────────────
+
+    [Fact]
+    public void Malformed_utf8_payload_is_rejected_with_null_position()
+    {
+        // Valid-looking base64url of bytes that are not valid UTF-8 (orphan continuation 0x80).
+        var invalidUtf8 = new byte[] { 0x80, 0x61, 0x0A };
+        var encoded = Convert.ToBase64String(invalidUtf8).TrimEnd('=').Replace('+', '-').Replace('/', '_');
+        Assert.False(ClassifyCursorCodec.TryDecodeOutcome(
+            encoded,
+            SampleOutcomeBinding(),
+            Now,
+            out var position,
+            out var error));
+        Assert.Null(position);
+        Assert.Equal(ClassifyErrors.CursorInvalid, error);
+
+        Assert.False(ClassifyCursorCodec.TryDecodeRule(
+            encoded,
+            SampleRuleBinding(),
+            Now,
+            out var rulePos,
+            out var ruleErr));
+        Assert.Null(rulePos);
+        Assert.Equal(ClassifyErrors.CursorInvalid, ruleErr);
+    }
+
     // ── Helpers ──────────────────────────────────────────────────────────────
 
     private static ClassifyCursorCodec.OutcomeSnapshotBinding SampleOutcomeBinding() =>
@@ -656,6 +893,7 @@ public sealed class ClassifyCursorCodecTests
         new(
             FilterFingerprint: ClassifyDiscoveryFilterFingerprint.ForRuleList(),
             PageSize: 10,
+            // Canonical CLASSIFY UTC; high-water rule id is ordinally after synthetic rv-###### keys.
             HighWaterCreatedAt: "2026-01-01T00:00:00.0000000Z",
             HighWaterRuleVersionId: "rv-hw",
             AuthorityFingerprint: Fp("authority-fp"),
