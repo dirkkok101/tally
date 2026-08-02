@@ -193,7 +193,9 @@ public sealed class ListClassificationOutcomesQuery
         var retainedFingerprint = ClassifyContractMapper.ToRetainedEvaluationFingerprint(run);
         var evaluationFingerprint = retainedFingerprint.CanonicalHash;
         var resultFingerprint = ClassificationOutcomeDiscoveryStore.ComputeResultFingerprint(allOutcomes);
-        var ruleSetFingerprint = ClassifyContractMapper.RuleSetFingerprint(run.RuleSetVersionId);
+        // Cursor/snapshot binding uses current durable active rule-set authority (not retained
+        // evaluation membership alone). An authority change invalidates continuations.
+        var ruleSetFingerprint = ClassifyContractMapper.RuleSetFingerprint(currentRuleSetVersionId!);
         var categoryLifecycleFingerprint = publicState.CategoryLifecycleFingerprint!;
         var ledgerGeneration = publicState.StoreGenerationFingerprint!;
 

@@ -255,18 +255,114 @@ public sealed class OutcomeCursorStalenessTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Missing_active_rule_set_returns_typed_error()
+    public async Task Missing_active_rule_set_with_retained_evaluation_returns_typed_error()
     {
-        // Empty store: no active rule set, no evaluation — evaluation not found first.
-        // After evaluation, retire active set is complex; verify ActiveRuleSetNotFound code exists and
-        // evaluation without activation is not creatable via public path.
-        Assert.Equal("CLASSIFY-ACTIVE-RULE-SET-NOT-FOUND", ClassifyErrors.ActiveRuleSetNotFound);
+        // Real retained evaluation exists; clear durable active_rule_set pointer only.
+        var seeded = await SeedMixedAsync();
+        await using (var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None))
+        {
+            var beforeClear = await services.RuleSetStore.GetActiveRuleSetAsync(connection, null, CancellationToken.None);
+            Assert.NotNull(beforeClear);
+            await using var clear = connection.CreateCommand();
+            clear.CommandText = "DELETE FROM active_rule_set;";
+            var removed = await clear.ExecuteNonQueryAsync();
+            Assert.Equal(1, removed);
+            var afterClear = await services.RuleSetStore.GetActiveRuleSetAsync(connection, null, CancellationToken.None);
+            Assert.Null(afterClear);
+        }
+
+        // Capture oracle after intentional authority removal (classify still has evaluation rows).
+        var beforeList = await CaptureClassifyOracleAsync();
+        Assert.Null(beforeList.ActiveRuleSet);
+
         var result = await listQuery.HandleAsync(
-            new ClassifyOutcomeListRequest("1.0", "no-eval", 10),
+            new ClassifyOutcomeListRequest("1.0", seeded.EvaluationId, 10),
             actor,
             CancellationToken.None);
-        Assert.Equal(ClassifyErrors.EvaluationNotFound, result.ErrorCode);
+        Assert.Equal(ClassifyErrors.ActiveRuleSetNotFound, result.ErrorCode);
         Assert.Null(result.Value);
+        await AssertNoMutationAsync(beforeList);
+    }
+
+    [Fact]
+    public async Task Active_rule_set_authority_change_invalidates_continuation_with_null_result()
+    {
+        // First page under authority A, then activate successor authority B, resume must fail closed.
+        var category = await CreateCategoryAsync("AuthChg");
+        const string phrase = "authority change phrase";
+        var v1 = await SaveDraftAsync(category.CategoryId, phrase);
+        await ActivateWithGateAsync(v1, category.CategoryId, phrase);
+        // Multiple outcomes so pageSize=1 yields a continuation.
+        _ = await RecordAsync(phrase);
+        _ = await RecordAsync("unmatched auth change a");
+        _ = await RecordAsync("unmatched auth change b");
+        var evaluated = await services.Evaluate.HandleAsync(
+            new ClassifyEvaluateRequest(ClassifyOperationIds.ContractVersion),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(evaluated.IsSuccess, evaluated.ErrorCode);
+        Assert.True(evaluated.Value!.TotalCount >= 3);
+
+        string? activeBefore;
+        await using (var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None))
+        {
+            activeBefore = (await services.RuleSetStore.GetActiveRuleSetAsync(connection, null, CancellationToken.None))
+                ?.RuleSetVersionId;
+        }
+
+        Assert.False(string.IsNullOrWhiteSpace(activeBefore));
+
+        var first = await listQuery.HandleAsync(
+            new ClassifyOutcomeListRequest("1.0", evaluated.Value.EvaluationId, 1),
+            actor,
+            CancellationToken.None);
+        Assert.True(first.IsSuccess, first.ErrorCode);
+        Assert.NotNull(first.Value!.Continuation);
+        Assert.Equal(
+            ClassifyContractMapper.RuleSetFingerprint(activeBefore!),
+            first.Value.RuleSetFingerprint);
+
+        // Successor active authority via public activate path (append-only history + pointer update).
+        var v2 = await SaveDraftAsync(category.CategoryId, "successor authority phrase");
+        await ActivateWithGateAsync(v2, category.CategoryId, "successor authority phrase");
+
+        string? activeAfter;
+        await using (var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None))
+        {
+            activeAfter = (await services.RuleSetStore.GetActiveRuleSetAsync(connection, null, CancellationToken.None))
+                ?.RuleSetVersionId;
+        }
+
+        Assert.False(string.IsNullOrWhiteSpace(activeAfter));
+        Assert.NotEqual(activeBefore, activeAfter);
+
+        var beforeResume = await CaptureClassifyOracleAsync();
+        Assert.Equal(activeAfter, beforeResume.ActiveRuleSet);
+
+        var resume = await listQuery.HandleAsync(
+            new ClassifyOutcomeListRequest(
+                "1.0",
+                evaluated.Value.EvaluationId,
+                1,
+                Continuation: first.Value.Continuation),
+            actor,
+            CancellationToken.None);
+        // Current active rule-set fingerprint no longer matches cursor binding → typed stale.
+        Assert.Equal(ClassifyErrors.CursorStale, resume.ErrorCode);
+        Assert.Null(resume.Value);
+        await AssertNoMutationAsync(beforeResume);
+
+        // Fresh first page under new authority still succeeds (items may be stale vs retained eval).
+        var fresh = await listQuery.HandleAsync(
+            new ClassifyOutcomeListRequest("1.0", evaluated.Value.EvaluationId, 50),
+            actor,
+            CancellationToken.None);
+        Assert.True(fresh.IsSuccess, fresh.ErrorCode);
+        Assert.Equal(
+            ClassifyContractMapper.RuleSetFingerprint(activeAfter!),
+            fresh.Value!.RuleSetFingerprint);
+        Assert.NotEqual(first.Value.RuleSetFingerprint, fresh.Value.RuleSetFingerprint);
     }
 
     [Fact]

@@ -39,14 +39,14 @@ public sealed class ClassificationOutcomeDiscoveryStore
         if (!string.IsNullOrWhiteSpace(contributingRuleVersionId))
         {
             sql.Append("""
-                
-                WHERE o.evaluation_id = $evaluation_id
-                  AND EXISTS (
-                    SELECT 1 FROM match_evidence m
-                    WHERE m.outcome_id = o.outcome_id
-                      AND m.rule_version_id = $rule_version_id
-                  )
-                """);
+
+WHERE o.evaluation_id = $evaluation_id
+  AND EXISTS (
+    SELECT 1 FROM match_evidence m
+    WHERE m.outcome_id = o.outcome_id
+      AND m.rule_version_id = $rule_version_id
+  )
+""");
         }
         else
         {
