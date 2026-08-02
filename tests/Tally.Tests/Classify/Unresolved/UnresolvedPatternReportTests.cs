@@ -205,9 +205,17 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
             CancellationToken.None);
         Assert.True(a.IsSuccess && b.IsSuccess);
         Assert.Equal(a.Value!.ReportFingerprint, b.Value!.ReportFingerprint);
+        // Semantic ProjectionFingerprint is stable across fresh equivalent queries (no snapshot binding).
+        Assert.Equal(a.Value.ProjectionFingerprint, b.Value.ProjectionFingerprint);
+        Assert.Equal(a.Value.EvaluationFingerprint, b.Value.EvaluationFingerprint);
+        Assert.Equal(a.Value.CategoryLifecycleFingerprint, b.Value.CategoryLifecycleFingerprint);
+        Assert.Equal(a.Value.RuleSetFingerprint, b.Value.RuleSetFingerprint);
         Assert.Equal(
             a.Value.Groups.Select(g => g.GroupFingerprint).ToArray(),
             b.Value.Groups.Select(g => g.GroupFingerprint).ToArray());
+        Assert.Equal(
+            a.Value.Groups.Select(g => g.RepresentativeNormalizedDescription).ToArray(),
+            b.Value.Groups.Select(g => g.RepresentativeNormalizedDescription).ToArray());
     }
 
     [Fact]
@@ -372,34 +380,91 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
     [Fact]
     public async Task Retention_gap_count_mismatch_fails_integrity()
     {
-        var seeded = await SeedRepeatedNoSuggestionAsync("gap coffee", count: 2);
-        // Corrupt retained counter without deleting outcomes.
-        await using var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None);
-        await using var cmd = connection.CreateCommand();
-        cmd.CommandText = "UPDATE evaluation_run SET no_suggestion_count = no_suggestion_count + 5 WHERE evaluation_id = $id;";
-        cmd.Parameters.AddWithValue("$id", seeded.EvaluationId);
-        // May be blocked by immutability triggers — accept Integrity or Lifecycle failure.
-        try
-        {
-            await cmd.ExecuteNonQueryAsync(CancellationToken.None);
-        }
-        catch
-        {
-            // Immutable row triggers — still exercise missing-eval path below.
-        }
+        // Deterministic envelope/count mismatch: completed run claims no_suggestion_count=3
+        // but has zero no_suggestion outcome rows. Requires Integrity + null + no writes.
+        var template = await SeedRepeatedNoSuggestionAsync("gap coffee", count: 1);
+        var synthId = await InsertSyntheticRunAsync(
+            template.EvaluationId,
+            lifecycle: "completed",
+            noSuggestionCount: 3);
+        var before = await CaptureTableCountsAsync();
+        var result = await query.HandleAsync(
+            new ClassifyUnresolvedReportRequest("1.0", synthId, 10, 2),
+            actor,
+            CancellationToken.None);
+        Assert.Equal(ClassifyErrors.Integrity, result.ErrorCode);
+        Assert.Null(result.Value);
+        Assert.Equal(before, await CaptureTableCountsAsync());
+    }
 
+    [Fact]
+    public async Task Active_rule_set_drift_fails_stale_with_zero_writes()
+    {
+        var seeded = await SeedRepeatedNoSuggestionAsync("ruleset drift coffee", count: 2);
+        // Activate a different rule set so active authority differs from retained evaluation.
+        var category = await CreateCategoryAsync("DriftRS");
+        var otherVersion = await SaveDraftAsync(category.CategoryId, "other-rule-phrase-xyz");
+        await ActivateWithGateAsync(otherVersion, category.CategoryId, "other-rule-phrase-xyz");
+        var before = await CaptureTableCountsAsync();
         var result = await query.HandleAsync(
             new ClassifyUnresolvedReportRequest("1.0", seeded.EvaluationId, 10, 2),
             actor,
             CancellationToken.None);
-        // Either still succeeds (if update blocked) or fails integrity — when update works, Integrity.
-        if (!result.IsSuccess)
-        {
-            Assert.True(
-                result.ErrorCode is ClassifyErrors.Integrity or ClassifyErrors.Lifecycle,
-                result.ErrorCode);
-            Assert.Null(result.Value);
-        }
+        Assert.Equal(ClassifyErrors.Stale, result.ErrorCode);
+        Assert.Null(result.Value);
+        Assert.Equal(before, await CaptureTableCountsAsync());
+    }
+
+    [Fact]
+    public async Task Unsupported_retained_normalization_fails_stale()
+    {
+        var template = await SeedRepeatedNoSuggestionAsync("norm drift coffee", count: 1);
+        var synthId = await InsertSyntheticRunAsync(
+            template.EvaluationId,
+            lifecycle: "completed",
+            normalizationVersion: "normalization_v0_unsupported");
+        var before = await CaptureTableCountsAsync();
+        var result = await query.HandleAsync(
+            new ClassifyUnresolvedReportRequest("1.0", synthId, 10, 2),
+            actor,
+            CancellationToken.None);
+        Assert.Equal(ClassifyErrors.Stale, result.ErrorCode);
+        Assert.Null(result.Value);
+        Assert.Equal(before, await CaptureTableCountsAsync());
+    }
+
+    [Fact]
+    public async Task Category_lifecycle_archive_drift_fails_stale()
+    {
+        // Archive a category that was in the active catalogue at evaluation time.
+        var seeded = await SeedRepeatedNoSuggestionWithCategoryAsync("archive-ns-phrase", count: 2);
+        await ArchiveCategoryAsync(seeded.RuleCategoryId);
+        var before = await CaptureTableCountsAsync();
+        var result = await query.HandleAsync(
+            new ClassifyUnresolvedReportRequest("1.0", seeded.EvaluationId, 10, 2),
+            actor,
+            CancellationToken.None);
+        Assert.Equal(ClassifyErrors.Stale, result.ErrorCode);
+        Assert.Null(result.Value);
+        Assert.Equal(before, await CaptureTableCountsAsync());
+    }
+
+    [Fact]
+    public async Task Category_lifecycle_reactivation_after_archive_fails_stale_for_prior_eval()
+    {
+        // FR-OUTCOME-INVALIDATION: reactivation of a category changes lifecycle fingerprint
+        // relative to evaluations created before the reactivation event.
+        var seeded = await SeedRepeatedNoSuggestionWithCategoryAsync("react coffee a", count: 2);
+        await ArchiveCategoryAsync(seeded.RuleCategoryId);
+        await ReactivateCategoryAsync(seeded.RuleCategoryId);
+        var before = await CaptureTableCountsAsync();
+        var result = await query.HandleAsync(
+            new ClassifyUnresolvedReportRequest("1.0", seeded.EvaluationId, 10, 2),
+            actor,
+            CancellationToken.None);
+        Assert.Equal(ClassifyErrors.Stale, result.ErrorCode);
+        Assert.Null(result.Value);
+        Assert.Equal(before, await CaptureTableCountsAsync());
     }
 
     // ── Privacy / zero-write ─────────────────────────────────────────────────
@@ -534,14 +599,25 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Projection_fingerprint_changes_with_generation_input()
+    public async Task Projection_fingerprint_excludes_snapshot_and_is_stable_for_same_semantics()
     {
+        var gen = new string('a', 64);
+        var cat = new string('b', 64);
+        var ordered = new string('c', 64);
         var a = ClassifyContractMapper.ComputeUnresolvedProjectionFingerprint(
-            "1.0", "classification_v1", new string('a', 64), "snap", new string('b', 64), new string('c', 64));
+            "1.0", "classification_v1", gen, cat, ordered);
         var b = ClassifyContractMapper.ComputeUnresolvedProjectionFingerprint(
-            "1.0", "classification_v1", new string('d', 64), "snap", new string('b', 64), new string('c', 64));
-        Assert.NotEqual(a, b);
+            "1.0", "classification_v1", gen, cat, ordered);
+        Assert.Equal(a, b);
         Assert.Equal(64, a.Length);
+        // Generation drift changes the semantic fingerprint.
+        var c = ClassifyContractMapper.ComputeUnresolvedProjectionFingerprint(
+            "1.0", "classification_v1", new string('d', 64), cat, ordered);
+        Assert.NotEqual(a, c);
+        // Category lifecycle drift changes the semantic fingerprint.
+        var d = ClassifyContractMapper.ComputeUnresolvedProjectionFingerprint(
+            "1.0", "classification_v1", gen, new string('e', 64), ordered);
+        Assert.NotEqual(a, d);
         await Task.CompletedTask;
     }
 
@@ -624,14 +700,18 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
 
     private sealed record SeededEval(
         string EvaluationId,
-        IReadOnlyList<string> TransactionIds);
+        IReadOnlyList<string> TransactionIds,
+        string RuleCategoryId = "");
 
-    private async Task<SeededEval> SeedRepeatedNoSuggestionAsync(string unmatchedPhrase, int count)
+    private async Task<SeededEval> SeedRepeatedNoSuggestionAsync(string unmatchedPhrase, int count) =>
+        await SeedRepeatedNoSuggestionWithCategoryAsync(unmatchedPhrase, count);
+
+    private async Task<SeededEval> SeedRepeatedNoSuggestionWithCategoryAsync(string unmatchedPhrase, int count)
     {
         var category = await CreateCategoryAsync("NS");
-        // Activate a rule that will not match the unmatched phrase.
-        var versionId = await SaveDraftAsync(category.CategoryId, "never-match-rule-token");
-        await ActivateWithGateAsync(versionId, category.CategoryId, "never-match-rule-token");
+        var rulePhrase = "never-match-" + Guid.NewGuid().ToString("N")[..8];
+        var versionId = await SaveDraftAsync(category.CategoryId, rulePhrase);
+        await ActivateWithGateAsync(versionId, category.CategoryId, rulePhrase);
         var txs = new List<string>(count);
         for (var i = 0; i < count; i++)
         {
@@ -645,7 +725,7 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
             CancellationToken.None);
         Assert.True(evaluated.IsSuccess, evaluated.ErrorCode);
         Assert.True(evaluated.Value!.NoSuggestionCount >= count, evaluated.Value.NoSuggestionCount.ToString());
-        return new SeededEval(evaluated.Value.EvaluationId, txs);
+        return new SeededEval(evaluated.Value.EvaluationId, txs, category.CategoryId);
     }
 
     private async Task<SeededEval> SeedManyDistinctNoSuggestionGroupsAsync(int groupCount, int perGroup)
@@ -712,7 +792,9 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
     private async Task<string> InsertSyntheticRunAsync(
         string templateEvaluationId,
         string lifecycle,
-        string? snapshotExpiresAt = null)
+        string? snapshotExpiresAt = null,
+        int noSuggestionCount = 0,
+        string? normalizationVersion = null)
     {
         await using var connection = await services.State.Store.OpenMigratedAsync(CancellationToken.None);
         await using var read = connection.CreateCommand();
@@ -726,8 +808,8 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
         await using var reader = await read.ExecuteReaderAsync(CancellationToken.None);
         Assert.True(await reader.ReadAsync(CancellationToken.None));
         var ruleSet = reader.GetString(0);
-        var norm = reader.GetString(1);
-        var ledger = reader.GetString(2);
+        var norm = normalizationVersion ?? reader.GetString(1);
+        var ledgerCv = reader.GetString(2);
         var proj = reader.GetString(3);
         var gen = reader.GetString(4);
         var snap = reader.GetString(5);
@@ -738,6 +820,8 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
         await reader.DisposeAsync();
 
         var synthId = "synth-" + Guid.NewGuid().ToString("N");
+        // input_count must equal sum of outcome counts for envelope integrity check.
+        var inputCount = noSuggestionCount;
         await using var insert = connection.CreateCommand();
         insert.CommandText = """
             INSERT INTO evaluation_run (
@@ -748,25 +832,43 @@ public sealed class UnresolvedPatternReportTests : IAsyncLifetime
                 lifecycle_state, actor, created_at
             ) VALUES (
                 $id, NULL, $rs, $norm, $ledger, $proj, $gen, $snap, $exp, $cat, $ord,
-                0, 0, 0, 0, 0, $life, $actor, $created
+                $input, 0, $ns, 0, 0, $life, $actor, $created
             );
             """;
         insert.Parameters.AddWithValue("$id", synthId);
         insert.Parameters.AddWithValue("$rs", ruleSet);
         insert.Parameters.AddWithValue("$norm", norm);
-        insert.Parameters.AddWithValue("$ledger", ledger);
+        insert.Parameters.AddWithValue("$ledger", ledgerCv);
         insert.Parameters.AddWithValue("$proj", proj);
         insert.Parameters.AddWithValue("$gen", gen);
         insert.Parameters.AddWithValue("$snap", snap);
         insert.Parameters.AddWithValue("$exp", exp);
         insert.Parameters.AddWithValue("$cat", cat);
         insert.Parameters.AddWithValue("$ord", ordered);
+        insert.Parameters.AddWithValue("$input", inputCount);
+        insert.Parameters.AddWithValue("$ns", noSuggestionCount);
         insert.Parameters.AddWithValue("$life", lifecycle);
         insert.Parameters.AddWithValue("$actor", act);
         insert.Parameters.AddWithValue("$created", DateTime.UtcNow.ToString("O", CultureInfo.InvariantCulture));
         await insert.ExecuteNonQueryAsync(CancellationToken.None);
         return synthId;
     }
+
+    private async Task ArchiveCategoryAsync(string categoryId) =>
+        _ = await ExecuteSuccessAsync(
+            "ledger.category.archive",
+            new ArchiveCategoryInput(categoryId, "unresolved-archive"),
+            NextKey(),
+            LedgerJsonContext.Default.ArchiveCategoryInput,
+            LedgerJsonContext.Default.CategoryLifecycleResult);
+
+    private async Task ReactivateCategoryAsync(string categoryId) =>
+        _ = await ExecuteSuccessAsync(
+            "ledger.category.reactivate",
+            new ReactivateCategoryInput(categoryId, "unresolved-reactivate"),
+            NextKey(),
+            LedgerJsonContext.Default.ReactivateCategoryInput,
+            LedgerJsonContext.Default.CategoryLifecycleResult);
 
     private async Task VoidTransactionAsync(string transactionId)
     {

@@ -65,21 +65,21 @@ public static partial class ClassifyContractMapper
     }
 
     /// <summary>
-    /// Fresh projection fingerprint over contract versions, generation, snapshot, catalogue,
-    /// and ordered item lifecycle identity — never raw descriptions or amounts alone.
+    /// Semantic projection fingerprint for unresolved.report (FR-CLASSIFY-UNRESOLVED-PATTERN-REPORT).
+    /// Includes contract/projection versions, store generation, category lifecycle, and ordered item
+    /// lifecycle identity. Excludes fresh Ledger snapshot ID and expiry so identical semantic
+    /// projection content yields a stable fingerprint across re-queries.
     /// </summary>
     public static string ComputeUnresolvedProjectionFingerprint(
         string ledgerContractVersion,
         string projectionVersion,
         string storeGenerationFingerprint,
-        string snapshotId,
         string categoryLifecycleFingerprint,
         string orderedItemsFingerprint) =>
         CanonicalClassificationHasher.HashParts(
             ledgerContractVersion,
             projectionVersion,
             storeGenerationFingerprint,
-            snapshotId,
             categoryLifecycleFingerprint,
             orderedItemsFingerprint);
 

@@ -4,6 +4,7 @@ using Tally.Application;
 using Tally.Contracts.Classify.Operations;
 using Tally.Contracts.Common;
 using Tally.Contracts.Ledger.Actuals;
+using Tally.Contracts.Ledger.Categories;
 using Tally.Domain.Classify.Evaluation;
 using Tally.Domain.Classify.Normalization;
 using Tally.Domain.Classify.Unresolved;
@@ -118,6 +119,15 @@ public sealed class GetUnresolvedPatternReportQuery
                 return CommandResult<ClassifyUnresolvedReportResult>.Failure(ClassifyErrors.Integrity);
             }
 
+            // Normalization must match the currently supported NormalizerV1 before any normalize call.
+            if (!string.Equals(
+                    run.NormalizationVersion,
+                    NormalizationDescriptor.V1.Version,
+                    StringComparison.Ordinal))
+            {
+                return CommandResult<ClassifyUnresolvedReportResult>.Failure(ClassifyErrors.Stale);
+            }
+
             identities = await unresolvedStore.ListNoSuggestionIdentitiesAsync(
                 connection, null, evaluationId, cancellationToken);
             var counted = await unresolvedStore.CountNoSuggestionIdentitiesAsync(
@@ -133,6 +143,12 @@ public sealed class GetUnresolvedPatternReportQuery
             {
                 return CommandResult<ClassifyUnresolvedReportResult>.Failure(
                     ClassifyErrors.ActiveRuleSetNotFound);
+            }
+
+            // Active rule-set authority must still equal the retained evaluation membership.
+            if (!string.Equals(active.RuleSetVersionId, run.RuleSetVersionId, StringComparison.Ordinal))
+            {
+                return CommandResult<ClassifyUnresolvedReportResult>.Failure(ClassifyErrors.Stale);
             }
 
             activeRuleSetVersionId = active.RuleSetVersionId;
@@ -212,8 +228,46 @@ public sealed class GetUnresolvedPatternReportQuery
                     (page.ActiveCategories ?? Array.Empty<ClassificationCategoryIdentity>())
                         .Select(c => (c.CategoryId, c.LifecycleState)));
 
-        // Optional: detect archived catalogue evidence when join needs active membership (none for no_sug).
-        // Archived lifecycle on retained outcome binding uses item lifecycle drift below.
+        // Category catalogue lifecycle drift (archive/identity change) fails closed.
+        // Same-ID display rename is non-stale because the fingerprint excludes display names.
+        if (!string.Equals(
+                categoryLifecycleFingerprint,
+                run.CategoryLifecycleFingerprint,
+                StringComparison.Ordinal))
+        {
+            return CommandResult<ClassifyUnresolvedReportResult>.Failure(ClassifyErrors.Stale);
+        }
+
+        // Reactivation after evaluation time is not always visible in the catalogue fingerprint
+        // (id+active can match the retained snapshot). Detect via public category history.
+        if (!TryParseUtc(run.CreatedAt, out var evaluationCreatedAt))
+        {
+            return CommandResult<ClassifyUnresolvedReportResult>.Failure(ClassifyErrors.Integrity);
+        }
+
+        foreach (var cat in page.ActiveCategories ?? Array.Empty<ClassificationCategoryIdentity>())
+        {
+            cancellationToken.ThrowIfCancellationRequested();
+            var detail = await ledger.GetBudgetCategoryAsync(
+                cat.CategoryId,
+                CategoryContractVersions.Current,
+                actor,
+                cancellationToken,
+                includeHistory: true);
+            if (!detail.IsSuccess || detail.Value is null)
+            {
+                continue;
+            }
+
+            var reactivatedAfter = detail.Value.LifecycleHistory.Any(h =>
+                h.Action == CategoryLifecycleAction.Reactivate
+                && TryParseUtc(h.OccurredAt, out var occurred)
+                && occurred > evaluationCreatedAt);
+            if (reactivatedAfter)
+            {
+                return CommandResult<ClassifyUnresolvedReportResult>.Failure(ClassifyErrors.Stale);
+            }
+        }
 
         var joined = new List<UnresolvedPatternGroupingPolicy.JoinedRow>(identities.Count);
         var seenTx = new HashSet<string>(StringComparer.Ordinal);
@@ -317,7 +371,6 @@ public sealed class GetUnresolvedPatternReportQuery
             page.LedgerContractVersion!,
             page.ProjectionVersion!,
             page.StoreGenerationFingerprint!,
-            page.SnapshotId,
             categoryLifecycleFingerprint,
             orderedItemsFingerprint);
         var ruleSetFingerprint = ClassifyContractMapper.RuleSetFingerprint(activeRuleSetVersionId!);
@@ -346,13 +399,16 @@ public sealed class GetUnresolvedPatternReportQuery
                 _ => ClassifyErrors.LedgerUnavailable
             };
 
-    private static bool TryParseExpiresAt(string raw, out DateTimeOffset expiresAt)
+    private static bool TryParseExpiresAt(string raw, out DateTimeOffset expiresAt) =>
+        TryParseUtc(raw, out expiresAt);
+
+    private static bool TryParseUtc(string raw, out DateTimeOffset value)
     {
-        expiresAt = default;
+        value = default;
         return DateTimeOffset.TryParse(
             raw,
             CultureInfo.InvariantCulture,
             DateTimeStyles.RoundtripKind,
-            out expiresAt);
+            out value);
     }
 }
