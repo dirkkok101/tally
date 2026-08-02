@@ -75,7 +75,8 @@ public sealed class BuildPrivateClassificationCorpusCommand
                 validationError ?? ClassifyErrors.InvalidInput);
         }
 
-        // Absolute destination required; path never enters fingerprint or terminal receipt.
+        // Absolute destination required. Raw path never enters terminal receipt; request fingerprint
+        // binds a one-way destination digest so another path under the same key conflicts.
         var destination = input.OutputPath.Trim();
         if (!Path.IsPathFullyQualified(destination)
             || destination.Contains('\0', StringComparison.Ordinal))
@@ -83,12 +84,22 @@ public sealed class BuildPrivateClassificationCorpusCommand
             return CommandResult<ClassifyCorpusBuildResult>.Failure(ClassifyErrors.PrivacyRejected);
         }
 
+        // Canonical absolute form (no trailing separator) so binding is stable.
+        if (destination.Length > 1
+            && (destination.EndsWith(Path.DirectorySeparatorChar)
+                || destination.EndsWith(Path.AltDirectorySeparatorChar)))
+        {
+            destination = destination.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        }
+
         var actorKind = actor.Kind.Trim();
         var actorLabel = actor.Label.Trim();
         var actorRunId = string.IsNullOrWhiteSpace(actor.RunId) ? null : actor.RunId.Trim();
         var idempotencyKey = input.IdempotencyKey.Trim();
 
-        var fingerprintElement = ClassifyContractMapper.ToCorpusBuildFingerprintElement(input);
+        // Fingerprint uses the request's OutputPath binding (canonical absolute digest).
+        var fingerprintRequest = input with { OutputPath = destination };
+        var fingerprintElement = ClassifyContractMapper.ToCorpusBuildFingerprintElement(fingerprintRequest);
         var requestFingerprint = ClassifyOperationIdempotencyStore.ComputeRequestFingerprint(
             ClassifyContractMapper.CorpusBuildOperationId,
             ClassifyOperationIds.ContractVersion,
@@ -130,8 +141,9 @@ public sealed class BuildPrivateClassificationCorpusCommand
             var buildId = ClassifyContractMapper.NewRuleVersionId(now);
             var createdAtUtc = now.UtcDateTime.ToString("O", CultureInfo.InvariantCulture);
 
-            // Recovery: destination already present with exact corpus fingerprint for these rows
-            // (post-rename / pre-idempotency crash window). Never replace different content.
+            // Recovery: post-rename / pre-idempotency crash window.
+            // Requires BOTH the destination bound into this request fingerprint AND an exact
+            // corpus fingerprint match for the rows that would be written. Never replace different content.
             var expectedBytes = EncodeRowsForFingerprint(rows);
             var expectedFingerprint = CorpusFingerprint.FromExactBytes(expectedBytes);
 

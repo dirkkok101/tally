@@ -196,6 +196,37 @@ public sealed class PrivateCorpusBuilderTests : IAsyncLifetime
     }
 
     [Fact]
+    public async Task Same_key_different_destination_conflicts_via_destination_binding()
+    {
+        var key = NextKey();
+        var destA = Dest("bind-a.jsonl");
+        var destB = Dest("bind-b.jsonl");
+        var labels = new[] { LabelNoSuggestion("tx-1") };
+        var items = new[] { Projection("tx-1", 0) };
+        Assert.True((await BuildAsync(destA, labels, items, key)).IsSuccess);
+        // Same labels/projection and key, different absolute path → destinationBinding differs → conflict.
+        var other = await BuildAsync(destB, labels, items, key);
+        Assert.Equal(ClassifyErrors.IdempotencyConflict, other.ErrorCode);
+        Assert.False(File.Exists(destB));
+        Assert.True(File.Exists(destA));
+    }
+
+    [Fact]
+    public async Task Exact_same_path_replays_after_success()
+    {
+        var key = NextKey();
+        var dest = Dest("same-path-replay.jsonl");
+        var labels = new[] { LabelNoSuggestion("tx-1") };
+        var items = new[] { Projection("tx-1", 0) };
+        var first = await BuildAsync(dest, labels, items, key);
+        Assert.True(first.IsSuccess, first.ErrorCode);
+        var second = await BuildAsync(dest, labels, items, key);
+        Assert.True(second.IsSuccess, second.ErrorCode);
+        Assert.True(second.Value!.Replayed);
+        Assert.Equal(first.Value!.CorpusFingerprint, second.Value.CorpusFingerprint);
+    }
+
+    [Fact]
     public async Task Recovery_after_rename_before_commit_accepts_exact_fingerprint()
     {
         // Simulate post-rename pre-commit: publish bytes first, then invoke command with same request.
@@ -417,12 +448,17 @@ public sealed class PrivateCorpusBuilderTests : IAsyncLifetime
     }
 
     [Fact]
-    public async Task Request_fingerprint_excludes_output_path()
+    public async Task Request_fingerprint_binds_destination_one_way_without_raw_path()
     {
+        var labels = new[] { LabelNoSuggestion("tx-1") };
+        var items = new[] { Projection("tx-1", 0) };
         var a = ClassifyContractMapper.ToCorpusBuildFingerprintElement(
-            Request("/tmp/a.jsonl", [LabelNoSuggestion("tx-1")], [Projection("tx-1", 0)]));
+            Request("/tmp/a.jsonl", labels, items));
         var b = ClassifyContractMapper.ToCorpusBuildFingerprintElement(
-            Request("/tmp/b.jsonl", [LabelNoSuggestion("tx-1")], [Projection("tx-1", 0)]));
+            Request("/tmp/b.jsonl", labels, items));
+        var same = ClassifyContractMapper.ToCorpusBuildFingerprintElement(
+            Request("/tmp/a.jsonl", labels, items));
+
         var fa = ClassifyOperationIdempotencyStore.ComputeRequestFingerprint(
             ClassifyContractMapper.CorpusBuildOperationId,
             ClassifyOperationIds.ContractVersion,
@@ -437,8 +473,25 @@ public sealed class PrivateCorpusBuilderTests : IAsyncLifetime
             actor.Label,
             actor.RunId,
             b);
-        Assert.Equal(fa, fb);
-        Assert.DoesNotContain("/tmp/", a.GetRawText(), StringComparison.Ordinal);
+        var fa2 = ClassifyOperationIdempotencyStore.ComputeRequestFingerprint(
+            ClassifyContractMapper.CorpusBuildOperationId,
+            ClassifyOperationIds.ContractVersion,
+            actor.Kind,
+            actor.Label,
+            actor.RunId,
+            same);
+
+        // Different destinations → different bindings → different fingerprints.
+        Assert.NotEqual(fa, fb);
+        // Same absolute path → identical binding.
+        Assert.Equal(fa, fa2);
+        // Raw path never appears in the fingerprint element (one-way digest only).
+        var rawA = a.GetRawText();
+        Assert.DoesNotContain("/tmp/a.jsonl", rawA, StringComparison.Ordinal);
+        Assert.DoesNotContain("/tmp/b.jsonl", rawA, StringComparison.Ordinal);
+        Assert.Contains("destinationBinding", rawA, StringComparison.Ordinal);
+        Assert.Equal(64, ClassifyContractMapper.ComputeDestinationBinding("/tmp/a.jsonl").Length);
+        await Task.CompletedTask;
     }
 
     [Fact]

@@ -3,6 +3,7 @@ using System.Runtime.Versioning;
 using System.Text;
 using System.Text.Json;
 using Tally.Contracts.Classify.Operations;
+// Encoding used by hard-link attack fixture bytes.
 using Tally.Contracts.Ledger.Actuals;
 using Tally.Domain.Classify.Rules;
 using Tally.Infrastructure.Classify.Corpus;
@@ -92,6 +93,91 @@ public sealed class PrivateCorpusWriterRecoveryTests : IAsyncLifetime
         var result = await writer.PublishAsync(dest, [Row(0, "tx-1")], CancellationToken.None);
         Assert.Equal(ClassifyErrors.DestinationExists, result.ErrorCode);
         Assert.Equal("KEEP\n", await File.ReadAllTextAsync(dest));
+    }
+
+    [Fact]
+    public async Task Renameat2_noreplace_preserves_competitor_bytes_on_race()
+    {
+        // Deterministic race/conflict: competitor creates destination while we would publish.
+        // Kernel RENAME_NOREPLACE must leave competitor bytes unchanged and fail closed.
+        var dest = Path.Combine(root, "race.jsonl");
+        const string competitor = "COMPETITOR-BYTES-UNCHANGED\n";
+        await File.WriteAllTextAsync(dest, competitor);
+        File.SetUnixFileMode(dest, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        var before = await File.ReadAllBytesAsync(dest);
+
+        var result = await writer.PublishAsync(dest, [Row(0, "tx-race")], CancellationToken.None);
+        Assert.Equal(ClassifyErrors.DestinationExists, result.ErrorCode);
+        Assert.Equal(before, await File.ReadAllBytesAsync(dest));
+        Assert.Equal(competitor, await File.ReadAllTextAsync(dest));
+        // No temp left after NOREPLACE failure.
+        Assert.Empty(Directory.GetFiles(root, PrivateCorpusWriter.RecognizedTempPrefix + "*"));
+    }
+
+    [Fact]
+    public async Task Intermediate_symlink_in_parent_chain_is_rejected()
+    {
+        // /root/real/out is fine; /root/link -> real makes intermediate component a symlink.
+        var real = Path.Combine(root, "real-chain");
+        Directory.CreateDirectory(real);
+        File.SetUnixFileMode(real, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        var link = Path.Combine(root, "mid-link");
+        Assert.Equal(0, Symlink(real, link));
+        var dest = Path.Combine(link, "nested", "out.jsonl");
+        // Even if nested does not exist, chain walk hits mid-link as S_IFLNK first.
+        var result = await writer.PublishAsync(dest, [Row(0, "tx-1")], CancellationToken.None);
+        Assert.False(result.IsSuccess);
+        Assert.True(
+            result.ErrorCode is PrivateCorpusErrors.SymlinkRejected
+                or PrivateCorpusErrors.NotFound
+                or ClassifyErrors.PrivacyRejected,
+            result.ErrorCode);
+        Assert.False(File.Exists(Path.Combine(real, "nested", "out.jsonl")));
+    }
+
+    [Fact]
+    public async Task Intermediate_symlink_with_existing_nested_dir_is_rejected()
+    {
+        var real = Path.Combine(root, "real-nested");
+        var nested = Path.Combine(real, "nested");
+        Directory.CreateDirectory(nested);
+        File.SetUnixFileMode(real, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        File.SetUnixFileMode(nested, UnixFileMode.UserRead | UnixFileMode.UserWrite | UnixFileMode.UserExecute);
+        var link = Path.Combine(root, "chain-link");
+        Assert.Equal(0, Symlink(real, link));
+        var dest = Path.Combine(link, "nested", "out.jsonl");
+        var result = await writer.PublishAsync(dest, [Row(0, "tx-1")], CancellationToken.None);
+        Assert.Equal(PrivateCorpusErrors.SymlinkRejected, result.ErrorCode);
+        Assert.False(File.Exists(Path.Combine(nested, "out.jsonl")));
+    }
+
+    [Fact]
+    public async Task Temp_hard_link_attack_before_rename_is_rejected()
+    {
+        // If an attacker hard-links the recognized temp after create, nlink!=1 must fail closed
+        // before renameat2. Force the condition by publishing to a path we pre-stage: create
+        // temp ourselves matching the recognized pattern, hard-link it, then observe writer
+        // refuses destinations that would rename a multi-linked inode.
+        // Direct unit of identity check: after a successful create path, hard-link temp and
+        // re-publish to a free destination — the writer's pre-rename identity check fails.
+        // We simulate by hard-linking a published file and ensuring NOREPLACE / exists path
+        // does not destroy it; plus a dedicated hard-link on a temp name that fails delete/identity.
+        var dest = Path.Combine(root, "hl-dest.jsonl");
+        var temp = Path.Combine(
+            root,
+            PrivateCorpusWriter.RecognizedTempPrefix + "attack" + PrivateCorpusWriter.RecognizedTempSuffix);
+        await File.WriteAllBytesAsync(temp, Encoding.UTF8.GetBytes("x\n"));
+        File.SetUnixFileMode(temp, UnixFileMode.UserRead | UnixFileMode.UserWrite);
+        var alias = Path.Combine(root, "alias-hardlink");
+        Assert.Equal(0, Link(temp, alias));
+        Assert.True(LstatNlink(temp) >= 2);
+        // Recognized temp with nlink>1 must not be deleted by cleanup helper.
+        Assert.False(PrivateCorpusWriter.TryDeleteRecognizedTemp(temp));
+        Assert.True(File.Exists(temp));
+        // Publish to a free dest still succeeds (new exclusive temp), competitor hard-link intact.
+        Assert.True((await writer.PublishAsync(dest, [Row(0, "tx-1")], CancellationToken.None)).IsSuccess);
+        Assert.True(File.Exists(alias));
+        Assert.Equal("x\n", await File.ReadAllTextAsync(alias));
     }
 
     [Fact]

@@ -1,4 +1,6 @@
 using System.Globalization;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
 using Tally.Contracts.Classify;
 using Tally.Contracts.Classify.Operations;
@@ -11,8 +13,8 @@ namespace Tally.Features.Classify.Contract;
 /// <summary>
 /// Pure aggregate-only mapping for classify.corpus.build
 /// (DM-CLASSIFY-PRIVATE-CORPUS-BUILD / FR-CLASSIFY-PRIVATE-CORPUS-BUILDER / bd-1cik).
-/// Never serializes outputPath, labels, rows, descriptions, amounts, or raw projection items
-/// into durable terminal receipts.
+/// Never serializes raw outputPath, labels, rows, descriptions, amounts, or raw projection items
+/// into durable terminal receipts. Destination is bound only via a one-way SHA-256 digest.
 /// </summary>
 public static partial class ClassifyContractMapper
 {
@@ -21,8 +23,9 @@ public static partial class ClassifyContractMapper
 
     /// <summary>
     /// Canonical request fingerprint element for corpus.build.
-    /// Excludes outputPath (private path) and the idempotency key (store identity).
-    /// Includes contract version, projection identity fingerprints, and ordered labels.
+    /// Binds the absolute destination via a one-way SHA-256 digest (never the raw path).
+    /// Excludes the idempotency key (store identity). Includes contract version, ordered labels,
+    /// and projection identity.
     /// </summary>
     public static JsonElement ToCorpusBuildFingerprintElement(ClassifyCorpusBuildRequest request)
     {
@@ -30,12 +33,15 @@ public static partial class ClassifyContractMapper
         ArgumentNullException.ThrowIfNull(request.Projection);
         ArgumentNullException.ThrowIfNull(request.Labels);
 
+        var destinationBinding = ComputeDestinationBinding(request.OutputPath);
+
         using var stream = new MemoryStream();
         using (var writer = new Utf8JsonWriter(stream, new JsonWriterOptions { Indented = false }))
         {
             writer.WriteStartObject();
-            // Sorted keys: contractVersion, labels, projection
+            // Sorted keys: contractVersion, destinationBinding, labels, projection
             writer.WriteString("contractVersion", request.ContractVersion);
+            writer.WriteString("destinationBinding", destinationBinding);
             writer.WritePropertyName("labels");
             writer.WriteStartArray();
             foreach (var label in request.Labels
@@ -56,6 +62,29 @@ public static partial class ClassifyContractMapper
         }
 
         return JsonDocument.Parse(stream.ToArray()).RootElement.Clone();
+    }
+
+    /// <summary>
+    /// One-way binding of a canonical absolute destination path into a 64-char hex digest.
+    /// Never embeds the raw path in durable state or public receipts.
+    /// </summary>
+    public static string ComputeDestinationBinding(string? absoluteOutputPath)
+    {
+        if (string.IsNullOrWhiteSpace(absoluteOutputPath))
+        {
+            return CanonicalClassificationHasher.HashUtf8(string.Empty);
+        }
+
+        // Canonical form: trimmed absolute path (no trailing separator except root).
+        var path = absoluteOutputPath.Trim();
+        if (path.Length > 1
+            && (path.EndsWith(Path.DirectorySeparatorChar)
+                || path.EndsWith(Path.AltDirectorySeparatorChar)))
+        {
+            path = path.TrimEnd(Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar);
+        }
+
+        return Convert.ToHexStringLower(SHA256.HashData(Encoding.UTF8.GetBytes(path)));
     }
 
     /// <summary>

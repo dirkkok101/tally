@@ -9,10 +9,12 @@ namespace Tally.Infrastructure.Classify.Corpus;
 /// <summary>
 /// Protected atomic publisher for owner-private validation JSONL corpora
 /// (DD-CLASSIFY-PRIVATE-CORPUS-PUBLICATION / TASK-CLASSIFY-ERGONOMICS-CORPUS-BUILDER).
-/// Same-directory recognized temporary at 0600 → complete write + flush →
-/// <see cref="PrivateCorpusReader"/> validation → atomic rename → parent metadata flush.
-/// Never follows final-component symlinks, never overwrites a different destination, and
-/// never unlinks an unknown path — only the recognized temporary this instance created.
+/// Same-directory recognized temporary at 0600 opened with O_CREAT|O_EXCL|O_NOFOLLOW,
+/// written and flushed on the retained descriptor, validated by <see cref="PrivateCorpusReader"/>
+/// against the same inode identity, then published with <c>renameat2(RENAME_NOREPLACE)</c>
+/// (kernel-enforced no-replace) and parent-directory fsync.
+/// Full absolute parent-chain components are owner-only non-symlink directories (0700).
+/// Never unlinks an unknown path — only the recognized temporary this instance created.
 /// </summary>
 [SupportedOSPlatform("linux")]
 public sealed class PrivateCorpusWriter
@@ -75,6 +77,7 @@ public sealed class PrivateCorpusWriter
         var ct = linked.Token;
 
         string? recognizedTempPath = null;
+        SafeFileHandle? tempHandle = null;
         try
         {
             ct.ThrowIfCancellationRequested();
@@ -87,25 +90,19 @@ public sealed class PrivateCorpusWriter
                 return PrivateCorpusPublishResult.Failure(ClassifyPrivacyOrInvalid());
             }
 
-            var parent = Path.GetDirectoryName(destination);
-            if (string.IsNullOrWhiteSpace(parent) || !Path.IsPathFullyQualified(parent))
+            // Full parent-chain containment: every intermediate component is a real (non-symlink)
+            // owner-only 0700 directory. Final parent included.
+            if (!TryValidateOwnerOnlyDirectoryChain(destination, out var parent, out var chainError))
             {
-                return PrivateCorpusPublishResult.Failure(ClassifyPrivacyOrInvalid());
+                return PrivateCorpusPublishResult.Failure(chainError!);
             }
 
-            // Parent boundary: absolute, owner UID, exact 0700, directory, not a symlink, nlink ok.
-            if (!TryValidateParentDirectory(parent, out var parentError))
-            {
-                return PrivateCorpusPublishResult.Failure(parentError!);
-            }
-
-            // Destination must not exist (no overwrite). Symlink/hard-link/file all rejected as exists.
+            // Pre-check destination absence (advisory). Kernel NOREPLACE is the authoritative guard.
             if (PathExistsNoFollow(destination))
             {
                 return PrivateCorpusPublishResult.Failure(MapDestinationExists());
             }
 
-            // Pre-size bound: refuse before any bytes if the encoded payload would exceed limits.
             var payload = EncodeJsonl(rows, out var encodeError);
             if (payload is null)
             {
@@ -121,27 +118,50 @@ public sealed class PrivateCorpusWriter
                 parent,
                 RecognizedTempPrefix + Guid.NewGuid().ToString("N") + RecognizedTempSuffix);
 
-            if (!TryCreateOwnerOnlyTemp(recognizedTempPath, out var createError))
+            // Create and retain the O_EXCL descriptor for the full write/flush/identity lifetime.
+            if (!TryCreateOwnerOnlyTemp(recognizedTempPath, out tempHandle, out var createError))
             {
                 recognizedTempPath = null;
                 return PrivateCorpusPublishResult.Failure(createError!);
             }
 
-            ct.ThrowIfCancellationRequested();
-            if (!TryWriteAllAndFlush(recognizedTempPath, payload, out var writeError))
+            var fd = tempHandle.DangerousGetHandle().ToInt32();
+            if (!TryFstatIdentity(fd, out var tempDev, out var tempIno, out var tempNlink, out var idError)
+                || tempNlink != 1)
             {
-                TryDeleteRecognizedTemp(recognizedTempPath);
-                recognizedTempPath = null;
+                CleanupTemp(ref tempHandle, ref recognizedTempPath);
+                return PrivateCorpusPublishResult.Failure(idError ?? PrivateCorpusErrors.PermissionsRejected);
+            }
+
+            ct.ThrowIfCancellationRequested();
+            if (!TryWriteAllAndFlushOnFd(tempHandle, payload, out var writeError))
+            {
+                CleanupTemp(ref tempHandle, ref recognizedTempPath);
                 return PrivateCorpusPublishResult.Failure(writeError!);
             }
 
-            // Validate through the production reader before any rename (same-path, no-follow).
+            // Close write handle only after durable flush; identity remains on the path inode.
+            // Re-stat via path must match the retained create identity (detects substitution).
+            tempHandle.Dispose();
+            tempHandle = null;
+
+            if (!TryLstatIdentity(recognizedTempPath, out var pathDev, out var pathIno, out var pathNlink, out var pathIdError)
+                || pathDev != tempDev
+                || pathIno != tempIno
+                || pathNlink != 1)
+            {
+                // Path no longer names our O_EXCL inode (swap/hard-link attack) — refuse.
+                CleanupTemp(ref tempHandle, ref recognizedTempPath);
+                return PrivateCorpusPublishResult.Failure(
+                    pathIdError ?? PrivateCorpusErrors.PermissionsRejected);
+            }
+
+            // Validate through the production reader against the same path/inode.
             ct.ThrowIfCancellationRequested();
             var validation = await reader.ReadAsync(recognizedTempPath, ct);
             if (!validation.IsSuccess || validation.Fingerprint is null)
             {
-                TryDeleteRecognizedTemp(recognizedTempPath);
-                recognizedTempPath = null;
+                CleanupTemp(ref tempHandle, ref recognizedTempPath);
                 return PrivateCorpusPublishResult.Failure(
                     validation.ErrorCode ?? PrivateCorpusErrors.Malformed);
             }
@@ -149,39 +169,44 @@ public sealed class PrivateCorpusWriter
             if (validation.RowCount != rows.Count
                 || validation.Fingerprint.ByteLength != payload.Length)
             {
-                TryDeleteRecognizedTemp(recognizedTempPath);
-                recognizedTempPath = null;
+                CleanupTemp(ref tempHandle, ref recognizedTempPath);
                 return PrivateCorpusPublishResult.Failure(PrivateCorpusErrors.Malformed);
             }
 
-            // Destination must still be absent immediately before rename.
-            if (PathExistsNoFollow(destination))
+            // Re-bind identity after reader open/close (still our inode, still nlink==1).
+            if (!TryLstatIdentity(recognizedTempPath, out pathDev, out pathIno, out pathNlink, out pathIdError)
+                || pathDev != tempDev
+                || pathIno != tempIno
+                || pathNlink != 1)
             {
-                TryDeleteRecognizedTemp(recognizedTempPath);
-                recognizedTempPath = null;
-                return PrivateCorpusPublishResult.Failure(MapDestinationExists());
+                CleanupTemp(ref tempHandle, ref recognizedTempPath);
+                return PrivateCorpusPublishResult.Failure(
+                    pathIdError ?? PrivateCorpusErrors.PermissionsRejected);
+            }
+
+            // Re-validate full parent chain immediately before publication (TOCTOU).
+            if (!TryValidateOwnerOnlyDirectoryChain(destination, out _, out var rechainError))
+            {
+                CleanupTemp(ref tempHandle, ref recognizedTempPath);
+                return PrivateCorpusPublishResult.Failure(rechainError!);
             }
 
             ct.ThrowIfCancellationRequested();
-            if (!TryAtomicRename(recognizedTempPath, destination, out var renameError))
+            // Kernel-enforced no-replace: renameat2(RENAME_NOREPLACE) cannot overwrite a racer.
+            if (!TryRenameNoReplace(recognizedTempPath, destination, out var renameError))
             {
-                // Rename failed — remove only our recognized temporary when still present.
-                TryDeleteRecognizedTemp(recognizedTempPath);
-                recognizedTempPath = null;
+                CleanupTemp(ref tempHandle, ref recognizedTempPath);
                 return PrivateCorpusPublishResult.Failure(renameError!);
             }
 
             // Temp name is gone after successful rename; do not unlink destination.
             recognizedTempPath = null;
 
-            // Post-rename destination must be owner-only regular file with link count 1.
             if (!TryValidatePublishedDestination(destination, out var destError))
             {
-                // Do not delete destination — external recovery / owner decision.
                 return PrivateCorpusPublishResult.Failure(destError!);
             }
 
-            // Parent directory metadata flush establishes durable directory entry.
             if (!TryFsyncDirectory(parent, out var parentFlushError))
             {
                 return PrivateCorpusPublishResult.Failure(parentFlushError!);
@@ -195,23 +220,27 @@ public sealed class PrivateCorpusWriter
         catch (OperationCanceledException) when (
             timeout.IsCancellationRequested && !cancellationToken.IsCancellationRequested)
         {
-            TryDeleteRecognizedTemp(recognizedTempPath);
+            CleanupTemp(ref tempHandle, ref recognizedTempPath);
             return PrivateCorpusPublishResult.Failure(PrivateCorpusErrors.Timeout);
         }
         catch (OperationCanceledException)
         {
-            TryDeleteRecognizedTemp(recognizedTempPath);
+            CleanupTemp(ref tempHandle, ref recognizedTempPath);
             return PrivateCorpusPublishResult.Failure(PrivateCorpusErrors.Cancelled);
         }
         catch (IOException)
         {
-            TryDeleteRecognizedTemp(recognizedTempPath);
+            CleanupTemp(ref tempHandle, ref recognizedTempPath);
             return PrivateCorpusPublishResult.Failure(PrivateCorpusErrors.ReadFailed);
         }
         catch (UnauthorizedAccessException)
         {
-            TryDeleteRecognizedTemp(recognizedTempPath);
+            CleanupTemp(ref tempHandle, ref recognizedTempPath);
             return PrivateCorpusPublishResult.Failure(PrivateCorpusErrors.PermissionsRejected);
+        }
+        finally
+        {
+            tempHandle?.Dispose();
         }
     }
 
@@ -250,7 +279,6 @@ public sealed class PrivateCorpusWriter
                 return false;
             }
 
-            // Refuse to unlink if the path is not a regular owner file (symlink/hardlink ambiguity).
             if (Lstat(path, out var st) != 0)
             {
                 return false;
@@ -267,6 +295,17 @@ public sealed class PrivateCorpusWriter
         catch
         {
             return false;
+        }
+    }
+
+    private static void CleanupTemp(ref SafeFileHandle? handle, ref string? recognizedTempPath)
+    {
+        handle?.Dispose();
+        handle = null;
+        if (recognizedTempPath is not null)
+        {
+            TryDeleteRecognizedTemp(recognizedTempPath);
+            recognizedTempPath = null;
         }
     }
 
@@ -305,23 +344,109 @@ public sealed class PrivateCorpusWriter
         return buffer.ToArray();
     }
 
-    private static bool TryValidateParentDirectory(string parent, out string? errorCode)
+    /// <summary>
+    /// Walk every absolute path component from <c>/</c> through the destination parent.
+    /// Intermediate components must be real (non-symlink) directories — no path walk through links.
+    /// The immediate parent must additionally be owned by euid with exact mode 0700.
+    /// </summary>
+    private static bool TryValidateOwnerOnlyDirectoryChain(
+        string absoluteFilePath,
+        out string parentDirectory,
+        out string? errorCode)
     {
         errorCode = null;
-        if (Lstat(parent, out var st) != 0)
+        parentDirectory = string.Empty;
+
+        if (!absoluteFilePath.StartsWith('/'))
+        {
+            errorCode = ClassifyPrivacyOrInvalid();
+            return false;
+        }
+
+        var trimmed = absoluteFilePath.TrimEnd('/');
+        if (trimmed.Length == 0 || trimmed == "/")
+        {
+            errorCode = ClassifyPrivacyOrInvalid();
+            return false;
+        }
+
+        var fileName = Path.GetFileName(trimmed);
+        if (string.IsNullOrEmpty(fileName))
+        {
+            errorCode = ClassifyPrivacyOrInvalid();
+            return false;
+        }
+
+        var parent = Path.GetDirectoryName(trimmed);
+        if (string.IsNullOrEmpty(parent))
+        {
+            errorCode = ClassifyPrivacyOrInvalid();
+            return false;
+        }
+
+        // Build ordered absolute prefixes: "/", "/a", "/a/b", ... parent
+        var segments = parent.Split('/', StringSplitOptions.RemoveEmptyEntries);
+        var chain = new List<string>(segments.Length + 1) { "/" };
+        var accum = string.Empty;
+        foreach (var segment in segments)
+        {
+            if (segment is "." or "..")
+            {
+                // Absolute paths must already be normalized; refuse relative segments.
+                errorCode = ClassifyPrivacyOrInvalid();
+                return false;
+            }
+
+            accum = accum + "/" + segment;
+            chain.Add(accum);
+        }
+
+        for (var i = 0; i < chain.Count; i++)
+        {
+            var component = chain[i];
+            var isImmediateParent = i == chain.Count - 1;
+            if (!TryValidateDirectoryComponent(component, requireOwnerOnly0700: isImmediateParent, out errorCode))
+            {
+                return false;
+            }
+        }
+
+        parentDirectory = parent == "/" ? "/" : parent;
+        return true;
+    }
+
+    private static bool TryValidateDirectoryComponent(
+        string path,
+        bool requireOwnerOnly0700,
+        out string? errorCode)
+    {
+        errorCode = null;
+        if (Lstat(path, out var st) != 0)
         {
             errorCode = PrivateCorpusErrors.NotFound;
             return false;
         }
 
-        if ((st.st_mode & FileTypeMask) != DirectoryFileType)
+        var fileType = st.st_mode & FileTypeMask;
+        // Intermediate and parent components must never be symlinks (containment / no-follow).
+        if (fileType == SymlinkFileType)
+        {
+            errorCode = PrivateCorpusErrors.SymlinkRejected;
+            return false;
+        }
+
+        if (fileType != DirectoryFileType)
         {
             errorCode = PrivateCorpusErrors.NotRegularFile;
             return false;
         }
 
-        // Symlink directories: lstat on a final symlink component yields S_IFLNK, not directory.
-        // Intermediate symlink components are not re-walked; containment is absolute-path based.
+        if (!requireOwnerOnly0700)
+        {
+            return true;
+        }
+
+        // Immediate parent: owner UID + exact 0700 (no group/other bits).
         if (st.st_uid != Geteuid())
         {
             errorCode = PrivateCorpusErrors.OwnerRejected;
@@ -375,10 +500,14 @@ public sealed class PrivateCorpusWriter
         return true;
     }
 
-    private static bool TryCreateOwnerOnlyTemp(string tempPath, out string? errorCode)
+    private static bool TryCreateOwnerOnlyTemp(
+        string tempPath,
+        out SafeFileHandle handle,
+        out string? errorCode)
     {
+        handle = null!;
         errorCode = null;
-        // O_CREAT|O_EXCL|O_WRONLY|O_NOFOLLOW|O_CLOEXEC, mode 0600
+        // O_CREAT|O_EXCL|O_WRONLY|O_NOFOLLOW|O_CLOEXEC, mode 0600 — retain the FD.
         var fd = Open(
             tempPath,
             OpenWriteOnly | OpenCreate | OpenExclusive | OpenNoFollow | OpenCloseOnExec,
@@ -396,90 +525,75 @@ public sealed class PrivateCorpusWriter
             return false;
         }
 
-        // Close immediately — subsequent write reopens by path with validation.
-        Close(fd);
-
-        if (Lstat(tempPath, out var st) != 0
-            || (st.st_mode & FileTypeMask) != RegularFileType
-            || st.st_nlink != 1
-            || st.st_uid != Geteuid())
+        handle = new SafeFileHandle((nint)fd, ownsHandle: true);
+        if (!TryFstatIdentity(fd, out _, out _, out var nlink, out var idError)
+            || nlink != 1)
         {
+            handle.Dispose();
+            handle = null!;
+            TryDeleteRecognizedTemp(tempPath);
+            errorCode = idError ?? PrivateCorpusErrors.PermissionsRejected;
+            return false;
+        }
+
+        if (Fchmod(fd, 0x180) != 0)
+        {
+            handle.Dispose();
+            handle = null!;
             TryDeleteRecognizedTemp(tempPath);
             errorCode = PrivateCorpusErrors.PermissionsRejected;
             return false;
         }
 
-        var mode = (UnixFileMode)(st.st_mode & PermissionBitsMask);
-        if (mode != OwnerFileMode)
-        {
-            // Normalize to 0600 if umask interfered (should not with explicit mode).
-            try
-            {
-                File.SetUnixFileMode(tempPath, OwnerFileMode);
-            }
-            catch
-            {
-                TryDeleteRecognizedTemp(tempPath);
-                errorCode = PrivateCorpusErrors.PermissionsRejected;
-                return false;
-            }
-        }
-
         return true;
     }
 
-    private static bool TryWriteAllAndFlush(string tempPath, byte[] payload, out string? errorCode)
+    private static bool TryWriteAllAndFlushOnFd(
+        SafeFileHandle handle,
+        byte[] payload,
+        out string? errorCode)
     {
         errorCode = null;
-        var fd = Open(tempPath, OpenWriteOnly | OpenNoFollow | OpenCloseOnExec | OpenTruncate, mode: 0);
-        if (fd < 0)
+        // Write through the retained O_EXCL descriptor only — path substitution cannot redirect us.
+        var fd = handle.DangerousGetHandle().ToInt32();
+        var offset = 0;
+        while (offset < payload.Length)
         {
-            errorCode = Marshal.GetLastPInvokeError() switch
-            {
-                ErrorTooManySymbolicLinks => PrivateCorpusErrors.SymlinkRejected,
-                ErrorAccessDenied => PrivateCorpusErrors.PermissionsRejected,
-                _ => PrivateCorpusErrors.ReadFailed
-            };
-            return false;
-        }
-
-        var handle = new SafeFileHandle((nint)fd, ownsHandle: true);
-        try
-        {
-            using var stream = new FileStream(handle, FileAccess.Write, bufferSize: 64 * 1024, isAsync: false);
-            stream.Write(payload, 0, payload.Length);
-            stream.Flush(flushToDisk: true);
-            if (Fsync(fd) != 0)
+            var written = Write(fd, ref payload[offset], payload.Length - offset);
+            if (written <= 0)
             {
                 errorCode = PrivateCorpusErrors.ReadFailed;
                 return false;
             }
 
-            return true;
+            offset += written;
         }
-        catch (IOException)
+
+        if (Fsync(fd) != 0)
         {
             errorCode = PrivateCorpusErrors.ReadFailed;
             return false;
         }
-        finally
-        {
-            handle.Dispose();
-        }
+
+        return true;
     }
 
-    private static bool TryAtomicRename(string tempPath, string destination, out string? errorCode)
+    /// <summary>
+    /// Kernel-enforced no-replace rename via renameat2(RENAME_NOREPLACE).
+    /// A concurrent creator of the destination cannot be overwritten.
+    /// </summary>
+    private static bool TryRenameNoReplace(string tempPath, string destination, out string? errorCode)
     {
         errorCode = null;
-        // rename(2) is atomic on the same filesystem; refuses cross-device.
-        if (Rename(tempPath, destination) != 0)
+        if (Renameat2(AtFdcwd, tempPath, AtFdcwd, destination, RenameNoreplace) != 0)
         {
             errorCode = Marshal.GetLastPInvokeError() switch
             {
                 ErrorExists or ErrorIsDirectory => MapDestinationExists(),
+                ErrorNoEntry => PrivateCorpusErrors.NotFound,
                 ErrorAccessDenied => PrivateCorpusErrors.PermissionsRejected,
                 ErrorCrossDevice => PrivateCorpusErrors.PermissionsRejected,
-                ErrorNoEntry => PrivateCorpusErrors.NotFound,
+                ErrorInvalid => PrivateCorpusErrors.ReadFailed, // NOREPLACE unsupported / invalid
                 _ => PrivateCorpusErrors.ReadFailed
             };
             return false;
@@ -514,6 +628,82 @@ public sealed class PrivateCorpusWriter
         }
     }
 
+    private static bool TryFstatIdentity(
+        int fd,
+        out ulong dev,
+        out ulong ino,
+        out ulong nlink,
+        out string? errorCode)
+    {
+        dev = 0;
+        ino = 0;
+        nlink = 0;
+        errorCode = null;
+        if (Fstat(fd, out var st) != 0)
+        {
+            errorCode = PrivateCorpusErrors.ReadFailed;
+            return false;
+        }
+
+        if ((st.st_mode & FileTypeMask) != RegularFileType)
+        {
+            errorCode = PrivateCorpusErrors.NotRegularFile;
+            return false;
+        }
+
+        if (st.st_uid != Geteuid())
+        {
+            errorCode = PrivateCorpusErrors.OwnerRejected;
+            return false;
+        }
+
+        dev = st.st_dev;
+        ino = st.st_ino;
+        nlink = st.st_nlink;
+        return true;
+    }
+
+    private static bool TryLstatIdentity(
+        string path,
+        out ulong dev,
+        out ulong ino,
+        out ulong nlink,
+        out string? errorCode)
+    {
+        dev = 0;
+        ino = 0;
+        nlink = 0;
+        errorCode = null;
+        if (Lstat(path, out var st) != 0)
+        {
+            errorCode = PrivateCorpusErrors.NotFound;
+            return false;
+        }
+
+        if ((st.st_mode & FileTypeMask) == SymlinkFileType)
+        {
+            errorCode = PrivateCorpusErrors.SymlinkRejected;
+            return false;
+        }
+
+        if ((st.st_mode & FileTypeMask) != RegularFileType)
+        {
+            errorCode = PrivateCorpusErrors.NotRegularFile;
+            return false;
+        }
+
+        if (st.st_uid != Geteuid())
+        {
+            errorCode = PrivateCorpusErrors.OwnerRejected;
+            return false;
+        }
+
+        dev = st.st_dev;
+        ino = st.st_ino;
+        nlink = st.st_nlink;
+        return true;
+    }
+
     private static bool PathExistsNoFollow(string path) => Lstat(path, out _) == 0;
 
     private static string MapDestinationExists() => ClassifyErrors.DestinationExists;
@@ -524,13 +714,15 @@ public sealed class PrivateCorpusWriter
     private const int OpenWriteOnly = 1;
     private const int OpenCreate = 0x40;
     private const int OpenExclusive = 0x80;
-    private const int OpenTruncate = 0x200;
     private const int OpenDirectory = 0x10000;
     private const int OpenNoFollow = 0x20000;
     private const int OpenCloseOnExec = 0x80000;
+    private const int AtFdcwd = -100;
+    private const uint RenameNoreplace = 1; // RENAME_NOREPLACE
     private const uint FileTypeMask = 0xF000;
     private const uint RegularFileType = 0x8000;
     private const uint DirectoryFileType = 0x4000;
+    private const uint SymlinkFileType = 0xA000;
     private const uint PermissionBitsMask = 0x0FFF;
     private const int ErrorNoEntry = 2;
     private const int ErrorAccessDenied = 13;
@@ -538,6 +730,7 @@ public sealed class PrivateCorpusWriter
     private const int ErrorCrossDevice = 18;
     private const int ErrorNotDirectory = 20;
     private const int ErrorIsDirectory = 21;
+    private const int ErrorInvalid = 22;
     private const int ErrorTooManySymbolicLinks = 40;
 
     [DllImport("libc", EntryPoint = "geteuid", SetLastError = true)]
@@ -549,11 +742,25 @@ public sealed class PrivateCorpusWriter
     [DllImport("libc", EntryPoint = "close", SetLastError = true)]
     private static extern int Close(int fd);
 
-    [DllImport("libc", EntryPoint = "rename", SetLastError = true, CharSet = CharSet.Ansi)]
-    private static extern int Rename(string oldPath, string newPath);
+    [DllImport("libc", EntryPoint = "write", SetLastError = true)]
+    private static extern int Write(int fd, ref byte buffer, int count);
+
+    [DllImport("libc", EntryPoint = "fchmod", SetLastError = true)]
+    private static extern int Fchmod(int fd, int mode);
+
+    [DllImport("libc", EntryPoint = "renameat2", SetLastError = true, CharSet = CharSet.Ansi)]
+    private static extern int Renameat2(
+        int olddirfd,
+        string oldpath,
+        int newdirfd,
+        string newpath,
+        uint flags);
 
     [DllImport("libc", EntryPoint = "fsync", SetLastError = true)]
     private static extern int Fsync(int fd);
+
+    [DllImport("libc", EntryPoint = "fstat", SetLastError = true)]
+    private static extern int Fstat(int fd, out StatBuf buf);
 
     [DllImport("libc", EntryPoint = "lstat", SetLastError = true, CharSet = CharSet.Ansi)]
     private static extern int Lstat(string path, out StatBuf buf);
