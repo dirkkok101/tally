@@ -19,6 +19,7 @@ using Tally.Contracts.Ledger.Transactions;
 using Tally.Domain.Classify.Normalization;
 using Tally.Features.Classify.Apply.Preview;
 using Tally.Features.Classify.Contract;
+using Tally.Features.Classify.Evaluation.Outcome;
 using Tally.Infrastructure.Classify.Storage;
 using Tally.Infrastructure.Classify.Storage.Apply;
 using Tally.Infrastructure.Classify.Storage.Evaluation;
@@ -152,6 +153,46 @@ public sealed class ApplyPreviewTests : IAsyncLifetime
     }
 
     // ── Selected outcomes happy path ────────────────────────────────────────
+
+    [Fact]
+    public async Task Released_preview_accepts_outcome_ids_from_outcome_list_composition()
+    {
+        // bd-wsjo: released apply.preview still accepts selected_outcomes IDs produced by outcome.list
+        // without any contract change and without calling outcome.get.
+        var seeded = await SeedSuggestionAsync("composition list shop");
+        var listQuery = new ListClassificationOutcomesQuery(
+            services.State.Store,
+            services.EvaluationStore,
+            new ClassificationOutcomeDiscoveryStore(),
+            services.RuleStore,
+            services.RuleSetStore,
+            ledger);
+        var list = await listQuery.HandleAsync(
+            new ClassifyOutcomeListRequest(
+                "1.0",
+                seeded.EvaluationId,
+                500,
+                OutcomeKind: ClassifyOutcomeKind.Suggestion),
+            actor,
+            CancellationToken.None);
+        Assert.True(list.IsSuccess, list.ErrorCode);
+        var ids = list.Value!.Items.Select(i => i.OutcomeId).ToArray();
+        Assert.NotEmpty(ids);
+
+        var before = await SnapshotCategoryStatesAsync(seeded.TransactionIds);
+        var result = await preview.HandleAsync(
+            new ClassifyApplyPreviewRequest(
+                ClassifyOperationIds.ContractVersion,
+                seeded.EvaluationId,
+                new ClassifyApplySelection(ClassifyApplySelectionMode.SelectedOutcomes, OutcomeIds: ids)),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(result.IsSuccess, result.ErrorCode);
+        Assert.True(result.Value!.SelectedCount >= 1);
+        Assert.Equal(ClassifyContractMapper.SelectionModeSelectedOutcomes, result.Value.SelectionMode);
+        Assert.Equal(before, await SnapshotCategoryStatesAsync(seeded.TransactionIds));
+    }
 
     [Fact]
     public async Task Selected_outcomes_preview_persists_assignable_items_without_ledger_mutation()
