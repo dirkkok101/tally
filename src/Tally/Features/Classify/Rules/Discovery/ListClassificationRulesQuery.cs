@@ -94,12 +94,12 @@ public sealed class ListClassificationRulesQuery
         string categoryLifecycleFingerprint;
         int overallCount;
         IReadOnlySet<string> activeMembers;
+        IReadOnlyList<string> frozenCategoryIds;
         ClassifyCursorCodec.RuleKeysetPosition? resume = null;
 
-        // ── Resolve high-water + decode continuation ─────────────────────────
+        // ── Resolve high-water (first page freezes; continuation reuses frozen HW) ──
         await using (var connection = await stateStore.OpenMigratedAsync(cancellationToken))
         {
-            overallCount = await discoveryStore.CountAllRuleVersionsAsync(connection, null, cancellationToken);
             var active = await ruleSetStore.GetActiveRuleSetAsync(connection, null, cancellationToken);
             authorityFingerprint = ClassificationRuleDiscoveryStore.AuthorityFingerprint(
                 active?.RuleSetVersionId,
@@ -109,23 +109,6 @@ public sealed class ListClassificationRulesQuery
                 : await discoveryStore.GetActiveMemberIdsAsync(
                     connection, null, active.RuleSetVersionId, cancellationToken);
 
-            // Category lifecycle fingerprint for cursor binding (active members' categories when present).
-            var catPairs = new List<(string CategoryId, string Lifecycle)>();
-            foreach (var memberId in activeMembers)
-            {
-                var version = await ruleStore.GetRuleVersionAsync(connection, null, memberId, cancellationToken);
-                if (version is not null)
-                {
-                    catPairs.Add((version.CategoryId, "pending"));
-                }
-            }
-
-            // Refined after Ledger reads; provisional stable empty when no members.
-            categoryLifecycleFingerprint = ClassificationRuleDiscoveryStore.CategoryLifecycleFingerprint(
-                catPairs.Count == 0
-                    ? Array.Empty<(string, string)>()
-                    : catPairs.Select(p => (p.CategoryId, "active")).Distinct());
-
             if (!string.IsNullOrWhiteSpace(input.Continuation))
             {
                 if (!TryExtractRuleCursorFields(
@@ -134,8 +117,8 @@ public sealed class ListClassificationRulesQuery
                         out var peekedHwRule,
                         out var peekedFilter,
                         out var peekedPageSize,
-                        out var peekedAuth,
-                        out var peekedCat,
+                        out _,
+                        out _,
                         out var peekedExp,
                         out var extractError))
                 {
@@ -149,15 +132,9 @@ public sealed class ListClassificationRulesQuery
                     return CommandResult<ClassifyRuleListResult>.Failure(ClassifyErrors.CursorInvalid);
                 }
 
-                // Live authority / category drift → stale continuation.
-                // Note: category fingerprint is refined again after Ledger; use peeked for decode expected.
                 highWaterCreatedAt = peekedHwCreated!;
                 highWaterRuleVersionId = peekedHwRule!;
                 expiresAt = peekedExp;
-
-                // Recompute live category fingerprint for members via Ledger outside; for now use peekedCat
-                // comparison after Ledger enrich below. Store provisional.
-                categoryLifecycleFingerprint = peekedCat!; // will re-validate after Ledger
             }
             else
             {
@@ -171,49 +148,45 @@ public sealed class ListClassificationRulesQuery
                 highWaterCreatedAt = highWater.Value.CreatedAt;
                 highWaterRuleVersionId = highWater.Value.RuleVersionId;
             }
+
+            // Snapshot-bound overall total (excludes concurrent appends after freeze).
+            overallCount = await discoveryStore.CountRuleVersionsBoundedAsync(
+                connection, null, highWaterCreatedAt, highWaterRuleVersionId, cancellationToken);
+
+            // Every category on a rule_version ≤ high-water can affect the frozen filtered traversal
+            // (drafts and non-members included — not only active-set members).
+            frozenCategoryIds = await discoveryStore.ListCategoryIdsBoundedAsync(
+                connection, null, highWaterCreatedAt, highWaterRuleVersionId, cancellationToken);
         }
 
         // ── Ledger category display/lifecycle for fingerprint + items ────────
-        // Collect category ids from candidates after load; for cursor category FP use active members.
         var categoryInfo = new Dictionary<string, (string? Display, string Lifecycle)>(StringComparer.Ordinal);
-        await using (var connection = await stateStore.OpenMigratedAsync(cancellationToken))
+        foreach (var catId in frozenCategoryIds)
         {
-            foreach (var memberId in activeMembers)
+            cancellationToken.ThrowIfCancellationRequested();
+            var detail = await ledger.GetBudgetCategoryAsync(
+                catId,
+                CategoryContractVersions.Current,
+                actor,
+                cancellationToken);
+            if (!detail.IsSuccess || detail.Value is null)
             {
-                var version = await ruleStore.GetRuleVersionAsync(connection, null, memberId, cancellationToken);
-                if (version is null)
-                {
-                    continue;
-                }
-
-                if (categoryInfo.ContainsKey(version.CategoryId))
-                {
-                    continue;
-                }
-
-                var detail = await ledger.GetBudgetCategoryAsync(
-                    version.CategoryId,
-                    CategoryContractVersions.Current,
-                    actor,
-                    cancellationToken);
-                if (!detail.IsSuccess || detail.Value is null)
-                {
-                    categoryInfo[version.CategoryId] = (null, "archived");
-                }
-                else
-                {
-                    var life = detail.Value.Status == CategoryStatus.Active ? "active" : "archived";
-                    categoryInfo[version.CategoryId] = (detail.Value.Name, life);
-                }
+                // Fail closed: missing identity is treated as archived for fingerprint binding.
+                categoryInfo[catId] = (null, "archived");
+            }
+            else
+            {
+                var life = detail.Value.Status == CategoryStatus.Active ? "active" : "archived";
+                categoryInfo[catId] = (detail.Value.Name, life);
             }
         }
 
         var liveCategoryFingerprint = ClassificationRuleDiscoveryStore.CategoryLifecycleFingerprint(
             categoryInfo.Select(kv => (kv.Key, kv.Value.Lifecycle)));
+        categoryLifecycleFingerprint = liveCategoryFingerprint;
 
         if (!string.IsNullOrWhiteSpace(input.Continuation))
         {
-            // Authority + category fingerprint must match frozen cursor (live values).
             if (!TryExtractRuleCursorFields(
                     input.Continuation!,
                     out var hwC,
@@ -234,7 +207,6 @@ public sealed class ListClassificationRulesQuery
                 return CommandResult<ClassifyRuleListResult>.Failure(ClassifyErrors.CursorStale);
             }
 
-            categoryLifecycleFingerprint = liveCategoryFingerprint;
             highWaterCreatedAt = hwC!;
             highWaterRuleVersionId = hwR!;
             expiresAt = peekedExp;
@@ -258,10 +230,6 @@ public sealed class ListClassificationRulesQuery
                 return CommandResult<ClassifyRuleListResult>.Failure(
                     cursorError ?? ClassifyErrors.CursorInvalid);
             }
-        }
-        else
-        {
-            categoryLifecycleFingerprint = liveCategoryFingerprint;
         }
 
         // ── Load bounded candidates ──────────────────────────────────────────

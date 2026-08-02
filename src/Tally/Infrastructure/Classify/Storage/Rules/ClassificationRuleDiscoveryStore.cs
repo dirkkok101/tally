@@ -53,6 +53,67 @@ public sealed class ClassificationRuleDiscoveryStore
     }
 
     /// <summary>
+    /// Overall catalogue count at or before the frozen high-water (snapshot-bound total).
+    /// Concurrent appends after first page are excluded.
+    /// </summary>
+    public async Task<int> CountRuleVersionsBoundedAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string highWaterCreatedAt,
+        string highWaterRuleVersionId,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(highWaterCreatedAt);
+        ArgumentException.ThrowIfNullOrWhiteSpace(highWaterRuleVersionId);
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+            SELECT COUNT(*)
+            FROM rule_version
+            WHERE created_at < $hw_created
+               OR (created_at = $hw_created AND rule_version_id <= $hw_rule);
+            """;
+        command.Parameters.AddWithValue("$hw_created", highWaterCreatedAt);
+        command.Parameters.AddWithValue("$hw_rule", highWaterRuleVersionId);
+        var scalar = await command.ExecuteScalarAsync(cancellationToken);
+        return Convert.ToInt32(scalar, CultureInfo.InvariantCulture);
+    }
+
+    /// <summary>
+    /// Distinct category IDs for every rule_version at or before high-water.
+    /// Used for cursor CategoryLifecycleFingerprint so draft/non-member categories bind the traversal.
+    /// </summary>
+    public async Task<IReadOnlyList<string>> ListCategoryIdsBoundedAsync(
+        SqliteConnection connection,
+        SqliteTransaction? transaction,
+        string highWaterCreatedAt,
+        string highWaterRuleVersionId,
+        CancellationToken cancellationToken)
+    {
+        ArgumentException.ThrowIfNullOrWhiteSpace(highWaterCreatedAt);
+        ArgumentException.ThrowIfNullOrWhiteSpace(highWaterRuleVersionId);
+        await using var command = connection.CreateCommand();
+        command.Transaction = transaction;
+        command.CommandText = """
+            SELECT DISTINCT category_id
+            FROM rule_version
+            WHERE created_at < $hw_created
+               OR (created_at = $hw_created AND rule_version_id <= $hw_rule)
+            ORDER BY category_id ASC;
+            """;
+        command.Parameters.AddWithValue("$hw_created", highWaterCreatedAt);
+        command.Parameters.AddWithValue("$hw_rule", highWaterRuleVersionId);
+        var ids = new List<string>();
+        await using var reader = await command.ExecuteReaderAsync(cancellationToken);
+        while (await reader.ReadAsync(cancellationToken))
+        {
+            ids.Add(reader.GetString(0));
+        }
+
+        return ids;
+    }
+
+    /// <summary>
     /// List rule versions at or before high-water with optional static AND filters.
     /// Ordered by created_at ASC, rule_version_id ASC. Active membership is evaluated in-process.
     /// </summary>

@@ -93,8 +93,10 @@ public sealed class GetActiveClassificationRuleSetQuery
                 connection, null, pointer.RuleSetVersionId, cancellationToken);
             if (memberIds.Count == 0)
             {
-                // Empty active membership is impossible for a normal activation; fail closed.
-                return CommandResult<ClassifyRuleSetActiveGetResult>.Failure(ClassifyErrors.Integrity);
+                // Retirement of the last active member leaves an empty successor pointer:
+                // that is "no active rule-set authority", not an integrity failure.
+                return CommandResult<ClassifyRuleSetActiveGetResult>.Failure(
+                    ClassifyErrors.ActiveRuleSetNotFound);
             }
 
             var orderedMembers = memberIds.OrderBy(id => id, StringComparer.Ordinal).ToArray();

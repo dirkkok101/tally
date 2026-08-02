@@ -351,11 +351,14 @@ public sealed class RuleDiscoveryTests : IAsyncLifetime
         var first = await listQuery.HandleAsync(new ClassifyRuleListRequest("1.0", 1), actor, CancellationToken.None);
         Assert.True(first.IsSuccess, first.ErrorCode);
         Assert.NotNull(first.Value!.Continuation);
+        var frozenOverall = first.Value.OverallCount;
+        var frozenFiltered = first.Value.FilteredCount;
+        Assert.Equal(3, frozenOverall);
 
         // Concurrent append after first page
         var late = await SaveDraftAsync(category.CategoryId, "hw late", "rule-hw-late");
 
-        // Walk remaining pages with frozen continuation
+        // Walk remaining pages with frozen continuation — totals stay snapshot-bound
         var seen = new HashSet<string>(StringComparer.Ordinal) { first.Value.Items[0].RuleVersionId };
         var cursor = first.Value.Continuation;
         while (cursor is not null)
@@ -365,7 +368,9 @@ public sealed class RuleDiscoveryTests : IAsyncLifetime
                 actor,
                 CancellationToken.None);
             Assert.True(page.IsSuccess, page.ErrorCode);
-            foreach (var item in page.Value!.Items)
+            Assert.Equal(frozenOverall, page.Value!.OverallCount);
+            Assert.Equal(frozenFiltered, page.Value.FilteredCount);
+            foreach (var item in page.Value.Items)
             {
                 Assert.True(seen.Add(item.RuleVersionId));
             }
@@ -374,11 +379,74 @@ public sealed class RuleDiscoveryTests : IAsyncLifetime
         }
 
         Assert.DoesNotContain(late, seen);
+        Assert.Equal(frozenOverall, seen.Count);
 
-        // Fresh list includes the late append
+        // Fresh list includes the late append and raises overall count
         var fresh = await listQuery.HandleAsync(new ClassifyRuleListRequest("1.0", 500), actor, CancellationToken.None);
         Assert.True(fresh.IsSuccess, fresh.ErrorCode);
         Assert.Contains(fresh.Value!.Items, i => i.RuleVersionId == late);
+        Assert.Equal(frozenOverall + 1, fresh.Value.OverallCount);
+    }
+
+    [Fact]
+    public async Task Draft_category_lifecycle_change_stales_continuation_with_null_result()
+    {
+        // Draft (non-member) category must participate in CategoryLifecycleFingerprint.
+        var draftCat = await CreateCategoryAsync("DraftCat");
+        var otherCat = await CreateCategoryAsync("OtherCat");
+        for (var i = 0; i < 3; i++)
+        {
+            await SaveDraftAsync(draftCat.CategoryId, "draftcat " + i, "rule-dc-" + i);
+        }
+
+        _ = await SaveDraftAsync(otherCat.CategoryId, "othercat", "rule-oc-1");
+
+        var first = await listQuery.HandleAsync(new ClassifyRuleListRequest("1.0", 1), actor, CancellationToken.None);
+        Assert.True(first.IsSuccess, first.ErrorCode);
+        Assert.NotNull(first.Value!.Continuation);
+
+        // Lifecycle transition on a draft-only category (not an active member).
+        await ArchiveCategoryAsync(draftCat.CategoryId);
+
+        var before = await CaptureClassifyOracleAsync();
+        var resume = await listQuery.HandleAsync(
+            new ClassifyRuleListRequest("1.0", 1, Continuation: first.Value.Continuation),
+            actor,
+            CancellationToken.None);
+        Assert.Equal(ClassifyErrors.CursorStale, resume.ErrorCode);
+        Assert.Null(resume.Value);
+        await AssertNoMutationAsync(before);
+
+        // Fresh first page under new lifecycle succeeds
+        var fresh = await listQuery.HandleAsync(new ClassifyRuleListRequest("1.0", 50), actor, CancellationToken.None);
+        Assert.True(fresh.IsSuccess, fresh.ErrorCode);
+        Assert.NotNull(fresh.Value);
+    }
+
+    [Fact]
+    public async Task Retire_last_active_member_makes_active_get_return_not_found()
+    {
+        var category = await CreateCategoryAsync("RetireLast");
+        var versionId = await SaveDraftAsync(category.CategoryId, "solo member", "rule-solo");
+        await ActivateAsync(versionId, category.CategoryId, "solo member");
+
+        var beforeRetire = await activeQuery.HandleAsync(
+            new ClassifyRuleSetActiveGetRequest("1.0"), actor, CancellationToken.None);
+        Assert.True(beforeRetire.IsSuccess, beforeRetire.ErrorCode);
+
+        var retired = await services.Retire.HandleAsync(
+            new ClassifyRuleRetireRequest(ClassifyOperationIds.ContractVersion, versionId, "retire last member"),
+            actor,
+            NextKey(),
+            CancellationToken.None);
+        Assert.True(retired.IsSuccess, retired.ErrorCode);
+
+        var before = await CaptureClassifyOracleAsync();
+        var after = await activeQuery.HandleAsync(
+            new ClassifyRuleSetActiveGetRequest("1.0"), actor, CancellationToken.None);
+        Assert.Equal(ClassifyErrors.ActiveRuleSetNotFound, after.ErrorCode);
+        Assert.Null(after.Value);
+        await AssertNoMutationAsync(before);
     }
 
     [Fact]
@@ -823,6 +891,14 @@ public sealed class RuleDiscoveryTests : IAsyncLifetime
             "ledger.category.create",
             new CreateCategoryInput(name + "-" + Guid.NewGuid().ToString("N")[..6]),
             NextKey(), LedgerJsonContext.Default.CreateCategoryInput, LedgerJsonContext.Default.CategoryDetail);
+
+    private async Task ArchiveCategoryAsync(string categoryId) =>
+        _ = await ExecuteSuccessAsync(
+            "ledger.category.archive",
+            new ArchiveCategoryInput(categoryId, "discovery-archive"),
+            NextKey(),
+            LedgerJsonContext.Default.ArchiveCategoryInput,
+            LedgerJsonContext.Default.CategoryLifecycleResult);
 
     private async Task<TransactionDetail> RecordAsync(string description)
     {
